@@ -12,7 +12,7 @@ HTTP.
 
 ---
 
-As an example, let's look at the SOAP web service classes for Liferay's
+As an example, take a look at the SOAP web service classes for Liferay's
 `Company`, `User`, and `UserGroup` portal services to execute the following:
 
 1. List each user group to which user *test* belongs. 
@@ -20,10 +20,10 @@ As an example, let's look at the SOAP web service classes for Liferay's
 2. Add a new user group named *MyGroup*. 
 
 3. Add your portal's administrative user to the new user group. For
-   demonstration purposes, you'll use an administrative user whose email address
-   is `test@liferay.com`. 
+   demonstration purposes, this tutorial uses an administrative user whose email 
+   address is `test@liferay.com`. 
 
-We'll use these SOAP related classes: 
+These SOAP related classes are used: 
 
     import com.liferay.portal.model.CompanySoap;
     import com.liferay.portal.model.UserGroupSoap;
@@ -40,7 +40,7 @@ all have suffixes `-ServiceSoapServiceLocator`, `-ServiceSoap`, and `-Soap`. The
 service's URL you provide. The `-ServiceSoap` class is the interface to the
 services specified in the *Web Services Definition Language* (*WSDL*) file for
 each service. The `-Soap` classes are the serializable implementations of the
-models. Let's look at how to determine the URLs for these services. 
+models.
 
 You can see a list of the services deployed on your portal by opening your
 browser to the following URL: 
@@ -96,31 +96,39 @@ Here's a WSDL excerpt of the `addUserGroup` operation of `UserGroup`:
     </wsdl:operation>
 
 To use the service, you pass in the WSDL URL along with your login credentials
-to the SOAP service locator for your service. We'll show you an example in the
-next section. 
+to the SOAP service locator for your service. You'll see an example in the next 
+section. 
 
-Next, let's invoke the web service! 
+Strap on your seatbelt, because it's time to invoke the web service next! 
 
-### SOAP Java Client [](id=soap-java-client-liferay-portal-6-2-dev-guide-05-en)
+## SOAP Java Client
 
 You can easily set up a Java web service client to access Liferay's remote
-services using Eclipse. Here's how: 
+services using Eclipse. 
 
 In Eclipse, you can use the *New* &rarr; *Web Service Client* wizard to
 either create a new web service client project or add a client to an existing
 project. You need to add a new web service client to your project for each
-service that you need to consume in your client code. For this example, you'll
-build a web service client to invoke the portal's `Company`, `User`, and
-`UserGroup` services.
+service that you need to consume in your client code.
 
-To create a new web service client project in Eclipse, click *File* &rarr;
-*New* &rarr; *Other...*, then expand the *Web Services* category. Select *Web
-Service Client*.
+Next you'll learn how to add a web service client to your project.
+
+### Setting up a Java Web Service Client in Eclipse
+
+The steps below show how to build a web service client to invoke the portal's 
+`Company`, `User`, and `UserGroup` services. Note that the same steps can be
+applied to IDE: 
+
+1. click *File* &rarr; *New* &rarr; *Other...* 
+
+2. Expand the *Web Services* category. 
+
+3. Select *Web Service Client*.
 
 For each client you create, you're prompted to enter the service definition
-(WSDL) for the desired service. Since your example web service client will use
-Liferay Portal's `Company`, `User`, and `UserGroup` services, you'll need to
-enter the following WSDLs: 
+(WSDL) for the desired service. The example web service client below uses
+Liferay Portal's `Company`, `User`, and `UserGroup` services, therefore the
+following WSDLs need entered: 
 
     http://localhost:8080/api/axis/Portal_CompanyService?wsdl
 
@@ -128,25 +136,30 @@ enter the following WSDLs:
 
     http://localhost:8080/api/axis/Portal_UserGroupService?wsdl
 
-![Figure 6.1: Service Definition](../../images/api-web-svc-wsdl.png)
+![Figure 1: Service Definition](../../images/api-web-svc-wsdl.png)
 
 When you specify a WSDL, Eclipse automatically adds the auxiliary files and
 libraries required to consume that web service. Nifty! After you've created your
 web service client project using one of the above WSDLs, you need to create
 additional clients in the project using the remaining WSDLs. To create an
-additional client in an existing project, right-click on the project and select
-*New* &rarr; *Other* &rarr; *Web Service Client*. Click *Next*, enter the
-WSDL, and complete the wizard.
+additional client in an existing project: 
+
+1. right-click on the project and select *New* &rarr; *Other* &rarr; 
+   *Web Service Client*.
+
+2. Click *Next*, enter the WSDL, and complete the wizard.
 
 The code below locates and invokes operations to create a new user group named
-`MyUserGroup` and add a user with the screen name *test* to it. Create a
-`LiferaySoapClient.java` file in your web service client project and add the
-following code to it. If you create this class in a package other than the one
-that's specified in the code below, replace the package with your package. To
-run the client from Eclipse, make sure that your Liferay server is running,
-right-click on the `LiferaySoapClient.java` class, and select *Run as Java
-application*. Check your console to check that your service calls succeeded.
+`MyUserGroup` and adds a user with the screen name *test* to it. You can replace
+the `remoteUser` and `password` variable values with another existing username 
+and password if you wish:
 
+1. Create a `com.liferay.test` package in your web service client project.
+
+2. Create a `LiferaySoapClient.java` class file inside the `com.liferay.test`
+   package in your web service client project and add the following code to it: 
+
+    ```
     package com.liferay.test;
 
     import java.net.URL;
@@ -278,6 +291,23 @@ application*. Check your console to check that your service calls succeeded.
         
     }
 
+    ```
+
+    ---
+
+     ![Note](../../images/tip-pen-paper.png) **Note:** If you create this class in 
+     a package other than the one that's specified in the code above, replace 
+     the package with your package.
+
+    ---
+
+3. Make sure your Liferay server is running in Eclipse and right-click the
+   `LiferaySoapClient.java` class.
+
+4. Select *Run as Java application*.
+
+5. Check your console to check that your service calls succeeded.
+
 Running this client should produce output like the following example: 
 
     userId for user named test is 10196
@@ -289,15 +319,15 @@ Running this client should produce output like the following example:
     User groups for user 10196 ...
         MyUserGroup
 
-The output tells us the user had no groups, but was added to UserGroup
+The output shows that the user had no groups, but was added to UserGroup
 `MyUserGroup`.
 
 You might be thinking, "But an error was thrown! I did something wrong!" Yes,
 an error was thrown (`java.rmi.RemoteException:`), but you're sitting here as
 cool as an ice cream sandwich all the same. The exception was thrown simply
 because the `UserGroup` check was invoked before the `UserGroup` was created.
-Because the very next line of the output says `Added user group named...`, you're
-okay. Don't worry, be happy! 
+Because the very next line of the output says `Added user group named...`, 
+you're okay. Don't worry, be happy! 
 
 Here are a few things to note about this example: 
 
@@ -319,20 +349,22 @@ for the `-ServiceSOAP` classes `CompanyServiceSoap`, `UserServiceSoap` and
 parameter order, request type, response type, and return type are conveniently
 specified in the WSDL for each Liferay web service. It's all there for you!
 
+Next you'll see how you can achieve the same results, using PHP.
 
-### SOAP PHP Client [](id=soap-php-client-liferay-portal-6-2-dev-guide-05-en)
+## SOAP PHP Client
 
 You can write your client in any language that supports web services invocation.
 Invoke the same operations you did when you created your Java client, this
 time using PHP and a PHP SOAP Client: 
 
+	```
     <?php
         $userGroupName = "MyUserGroup2";
         $userName = "test";
         $clientOptions = array('login' => $userName, 'password' => 'test');
 
         // Add user group
-        $userGroupClient = new 
+        $userGroupClient = new
             SoapClient(
                 "http://localhost:8080/api/axis/Portal_UserGroupService?wsdl", 
                 $clientOptions);
@@ -360,6 +392,11 @@ time using PHP and a PHP SOAP Client:
         foreach($userGroups as $ug)
             print ("$ug->name, $ug->userGroupId ")
     ?>
-
+    ```
 Remember, you can implement a web service client in any language that supports
-using SOAP web services. Next, you'll explore Liferay's JSON web services. 
+using SOAP web services. 
+
+## Next Steps
+
+ <!-- URL will need changed to proper LDN URL when moved to LDN-->
+ <!--[Setting the Authentication type](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/json-web-services)—>
