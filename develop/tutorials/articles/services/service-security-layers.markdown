@@ -6,7 +6,8 @@ step in order to call them from a remote machine. Liferay's core web services
 require user authentication and authentication verification. Lastly, regardless 
 of whether the remote service is called from the same machine or via a web 
 service, Liferay's standard security model comes into action: a user must have 
-the proper permissions in Liferay's permissions system to access remote services. 
+the proper permissions in Liferay's permissions system to access remote 
+services. 
 
 ## IP Permission Layer
 
@@ -14,11 +15,11 @@ The first layer of security a client encounters when calling a remote service
 is called *invoker IP filtering*. Imagine you have a batch job that runs on 
 another machine in your network. This job polls a shared folder on your network 
 and uploads documents to your site's *Documents and Media* portlet on a regular 
-basis, using Liferay's web services. To get your batch job through the IP filter, 
-the portal administrator has to allow the machine on which the batch job is 
-running access to Liferay's remote service. For example, if your batch job uses 
-the SOAP web services to upload the documents, the portal administrator must add 
-the IP address of the machine on which the batch job is running to the
+basis, using Liferay's web services. To get your batch job through the IP 
+filter, the portal administrator has to allow the machine on which the batch job 
+is running access to Liferay's remote service. For example, if your batch job 
+uses the SOAP web services to upload the documents, the portal administrator 
+must add the IP address of the machine on which the batch job is running to the
 `axis.servlet.hosts.allowed` property. A typical entry might look like this:
 
     axis.servlet.hosts.allowed=192.168.100.100, 127.0.0.1, [SERVER_IP]
@@ -46,7 +47,7 @@ Next, you'll learn about the layer of security used for web services.
 
 If you're invoking the remote service via web services (e.g., JSON WS, old
 JSON, Axis, REST, etc.), a two step process of authentication and authentication
-verification is involved. Each call to a Liferay portal web services must be
+verification is involved. Each call to a Liferay portal web service must be
 accompanied by a user authentication token. It's up to the web service caller to
 produce the token (e.g., through Liferay's utilities or through some third-party
 software). Liferay verifies that there is a Liferay user that matches the token.
@@ -73,7 +74,7 @@ When it comes to security, password protection is very important. Next, you'll
 learn how password policies can make life a little bit easier for your portal
 administrator.
 
-## Password Policies    
+## Password Policies 
 
 Your Liferay Portal password policies (see the [User
 Management](https://www.liferay.com/documentation/liferay-portal/6.2/user-guide/-/ai/management-liferay-portal-6-2-user-guide-16-en)
@@ -88,7 +89,16 @@ password policy that doesn't enforce password expiration and add a specific
 administrative user ID to it. Then your batch job can run as many times as you
 need it to, without your administrative ID's password expiring.
 
-## Next Steps
- <!-- URL will need changed to proper LDN URL when moved to LDN-->
- <!--[Setting the Authentication
- type](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/setting-authentication-type)-->
+## Next Steps 
+
+[Platform Frameworks](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/platform-frameworks-lp-6-2-develop-tutorial)
+
+[Localization](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/localization-lp-6-2-develop-tutorial)
+
+<!-- 
+URL below needs changed to proper LDN URL when moved to LDN
+-->
+
+<!--
+[Setting the Authentication type](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/setting-authentication-type)
+-->

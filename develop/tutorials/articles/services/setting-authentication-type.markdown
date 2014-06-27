@@ -88,5 +88,15 @@ see a text that reads:
 Congrats, you have successfully set your authentication type and tested it out!
 
 ## Next Steps
-<!-- URL will need replaced with proper URL when moved to LDN-->
- <!--[Using Liferay's SOAP web services](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/using-soap-web-services)--> 
+
+[Platform Frameworks](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/platform-frameworks-lp-6-2-develop-tutorial)
+
+[Localization](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/localization-lp-6-2-develop-tutorial)
+
+<!-- 
+URL below needs replaced with proper URL when moved to LDN
+-->
+
+<!--
+[Using Liferay's SOAP web services](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/using-soap-web-services)
+--> 
