@@ -396,7 +396,16 @@ time using PHP and a PHP SOAP Client:
 Remember, you can implement a web service client in any language that supports
 using SOAP web services. 
 
-## Next Steps
+## Next Steps 
 
- <!-- URL will need changed to proper LDN URL when moved to LDN-->
- <!--[Setting the Authentication type](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/json-web-services)—>
+[Platform Frameworks](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/platform-frameworks-lp-6-2-develop-tutorial)
+
+[Localization](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/localization-lp-6-2-develop-tutorial)
+
+<!-- 
+URL will need changed to proper LDN URL when moved to LDN
+-->
+
+<!--
+[Setting the Authentication type](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/json-web-services)
+-->
