@@ -354,8 +354,9 @@ Next you'll see how you can achieve the same results, using PHP.
 ## SOAP PHP Client
 
 You can write your client in any language that supports web services invocation.
-Invoke the same operations you did when you created your Java client, this
-time using PHP and a PHP SOAP Client: 
+The example code below uses "test" as the `userName` and `password`; make sure
+you replace them before running the code. Invoke the same operations you did 
+when you created your Java client, this time using PHP and a PHP SOAP Client:
 
 	```
     <?php
@@ -398,9 +399,9 @@ using SOAP web services.
 
 ## Next Steps 
 
-[Platform Frameworks](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/platform-frameworks-lp-6-2-develop-tutorial)
+ [Platform Frameworks](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/platform-frameworks-lp-6-2-develop-tutorial)
 
-[Localization](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/localization-lp-6-2-develop-tutorial)
+ [Localization](https://www-ldn.liferay.com/develop/tutorials/-/knowledge_base/localization-lp-6-2-develop-tutorial)
 
 <!-- 
 URL will need changed to proper LDN URL when moved to LDN
