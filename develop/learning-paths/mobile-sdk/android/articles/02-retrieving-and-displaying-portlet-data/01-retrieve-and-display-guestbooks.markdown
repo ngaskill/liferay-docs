@@ -364,7 +364,7 @@ This method makes the portlet call to get the guestbooks. Since a portal
 *session* is required for the Mobile SDK to communicate with the portal, the 
 `getGuestbooks` method first creates a session with the user's credentials. The 
 session is created by using `SessionImpl` with the server's address 
-(`10.0.2.2:8080` is the same as `localhost:8080`) and a `BasicAuthentication` 
+(for the Android emulator, `10.0.2.2:8080` is the same as `localhost:8080`) and a `BasicAuthentication` 
 object containing the user's credentials. Be sure to change the user credentials 
 here to match those of the user you created when you set up your portal. A new 
 instance of `GetGuestbooksCallback` is then created and set as the session's 
@@ -377,7 +377,7 @@ following variable in the `MainActivity` class:
 
     public static final int SITE_ID = 10182;
 
-This is the portal's default site ID. At this point, you're probably thinking, 
+This is my portal's Guest Site ID, this may change from installation to installation, in order to find out what's the correct Site ID, you can go to Control Panel (...). At this point, you're probably thinking, 
 "Hang on a minute. What good is an Android app that has the portal, site, and 
 user hardcoded in? It can only be used by one person, on one site, and in one 
 portal!" You're right. This implementation is most untenable. However, you don't 
@@ -456,3 +456,6 @@ it's the default behavior of Android's built-in adapter classes. Recall that
 `ArrayAdapter` is being used to hold the guestbooks for display in the drawer's 
 `ListView`. To show the proper guestbook names in the drawer, you need to 
 implement your own adapter class. You'll do this next.
+
+
+Nick: not sure if you should implement a custom Adapter instance, the tutorial may become simpler if you just use the available Adapters impl and just implement toString for GuestbookModel.
