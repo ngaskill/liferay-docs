@@ -13,18 +13,16 @@ The Mobile SDK Builder generated two separate `jar` files in your
 
 1. `modules/guestbook-portlet/build/libs/liferay-guestbook-portlet-android-sdk-1.0.jar`
 
-2. `android/build/libs/liferay-android-sdk-6.2.0.15.jar`
-
 The first contains the classes and methods for calling the Guestbook portlet's 
 remote services. The second contains the rest of the Mobile SDK. Navigate to 
 your project's location on disk (`AndroidStudioProjects/LiferayGuestbook` by 
 default) and copy the above `jar` files into your app's `app/libs` directory. 
-You also need to install a couple dependencies. Download and copy the following 
-files into your app's `app/libs` directory: 
 
-3. [`httpclient-android-4.3.3.jar`](http://search.maven.org/remotecontent?filepath=org/apache/httpcomponents/httpclient-android/4.3.3/httpclient-android-4.3.3.jar)
+Nick: you can install the mobile sdk as a gradle depedency:
 
-4. [`httpmime-4.3.3.jar`](http://search.maven.org/remotecontent?filepath=org/apache/httpcomponents/httpmime/4.3.3/httpmime-4.3.3.jar)
+https://github.com/brunofarache/liferay-mobile-sdk/tree/master/android#gradle
+
+It will automatically download dependencies for you. You will still need to copy the guestbook jar to apps/libs though.
 
 Next, you need to update your Android Studio project to pick up these additions. 
 
@@ -77,6 +75,15 @@ For example, the entire `android` element may then look something like this:
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
       }
+    }
+    
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    
+    dependencies {
+        compile group: 'com.liferay.mobile', name: 'liferay-android-sdk', version: '6.2.0.+'
     }
     
 After you add the `packagingOptions` element, click the 
