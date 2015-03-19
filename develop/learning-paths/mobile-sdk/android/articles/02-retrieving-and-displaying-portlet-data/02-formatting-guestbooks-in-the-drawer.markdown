@@ -16,7 +16,17 @@ The first thing you need to do is create a layout for the adapter to use when
 displaying each guestbook in the drawer. The `ArrayAdapter` is currently using 
 one of Android's built-in layouts for list items, 
 `simple_list_item_activated_1`. Since you're writing your own adapter, you also 
-need to write your own layout. In Android Studio's project view, right click the 
+need to write your own layout.
+
+Nick: this is not a requirement, you can re-use stock Android layouts if you want.
+
+As I said in the previous request, you don't even need to create a custom ArrayAdapter, you can just instantiate it:
+
+http://developer.android.com/reference/android/widget/ArrayAdapter.html#ArrayAdapter(android.content.Context, int, T[])
+
+The second parameter "int resource" refers to a layout that can be either yours or Android's, if it's not passed, it wil use `simple_list_item_activated_1` like you said.
+
+In Android Studio's project view, right click the 
 `res/layout` folder and select *New* &rarr; *Layout resource file*. In the 
 dialog that appears, enter *item_guestbook.xml* into the *File name* field. 
 Make sure that *LinearLayout* is specified in the *Root element* field. Accept 
