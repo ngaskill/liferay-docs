@@ -380,6 +380,13 @@ all the entries on the screen. Since you want the entries to appear in a list,
 you need to change `fragment_main.xml` to use `ListView`. Begin by replacing the 
 contents of `onCreateView` in `EntriesFragment` with the following code:
 
+Nick: Android provides some Fragment implementations that may help you writing less code, for example:
+
+http://developer.android.com/reference/android/app/ListFragment.html
+
+Which, like stock Adapters, has a default layout, this way you don't need to have your own fragment_main.xml.
+
+
     ListView entriesListView = (ListView) inflater.inflate(R.layout.fragment_main, container, false);
     _adapter = new EntriesAdapter(this.getActivity(), _entries);
     entriesListView.setAdapter(_adapter);
