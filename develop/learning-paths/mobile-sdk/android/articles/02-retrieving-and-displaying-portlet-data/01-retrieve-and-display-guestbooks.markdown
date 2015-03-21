@@ -246,6 +246,8 @@ instance. Create this variable in the `MainActivity` class as follows:
 
     public static List<GuestbookModel> _guestbooks = new ArrayList<GuestbookModel>();
 
+Nick: I'm not sure why _guestbooks needs to static, it shouldn't be required.
+
 The app displays a list of items in the drawer by using [`ListView`](http://developer.android.com/guide/topics/ui/layout/listview.html) 
 with an [adapter](http://developer.android.com/guide/topics/ui/declaring-layout.html#AdapterViews). 
 Specifically, an `ArrayAdapter` is used as the data source for the drawer's 
