@@ -67,7 +67,13 @@ entered in the Mobile SDK Builder:
 
 Once you enter the final property, the Mobile SDK Builder runs and generates a 
 `BUILD SUCCESSFUL` message. Great! However, you're probably wondering what just 
-happened. Obviously, the build completed successfully, but other than that it 
+happened.
+
+Nick: It may be a good idea to also add the output screenshots, which actually says where the module was created to:
+
+[http://cl.ly/image/0j3U0S3J0k1i](http://cl.ly/image/0j3U0S3J0k1i)
+
+Obviously, the build completed successfully, but other than that it 
 doesn't tell you too much. What happened is this: the Mobile SDK Builder 
 generated the source classes you'll use in your Android app to interact with 
 your Liferay installation's Guestbook portlet. You can find these source classes 
