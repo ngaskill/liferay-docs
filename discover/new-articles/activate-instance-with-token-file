@@ -5,3 +5,18 @@ Once created, token file should be carefully shared since allows anybody to conn
 If file is deleted, all portal instances used token file to start up and connect will disconnect from LCS, and wont be able to connect unless new token file is provided, or Administrator manually connects
 instance using his own credentials.
 It is important to mention that disconnecting portal instance from LCS due token file removal wont delete existing archive data, and LCS will link data to portal instance once new credentials are set.
+How it works
+Here are steps to generate token file and use it to automatically register your portal instance to Liferay Conncted Services. Instruction assumes you already have a valid LCS project and environment and your portal instance has never been connected to LCS. Otherwise check instructions at te end of the article.
+1) Go to LCS portal dashboard and select environment you want your portal instance to be registered to.
+2) Click Subscriptions tab.
+3) If no any token has been generated yet, your user interface should look like screen auto-register-01-subscriptions. Click Generate.
+4) If token file was properly generated you will see token file details with menu options Regenerate and Download like screen auto-registration-02-download
+5) Click on menu option Download downloads token file to your Browser's download folder.
+6) Move file to your portal instance data folder
+7) Deploy LCS Portlet (or if portal instance is already bundeled with LCS Portlet start/restart portal instance)
+8) After LCS Portlet deploys you should see it is connected at LCS Portal dashboard like in screen auto-registration-03-connected
+Portal instance is registered using minimum informations. You should be able to change descriptive informations as you wish. It is important to mention that autoactivation overrides OAuth authorization cycle. If user has never been before registered any portal instance to LCS there will be created OAuth authorization entry visible under My Account, OAuth Authorisations secion like in screen auto-registration-04-oauthcreds. If user has already registered portal instances to LCS, existing credentials will be used to create token file.
+How to switch an registered portal instance to use activation token?
+If user wants to change a manually registered portal instance to use activation token, but to preserve collected statistics LCS Portlet interface should be used first to Disconnect portal instance and then press Back button. Pressing Back button will delete current OAuth credentials and on next LCS Portlet deploy (portal server start/restart) it will attempt to locate and load token file. Only thing user should not forget is to place token file to portal instance data folder.
+Deleting and Regenerating token file
+If user suspects token file is compromised or want to leave token file concept it is possible to Delete or Regenerate token file. Both operations causes invalidation of current token files which automatically commands portal instances registered with token to disconnect and clear all OAuth credentials used to authorize access to LCS system. This operation preserves historical data collected by the time.
