@@ -56,7 +56,7 @@ and email address of the administrative user (for the purposes of this learning
 path, these don't have to be real). If you want to connect Liferay to a separate 
 database such as MySQL, PostgreSQL, or similar, you can also configure it here. 
 If you want to start quickly, the embedded database is fine for your local 
-machine (but it’s not optimized for production, so don’t use it there). Click 
+machine (but it's not optimized for production, so don't use it there). Click 
 *Finish Configuration* when you're done. When the success message displays, 
 click *Go to My Portal* and accept the license agreement. Then set a password 
 and a password reminder query for your administrative user. You're then taken to 
