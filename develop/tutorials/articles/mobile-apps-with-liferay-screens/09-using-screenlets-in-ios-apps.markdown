@@ -42,6 +42,10 @@ This is indicated by the comments in the code here:
         }
 
         ...
+        
+If you are using CocoaPods you will have to add the import for Liferay Screens to your view controller:
+
+	import LiferayScreens
 
 Now that the screenlet's delegate protocol conforms in your `ViewController` 
 class, go back to Interface Builder and connect the screenlet's delegate to your 
@@ -56,6 +60,8 @@ follow these steps:
 
 1. Declare an outlet to hold a reference to the screenlet. You can connect it in 
    Interface Builder without any issues.
+   
+   ![Figure 3: Connect the outlet with the screenlet reference.](../../images/screens-ios-xcode-add-screenlet-delegate.png)
    
 2. Assign the screenlet's delegate the `viewDidLoad` method. This is 
    the connection typically done in Interface Builder.
@@ -74,7 +80,7 @@ These steps are shown in the following code for the view controller of
 
         ...
 
-![Figure 3: Connect the screenlet's delegate in Interface Builder.](../../images/screens-ios-xcode-delegate.png)
+![Figure 4: Connect the screenlet's delegate in Interface Builder.](../../images/screens-ios-xcode-delegate.png)
 
 Awesome! Now you know how to use screenlets in your apps. If you need to use
 screenlets from Objective-C code, then you can follow the instructions in the
@@ -107,7 +113,7 @@ steps:
     - Precompile Prefix Header: `Yes`
     - Prefix Header: `path/to/your/file/PrefixHeader.pch`
 
-    ![Figure 4: The `PrefixHeader.pch` configuration in Xcode settings.](../../images/screens-ios-xcode-prefix.png)
+    ![Figure 5: The `PrefixHeader.pch` configuration in Xcode settings.](../../images/screens-ios-xcode-prefix.png)
 
 You can use precompiler header file
 [`PrefixHeader.pch`](https://github.com/liferay/liferay-screens/tree/master/ios/Samples/Showcase-objc/LiferayScreens-Showcase-Objc/PrefixHeader.pch) 
@@ -125,7 +131,7 @@ other words, a screenlet's support for a language is only valid if your app
 supports that language. To support a language, make sure to add it as a
 localization in your project's settings. 
 
-![Figure 5: The Xcode localizations in the project's settings.](../../images/screens-ios-xcode-localizations.png)
+![Figure 6: The Xcode localizations in the project's settings.](../../images/screens-ios-xcode-localizations.png)
 
 ## Related Topics [](id=related-topics)
 
