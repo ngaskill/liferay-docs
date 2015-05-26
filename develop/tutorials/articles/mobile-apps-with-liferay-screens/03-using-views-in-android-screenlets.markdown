@@ -3,11 +3,11 @@
 Using a Liferay Screens *view*, you can set your screenlet's UI components,
 behavior, and look and feel. They let you focus on a screenlet's UI and UX,
 without having to worry about its core functionality. Liferay's screenlets come
-with several views, and more are being developed by Liferay and the community. A
+with several views, and more are being developed by Liferay and its community. A
 Liferay screenlet's views are specified in its
 [reference documentation](/develop/reference/-/knowledge_base/6-2/screenlets-in-liferay-screens-for-android).
-This tutorial shows you how to use views in Android screenlets. It's
-straightforward; you'll master using views in no time!
+This tutorial shows you how to use views in Android screenlets. It's easy;
+you'll master using views in no time!
 
 Here are some view layer components you should understand: 
 
@@ -46,9 +46,9 @@ Here are some view sets that Liferay created for Android screenlets:
   [Westeros Bank](https://github.com/liferay/liferay-screens/tree/master/android/samples/bankofwesteros) 
   demo app. 
 
-To use a view set in your screenlet, specify its name as the `liferay:layoutId`
-property value in your app's layout XML. This is shown in the following
-screenshot: 
+To use a view set in your screenlet, specify its name using the
+`liferay:layoutId` property in your app's layout XML. This is shown in the
+following screenshot: 
 
 ![Figure 1: You can set a screenlet's layout via its `liferay:layoutId` attribute.](../../images/screens-android-layoutid-xml.png)
 
