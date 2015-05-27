@@ -12,7 +12,7 @@ This tutorial shows you how to create your own screenlets in Liferay Screens for
 Android. As an example, code is provided for a [sample bookmarks screenlet](https://github.com/liferay/liferay-screens/tree/master/android/samples/addbookmarkscreenlet) 
 that lets the user enter the bookmark's URL and title in text boxes. When the 
 user touches the submit button, the URL and title are sent to the Liferay 
-instance's Bookmark service to be saved.  
+instance's Bookmark service to be saved.
 
 To understand the components that comprise a screenlet, you first may want to 
 read the tutorial [Architecture of Liferay Screens for Android](/develop/tutorials/-/knowledge_base/6-2/architecture-of-liferay-screens-for-android). 
@@ -20,13 +20,13 @@ You may also want to read the tutorial [Creating Android Views](/develop/tutoria
 to learn how to support your new screenlet from the view you want to use. 
 Without any further ado, let the screenlet creation begin! 
 
-## Deciding Your Screenlet's Location [](id=deciding-your-screenlets-location)
+## Determining Your Screenlet's Location [](id=determining-your-screenlets-location)
 
-You have a couple different options on where to create your screenlet, depending 
-on how you plan on using it. If you don't plan to reuse your screenlet in 
-another app, or if you don't want to redistribute it, the best place to create 
-it is in a new package inside your project. This way you can reference and 
-access Liferay Screens' core, in addition to all the view sets you've imported. 
+You have a couple different options regarding where to create your screenlet,
+depending on how you plan on using it. If you don't plan to reuse your screenlet
+in another app or you don't want to redistribute it, it's best to create it in a
+new package inside your project. This approach lets you reference and access
+Liferay Screens's core, in addition to all the view sets you've imported. 
 
 If you want to reuse your screenlet in another app, you need to create it in a 
 new Android application module. The steps for creating such a module are 
@@ -372,8 +372,10 @@ example screenlet class for the `AddBookmarkScreenlet` is shown here:
     
     }
 
-Great! Now you know how to create a screenlet class. The final step is hooking 
-it up to the rest of the screenlet's code. 
+If you copied the code above, you'll see a few errors regarding
+`R.styleable.AddBookmarkScreenlet*` references. See the next section to learn
+how to resolve such errors. Great! Now you know how to create a screenlet class.
+The final step is hooking it up to the rest of the screenlet's code. 
 
 ## Triggering the User Action [](id=triggering-the-user-action)
 
