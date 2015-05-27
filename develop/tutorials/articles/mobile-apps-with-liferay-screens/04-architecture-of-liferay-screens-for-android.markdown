@@ -5,10 +5,10 @@ Liferay Screens applies architectural ideas from
 [Model View ViewModel](http://en.wikipedia.org/wiki/Model_View_ViewModel), and 
 [VIPER](http://www.objc.io/issue-13/viper.html). Screens isn't considered a
 canonical implementation of these architectures, because it isn't an app, but it
-borrows from them to separate presentation layers from business-logic. This
-tutorial explains Screen's high-level architecture, its component's low-level
-architecture, and the Android screenlet lifecyle. Now, go ahead and get started
-examining Screens's building blocks! 
+borrows from them to separate presentation layers from business logic. This
+tutorial explains the high-level architecture of Screens, the low-level
+architecture of Screens components, and the Android screenlet lifecyle. Now, go
+ahead and get started examining Screens's building blocks! 
 
 ## High-Level Architecture [](id=high-level-architecture)
 
@@ -23,21 +23,22 @@ architecture.
 Each component is described below.
 
 - *Core*: includes all the base classes for developing other Screens components.
-It's a micro-framework that lets developers write their own screenlets, views,
-and interactors. 
+  It's a micro-framework that lets developers write their own screenlets, views,
+  and interactors. 
 
-- *Screenlets*: Java View classes for inserting in any activity or fragment view
-hierarchy. They render a selected layout in the runtime and in Android Studio's
-visual editor, and react to UI events, sending any necessary server requests.
-You can set a screentlet's properties from its layout XML file and Java code. 
+- *Screenlets*: Java View classes for inserting any activity or fragment view
+  hierarchy. They render a selected layout in the runtime and in Android
+  Studio's visual editor, and react to UI events, sending any necessary server
+  requests. You can set a screentlet's properties from its layout XML file and
+  Java code. 
 
-- *Interactors*: implement specific user interactions or use cases. They can 
-interact with local and remote data sources. Most interactors use the
-[Liferay Mobile SDK](/develop/tutorials/-/knowledge_base/6-2/mobile) to exchange 
-data with a Liferay instance. 
+- *Interactors*: implement specific user interactions or use cases. They can
+  interact with local and remote data sources. Most interactors use the [Liferay
+  Mobile SDK](/develop/tutorials/-/knowledge_base/6-2/mobile) to exchange data
+  with a Liferay instance. 
 
-- *Views*: a set of layouts and accompanying custom view classes that present 
-screenlets to the user.
+- *Views*: a set of layouts and accompanying custom view classes that present
+  screenlets to the user.
 
 Next, the core layer is described in detail. 
 
@@ -53,12 +54,12 @@ API.
 Here are the core classes:
 
 - *Interactor*: the base class for all Liferay portal interactions and use cases
-that a screenlet supports. Interactors call services through the Liferay Mobile
-SDK and receive responses asynchronously through the EventBus, eventually
-changing a view's state. Their actions can vary in complexity, from performing
-simple algorithms to requesting data asynchronously from a server or database. A
-screenlet can have multiple interactors; each operation a screenlet supports
-typically requires a dedicated interactor. 
+  that a screenlet supports. Interactors call services through the Liferay
+  Mobile SDK and receive responses asynchronously through the EventBus,
+  eventually changing a view's state. Their actions can vary in complexity, from
+  performing simple algorithms to requesting data asynchronously from a server
+  or database. A screenlet can have multiple interactors; each operation a
+  screenlet supports typically requires a dedicated interactor. 
 
 - *BaseScreenlet*: the base class for all screenlet classes. It primarily 
   receives user events from a screentlet's view, instantiates and calls the 
