@@ -4,11 +4,12 @@ Liferay Screens applies architectural ideas from
 [Model View Presenter](http://en.wikipedia.org/wiki/Model-view-presenter), 
 [Model View ViewModel](http://en.wikipedia.org/wiki/Model_View_ViewModel), and 
 [VIPER](http://www.objc.io/issue-13/viper.html). Screens isn't considered a
-canonical implementation of these architectures, because it isn't an app, but it
-borrows from them to separate presentation layers from business logic. This
-tutorial explains the high-level architecture of Screens, the low-level
-architecture of Screens components, and the Android screenlet lifecyle. Now, go
-ahead and get started examining Screens's building blocks! 
+canonical implementation of these architectures because it isn't an app.
+Nevertheless, Screens borrows from these patterns to separate presentation
+layers from business logic. This tutorial explains the high-level architecture
+of Screens, the low-level architecture of Screens components, and the Android
+screenlet lifecyle. Now, go ahead and get started examining Screens's building
+blocks! 
 
 ## High-Level Architecture [](id=high-level-architecture)
 
@@ -29,7 +30,7 @@ Each component is described below.
 - *Screenlets*: Java View classes for inserting any activity or fragment view
   hierarchy. They render a selected layout in the runtime and in Android
   Studio's visual editor, and react to UI events, sending any necessary server
-  requests. You can set a screentlet's properties from its layout XML file and
+  requests. You can set a screenlet's properties from its layout XML file and
   Java code. 
 
 - *Interactors*: implement specific user interactions or use cases. They can
@@ -62,7 +63,7 @@ Here are the core classes:
   screenlet supports typically requires a dedicated interactor. 
 
 - *BaseScreenlet*: the base class for all screenlet classes. It primarily 
-  receives user events from a screentlet's view, instantiates and calls the 
+  receives user events from a screenlet's view, instantiates and calls the 
   interactors, and then updates the view with operation results. Classes that 
   extend it can override its [template methods](http://www.oodesign.com/template-method-pattern.html):
 
@@ -108,7 +109,7 @@ screenlet layer's details.
 The screenlet layer contains the screenlets available in Liferay Screens for
 Android. The following diagram uses screenlet classes prefixed with
 *MyScreenlet* to show the screenlet layer's relationship with the core, view,
-and interactor components.  
+and interactor components.
 
 ![Figure 3: This diagrame illustrates the Android screenlet layer's relationship to other Screens components.](../../images/screens-android-architecture-03.png)
 
@@ -120,8 +121,8 @@ Screenlets are comprised of several Java classes and an XML descriptor file:
   user name and password. The screenlet can read the attribute values, invoke  
   interactor operations, and change the values based on operation results. 
 
-- *Screenlet*: a class that represents the screenlet component the developer
-  interacts with. It's comprised of the following things:
+- *Screenlet*: a class that represents the screenlet component with which the
+  developer interacts. It's comprised of the following things:
 
     - Attribute fields for configuring the screenlet's behavior. They are read 
       in the screenlet's `createScreenletView` method and their default values 
