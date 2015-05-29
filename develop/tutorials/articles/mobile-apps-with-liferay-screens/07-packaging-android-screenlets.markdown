@@ -2,9 +2,9 @@
 
 You should package your screenlets in a module (Android library) if you want to 
 distribute them for use in other apps. Developers can then use your screenlets 
-by adding that module as a project dependency in their apps. With the following 
-steps, this tutorial shows you how to package and distribute your screenlets in 
-a module:  
+by adding your module as a project dependency in their apps. With the following
+steps, this tutorial shows you how to package and distribute your screenlets in
+a module:
 
 1. Create a new Android module and configure the `build.gradle` file.
 2. Configure dependencies between each module.
@@ -49,10 +49,10 @@ following `compile` statement to the `dependencies` in your `build.gradle` file:
         ...
     }
 
-Your module also needs the dependencies required to override the existing 
-screenlets or create new ones. This usually means that you need to add Liferay 
-Screens and the view sets you currently use as dependencies. To do so, add the 
-following `compile` statement to the `dependencies` in your `build.gradle` file: 
+Your module also needs the dependencies required to override existing screenlets
+or to create new ones. This usually means that you need to add Liferay Screens
+and any required view sets as dependencies. To do so, add the following
+`compile` statement to the `dependencies` in your `build.gradle` file: 
 
     dependencies {
         ...
@@ -68,7 +68,7 @@ Now that your module is ready, you can upload it to jCenter or Maven Central so
 that others can use it. Before doing so, you need to configure your 
 `build.gradle` file appropriately for those repositories. Use the material or 
 Westeros view set's [`build.gradle`](https://github.com/liferay/liferay-screens/blob/master/android/viewsets/westeros/build.gradle) 
-file as an example. After entering your bintray api key, you can execute 
+file as an example. After entering your bintray API key, you can execute 
 `gradlew bintrayupload` to upload your project to jCenter. Developers can then 
 use your screenlet as any other Android dependency by adding the repository, 
 artifact, groupId, and version to their gradle file. 
