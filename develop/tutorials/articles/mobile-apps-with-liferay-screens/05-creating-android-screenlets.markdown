@@ -393,8 +393,9 @@ defines those attributes. Here's an example for the `AddBookmarkScreenlet`:
 
 Next, you need to trigger the user action when the button is pressed. To do 
 this, go back to your view class and add a listener to the button. To handle the 
-button press, you also need to make your view class implement `OnClickListener`. 
-This additional code is shown here for the example `AddBookmarkScreenlet`: 
+button press, you also need to make your view class implement
+`View.OnClickListener`. This additional code is shown here for the example
+`AddBookmarkScreenlet`: 
 
     protected void onFinishInflate() {
         super.onFinishInflate();
