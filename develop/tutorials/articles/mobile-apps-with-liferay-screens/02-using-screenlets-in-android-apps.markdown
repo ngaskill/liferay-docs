@@ -5,7 +5,7 @@ You can start using screenlets once you've
 your project to use Liferay Screens. There are plenty of Liferay screenlets
 available and they're described in the screenlet
 [reference documentation](/develop/reference/-/knowledge_base/6-2/screenlets-in-liferay-screens-for-android).
-It is very straightforward to use screenlets. This tutorial shows you how to
+It's very straightforward to use screenlets. This tutorial shows you how to
 insert screenlets into your android app and configure them. You'll be a
 screenlet master in no time! 
 

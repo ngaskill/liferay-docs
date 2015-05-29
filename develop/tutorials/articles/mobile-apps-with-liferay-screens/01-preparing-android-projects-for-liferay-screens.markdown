@@ -1,13 +1,13 @@
 # Preparing Android Projects for Liferay Screens [](id=preparing-android-projects-for-liferay-screens)
 
 To use Liferay Screens in your Android project, you must install it, install its
-dependencies, and configure it. We recommend you use Gradle or Maven to
-configure your project automatically with Liferay Screens, but you can do it
-manually too. Liferay Screens is released as an
+dependencies, and configure it. We recommend that you use Gradle or Maven to
+configure your project automatically with Liferay Screens. It's also possible to
+configure your project manually. Liferay Screens is released as an
 [AAR](http://tools.android.com/tech-docs/new-build-system/aar-format) file
 hosted in jCenter. This tutorial specifies Screens's requirements, shows you all
-three configuration methods, and shows how to set up communication with Liferay.
-Let the preparations begin! 
+three configuration methods, and explains how to configure communication with
+Liferay. Let the preparations begin! 
 
 ## Requirements [](id=requirements)
 
@@ -20,7 +20,7 @@ a sample project. It requires the following software:
   [recycler view](https://developer.android.com/tools/support-library/features.html#v7-recyclerview) 
   and offers older devices a material look and feel.
 - [Liferay Portal 6.2 CE or EE](http://www.liferay.com/downloads/liferay-portal/available-releases).
-- [Liferay Screens Compatiblity Plugin](https://github.com/liferay/liferay-screens/tree/master/portal). 
+- [Liferay Screens Compatibility Plugin](https://github.com/liferay/liferay-screens/tree/master/portal). 
 - Liferay Screens source code. 
 
 Liferay Screens for Android uses
@@ -56,7 +56,7 @@ file:
         ...
     }
 
-Next, steps for configuring your project with Maven are shown.
+Next, learn how to configure your project with Maven.
 
 ## Configuring Your Project with Maven [](id=configuring-your-project-with-maven)
 
@@ -129,7 +129,7 @@ You can also configure the `.aar` binary files (in `Android/dist`) as local
 To check your configuration, you can compile and execute a blank activity and
 import a Liferay Screens class (like `LoginScreenlet`). 
 
-Next, you'll set up communication with Liferay. 
+Next, you'll set up communication between your screenlets and Liferay. 
 
 ## Configuring Communication with Liferay [](id=configuring-communication-with-liferay)
 
@@ -158,7 +158,7 @@ you should, however, use address `192.168.56.1` instead of `localhost`.
 In your `server_context.xml` file, you can configure screenlet properties. The
 example properties listed below, `liferay_recordset_id` and
 `liferay_recordset_fields`, enable `DDLFormScreenlet` and `DDLListScreenlet` to
-interact with a portal's DDLs. You can see an additional example
+interact with a portal's dynamic data lists. You can see an additional example
 `server_context.xml` file
 [here](https://github.com/liferay/liferay-screens/blob/master/android/samples/bankofwesteros/src/main/res/values/server_context.xml).
 
