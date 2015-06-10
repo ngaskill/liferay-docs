@@ -35,6 +35,8 @@ diagram.
   server operations if necessary. Screenlets also define a set of 
   `@IBInspectable` properties that can be configured from Interface Builder.
 
++- *Interactors*: implement specific user interactions or use cases. They can interact with local and remote data sources using *Server Operations* or custom classes for that. If one user action or use case needs to execute more than one query to remote or local store, the sequence will be done in the corresponding interactor. If one screenlet supports more than one user action or use case, one interactor will be created for each one.
+
 - *Server Operations*: A collection of `NSOperation` classes that interact with 
   local and remote data sources. Liferay's own set of operations, Liferay 
   Operations, use the [Liferay Mobile SDK](/develop/tutorials/-/knowledge_base/6-2/invoking-liferay-services-in-your-ios-app).
