@@ -31,10 +31,7 @@ hierarchy. They render a selected layout in the runtime and in Android Studio's
 visual editor, and react to UI events, sending any necessary server requests.
 You can set a screentlet's properties from its layout XML file and Java code. 
 
-- *Interactors*: implement specific user interactions or use cases. They can 
-interact with local and remote data sources. Most interactors use the
-[Liferay Mobile SDK](/develop/tutorials/-/knowledge_base/6-2/mobile) to exchange 
-data with a Liferay instance. 
+- *Interactors*: implement specific user interactions or use cases. They can interact with local and remote data sources. Most interactors use the [Liferay Mobile SDK](/develop/tutorials/-/knowledge_base/6-2/mobile) to exchange data with a Liferay instance..If one user action or use case needs to execute more than one query to remote or local store, the sequence will be done in the corresponding interactor. If one screenlet supports more than one user action or use case, one interactor will be created for each one.
 
 - *Views*: a set of layouts and accompanying custom view classes that present 
 screenlets to the user.
