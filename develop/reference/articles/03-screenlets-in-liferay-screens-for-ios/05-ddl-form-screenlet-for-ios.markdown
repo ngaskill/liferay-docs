@@ -183,7 +183,7 @@ following methods:
 - `- screenlet:onDocumentFieldUploadStarted:`: Called when the upload of a 
   Documents and Media field begins.
 
-- `- screenlet:onDocumentField:uploadedBytes:sentBytes:totalBytes:`: Called when 
+- `- screenlet:onDocumentField:uploadedBytes:totalBytes:`: Called when 
   a block of bytes in a Documents and Media field is uploaded. This method is 
   intended to track progress of the uploads.
 
