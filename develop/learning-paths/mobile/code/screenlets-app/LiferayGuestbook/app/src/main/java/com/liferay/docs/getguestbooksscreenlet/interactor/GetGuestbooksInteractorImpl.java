@@ -24,7 +24,7 @@ public class GetGuestbooksInteractorImpl extends BaseRemoteInteractor<ListListen
         if (event.isFailed()) {
             getListener().onGetEntitiesFailure(event.getException());
         } else {
-            getListener().onGetEntitiesSuccess(event.getGuestbooks());
+            getListener().onGetEntitiesSuccess(event.getEntities());
         }
     }
 

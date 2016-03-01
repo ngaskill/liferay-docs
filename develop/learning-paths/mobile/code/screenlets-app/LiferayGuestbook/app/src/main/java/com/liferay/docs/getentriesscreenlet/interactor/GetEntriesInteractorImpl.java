@@ -24,7 +24,7 @@ public class GetEntriesInteractorImpl extends BaseRemoteInteractor<ListListener<
         if (event.isFailed()) {
             getListener().onGetEntitiesFailure(event.getException());
         } else {
-            getListener().onGetEntitiesSuccess(event.getEntries());
+            getListener().onGetEntitiesSuccess(event.getEntities());
         }
     }
 
