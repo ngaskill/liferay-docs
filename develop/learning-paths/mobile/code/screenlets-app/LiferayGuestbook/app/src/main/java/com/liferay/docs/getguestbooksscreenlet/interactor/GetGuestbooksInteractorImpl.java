@@ -1,14 +1,15 @@
 package com.liferay.docs.getguestbooksscreenlet.interactor;
 
-import com.liferay.docs.getguestbooksscreenlet.GetGuestbooksListener;
+import com.liferay.docs.basescreenlet.ListListener;
 import com.liferay.docs.getguestbooksscreenlet.event.GetGuestbooksEvent;
+import com.liferay.docs.model.GuestbookModel;
 import com.liferay.mobile.android.service.Session;
 import com.liferay.mobile.android.v62.guestbook.GuestbookService;
 import com.liferay.mobile.screens.base.interactor.BaseRemoteInteractor;
 import com.liferay.mobile.screens.context.SessionContext;
 import com.liferay.mobile.screens.util.LiferayLogger;
 
-public class GetGuestbooksInteractorImpl extends BaseRemoteInteractor<GetGuestbooksListener>
+public class GetGuestbooksInteractorImpl extends BaseRemoteInteractor<ListListener<GuestbookModel>>
         implements GetGuestbooksInteractor {
 
     public GetGuestbooksInteractorImpl(int targetScreenletId) {
@@ -21,10 +22,9 @@ public class GetGuestbooksInteractorImpl extends BaseRemoteInteractor<GetGuestbo
         }
 
         if (event.isFailed()) {
-            getListener().onGetGuestbooksFailure(event.getException());
-        }
-        else {
-            getListener().onGetGuestbooksSuccess(event.getGuestbooks());
+            getListener().onGetEntitiesFailure(event.getException());
+        } else {
+            getListener().onGetEntitiesSuccess(event.getEntities());
         }
     }
 

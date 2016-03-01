@@ -1,26 +1,17 @@
 package com.liferay.docs.getguestbooksscreenlet.event;
 
+import com.liferay.docs.basescreenlet.ListEvent;
 import com.liferay.docs.model.GuestbookModel;
-import com.liferay.mobile.screens.base.interactor.BasicEvent;
 
 import java.util.List;
 
-public class GetGuestbooksEvent extends BasicEvent {
+public class GetGuestbooksEvent extends ListEvent<GuestbookModel> {
 
-    private List<GuestbookModel> _guestbooks;
-
-    public GetGuestbooksEvent(int targetScreenletId, Exception e) {
-        super(targetScreenletId, e);
+    public GetGuestbooksEvent(int targetScreenletId, List<GuestbookModel> entities) {
+        super(targetScreenletId, entities);
     }
 
-    public GetGuestbooksEvent(int targetScreenletId, List<GuestbookModel> guestbooks) {
-        super(targetScreenletId);
-
-        _guestbooks = guestbooks;
+    public GetGuestbooksEvent(int targetScreenletId, Exception exception) {
+        super(targetScreenletId, exception);
     }
-
-    public List<GuestbookModel> getGuestbooks() {
-        return _guestbooks;
-    }
-
 }
