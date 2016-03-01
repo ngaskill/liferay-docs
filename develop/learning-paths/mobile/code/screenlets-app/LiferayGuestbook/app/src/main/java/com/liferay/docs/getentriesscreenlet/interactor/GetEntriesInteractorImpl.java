@@ -1,14 +1,15 @@
 package com.liferay.docs.getentriesscreenlet.interactor;
 
-import com.liferay.docs.getentriesscreenlet.GetEntriesListener;
+import com.liferay.docs.basescreenlet.ListListener;
 import com.liferay.docs.getentriesscreenlet.event.GetEntriesEvent;
+import com.liferay.docs.model.EntryModel;
 import com.liferay.mobile.android.service.Session;
 import com.liferay.mobile.android.v62.entry.EntryService;
 import com.liferay.mobile.screens.base.interactor.BaseRemoteInteractor;
 import com.liferay.mobile.screens.context.SessionContext;
 import com.liferay.mobile.screens.util.LiferayLogger;
 
-public class GetEntriesInteractorImpl extends BaseRemoteInteractor<GetEntriesListener>
+public class GetEntriesInteractorImpl extends BaseRemoteInteractor<ListListener<EntryModel>>
         implements GetEntriesInteractor {
 
     public GetEntriesInteractorImpl(int targetScreenletId) {
@@ -21,10 +22,9 @@ public class GetEntriesInteractorImpl extends BaseRemoteInteractor<GetEntriesLis
         }
 
         if (event.isFailed()) {
-            getListener().onGetEntriesFailure(event.getException());
-        }
-        else {
-            getListener().onGetEntriesSuccess(event.getEntries());
+            getListener().onGetEntitiesFailure(event.getException());
+        } else {
+            getListener().onGetEntitiesSuccess(event.getEntries());
         }
     }
 

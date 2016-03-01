@@ -4,24 +4,24 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.view.View;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
-import com.liferay.docs.getguestbooksscreenlet.GetGuestbooksListener;
+import com.liferay.docs.basescreenlet.ListListener;
 import com.liferay.docs.getguestbooksscreenlet.GetGuestbooksScreenlet;
 import com.liferay.docs.model.GuestbookModel;
 
 import java.util.List;
 
-public class GuestbooksActivity extends AppCompatActivity implements GetGuestbooksListener {
+public class GuestbooksActivity extends AppCompatActivity implements ListListener<GuestbookModel> {
 
     private ActionBar actionBar;
     private Toolbar toolbar;
@@ -50,6 +50,16 @@ public class GuestbooksActivity extends AppCompatActivity implements GetGuestboo
     }
 
     @Override
+    public void onGetEntitiesFailure(Exception e) {
+        Toast.makeText(this, "Couldn't get guestbooks " + e.getMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onGetEntitiesSuccess(List<GuestbookModel> entities) {
+        onItemClicked(entities.get(0));
+    }
+
+    @Override
     public void onItemClicked(final GuestbookModel guestbook) {
         actionBar.setTitle(guestbook.getName());
 
@@ -59,16 +69,6 @@ public class GuestbooksActivity extends AppCompatActivity implements GetGuestboo
         transaction.commit();
 
         drawer.closeDrawers();
-    }
-
-    @Override
-    public void onGetGuestbooksSuccess(List<GuestbookModel> guestbooks) {
-        onItemClicked(guestbooks.get(0));
-    }
-
-    @Override
-    public void onGetGuestbooksFailure(Exception e) {
-        Toast.makeText(this, "Couldn't get guestbooks " + e.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     private void initDrawer() {

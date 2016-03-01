@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.liferay.docs.basescreenlet.ListListener;
 import com.liferay.docs.getguestbooksscreenlet.interactor.GetGuestbooksInteractor;
 import com.liferay.docs.getguestbooksscreenlet.interactor.GetGuestbooksInteractorImpl;
 import com.liferay.docs.getguestbooksscreenlet.view.GetGuestbooksViewModel;
@@ -19,9 +20,9 @@ import com.liferay.mobile.screens.util.LiferayLogger;
 import java.util.List;
 
 public class GetGuestbooksScreenlet extends BaseScreenlet<GetGuestbooksViewModel, GetGuestbooksInteractor>
-        implements GetGuestbooksListener {
+        implements ListListener<GuestbookModel> {
 
-    private GetGuestbooksListener _listener;
+    private ListListener<GuestbookModel> _listener;
     private int _groupId;
     private boolean _autoLoad;
 
@@ -37,19 +38,21 @@ public class GetGuestbooksScreenlet extends BaseScreenlet<GetGuestbooksViewModel
         super(context, attributes, defaultStyle);
     }
 
-    public void onGetGuestbooksSuccess(List<GuestbookModel> guestbooks) {
-        getViewModel().showFinishOperation(null, guestbooks);
-
-        if (_listener != null) {
-            _listener.onGetGuestbooksSuccess(guestbooks);
-        }
-    }
-
-    public void onGetGuestbooksFailure(Exception e) {
+    @Override
+    public void onGetEntitiesFailure(Exception e) {
         getViewModel().showFailedOperation(null, e);
 
         if (_listener != null) {
-            _listener.onGetGuestbooksFailure(e);
+            _listener.onGetEntitiesFailure(e);
+        }
+    }
+
+    @Override
+    public void onGetEntitiesSuccess(List<GuestbookModel> entities) {
+        getViewModel().showFinishOperation(null, entities);
+
+        if (_listener != null) {
+            _listener.onGetEntitiesSuccess(entities);
         }
     }
 
@@ -60,11 +63,11 @@ public class GetGuestbooksScreenlet extends BaseScreenlet<GetGuestbooksViewModel
         }
     }
 
-    public GetGuestbooksListener getListener() {
+    public ListListener<GuestbookModel> getListener() {
         return _listener;
     }
 
-    public void setListener(GetGuestbooksListener listener) {
+    public void setListener(ListListener<GuestbookModel> listener) {
         _listener = listener;
     }
 
@@ -108,9 +111,8 @@ public class GetGuestbooksScreenlet extends BaseScreenlet<GetGuestbooksViewModel
 
         try {
             interactor.getGuestbooks(_groupId);
-        }
-        catch (Exception e) {
-            onGetGuestbooksFailure(e);
+        } catch (Exception e) {
+            onGetEntitiesFailure(e);
         }
     }
 

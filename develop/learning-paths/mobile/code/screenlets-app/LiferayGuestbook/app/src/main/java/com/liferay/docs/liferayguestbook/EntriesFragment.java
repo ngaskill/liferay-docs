@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.liferay.docs.getentriesscreenlet.GetEntriesListener;
+import com.liferay.docs.basescreenlet.ListListener;
 import com.liferay.docs.getentriesscreenlet.GetEntriesScreenlet;
 import com.liferay.docs.model.EntryModel;
 
 import java.util.List;
 
-public class EntriesFragment extends Fragment implements GetEntriesListener {
+public class EntriesFragment extends Fragment implements ListListener<EntryModel> {
 
     private long _guestbookId;
 
@@ -46,12 +46,13 @@ public class EntriesFragment extends Fragment implements GetEntriesListener {
     }
 
     @Override
-    public void onGetEntriesSuccess(List<EntryModel> entries) {
+    public void onGetEntitiesFailure(Exception e) {
+        Toast.makeText(getActivity(), "Couldn't get entries " + e.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onGetEntriesFailure(Exception e) {
-        Toast.makeText(getActivity(), "Couldn't get entries " + e.getMessage(), Toast.LENGTH_LONG).show();
+    public void onGetEntitiesSuccess(List<EntryModel> entities) {
+
     }
 
     @Override

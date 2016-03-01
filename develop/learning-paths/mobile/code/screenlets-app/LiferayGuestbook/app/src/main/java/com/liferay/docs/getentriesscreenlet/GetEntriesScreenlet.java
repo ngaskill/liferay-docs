@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.liferay.docs.basescreenlet.ListListener;
 import com.liferay.docs.getentriesscreenlet.interactor.GetEntriesInteractor;
 import com.liferay.docs.getentriesscreenlet.interactor.GetEntriesInteractorImpl;
 import com.liferay.docs.getentriesscreenlet.view.GetEntriesViewModel;
@@ -18,9 +19,9 @@ import com.liferay.mobile.screens.util.LiferayLogger;
 import java.util.List;
 
 public class GetEntriesScreenlet extends BaseScreenlet<GetEntriesViewModel, GetEntriesInteractor>
-        implements GetEntriesListener {
+        implements ListListener<EntryModel> {
 
-    private GetEntriesListener _listener;
+    private ListListener<EntryModel> _listener;
     private int _groupId;
     private long _guestbookId;
     private boolean _autoLoad;
@@ -37,19 +38,21 @@ public class GetEntriesScreenlet extends BaseScreenlet<GetEntriesViewModel, GetE
         super(context, attributes, defaultStyle);
     }
 
-    public void onGetEntriesSuccess(List<EntryModel> entries) {
-        getViewModel().showFinishOperation(null, entries);
-
-        if (_listener != null) {
-            _listener.onGetEntriesSuccess(entries);
-        }
-    }
-
-    public void onGetEntriesFailure(Exception e) {
+    @Override
+    public void onGetEntitiesFailure(Exception e) {
         getViewModel().showFailedOperation(null, e);
 
         if (_listener != null) {
-            _listener.onGetEntriesFailure(e);
+            _listener.onGetEntitiesFailure(e);
+        }
+    }
+
+    @Override
+    public void onGetEntitiesSuccess(List<EntryModel> entities) {
+        getViewModel().showFinishOperation(null, entities);
+
+        if (_listener != null) {
+            _listener.onGetEntitiesSuccess(entities);
         }
     }
 
@@ -60,11 +63,11 @@ public class GetEntriesScreenlet extends BaseScreenlet<GetEntriesViewModel, GetE
         }
     }
 
-    public GetEntriesListener getListener() {
+    public ListListener<EntryModel> getListener() {
         return _listener;
     }
 
-    public void setListener(GetEntriesListener listener) {
+    public void setListener(ListListener<EntryModel> listener) {
         _listener = listener;
     }
 
@@ -118,7 +121,7 @@ public class GetEntriesScreenlet extends BaseScreenlet<GetEntriesViewModel, GetE
             interactor.getEntries(_groupId, _guestbookId);
         }
         catch (Exception e) {
-            onGetEntriesFailure(e);
+            onGetEntitiesFailure(e);
         }
     }
 
