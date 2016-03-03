@@ -16,12 +16,12 @@ Let the preparations begin!
 Liferay Screens for Android includes the Component Library (the Screenlets) and 
 a sample project. It requires the following software:
 
-- Android Studio 1.0.2 or above.
+- Android Studio 2.0 or above.
 - Android SDK 4.0 (API Level 15) or above. Its [AppCompat library](https://developer.android.com/tools/support-library/features.html#v7-appcompat) 
   (v7:23.0.1) implements the
   [recycler view](https://developer.android.com/tools/support-library/features.html#v7-recyclerview) 
   and offers older devices a material look and feel.
-- [Liferay Portal 6.2 CE or EE](http://www.liferay.com/downloads/liferay-portal/available-releases).
+- [Liferay Portal 6.2 CE, 7.0 CE or EE](http://www.liferay.com/downloads/liferay-portal/available-releases).
 - Liferay Screens Compatibility Plugin (
   [CE](http://www.liferay.com/marketplace/-/mp/application/54365664) or 
   [EE](http://www.liferay.com/marketplace/-/mp/application/54369726), 
