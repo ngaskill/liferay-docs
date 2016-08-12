@@ -66,7 +66,7 @@ registration process.
     	}
     }
 
-Once you've implemented the `UpgradeStepRegister` interface, you’ll have to use 
+Once you've implemented the `UpgradeStepRegistrator` interface, you’ll have to use 
 its `register` method to specify your upgrades, defining the versions you want
 to upgrade to the version you're upgrading to.
 
