@@ -116,7 +116,7 @@ For example, the Guestbook portlet(an app designed in the
 originally allowed users to enter a message of any length into the guestbook. 
 In an updated version, a character counter was added to the app to keep the 
 messages to a consistent length of no more than 140 characters. If a user enters
-a message of more than 140 characters, a verifer can act as an added measure of 
+a message of more than 140 characters, a verifier can act as an added measure of 
 security, and let the user know that their message must be no more than 140 
 characters in length.
 
@@ -124,7 +124,7 @@ If your verifier is simple, you can write all of it inside the `*VerifyProcess`
 class, but for anything but the simplest use cases, that gets clunky. Separate
 the logic into different classes instead.
 
-In this section, you'll Look closer at the DDM verifier classes to learn how 
+In this section, you'll look closer at the DDM verifier classes to learn how 
 verifiers are written and organized.
 
 The DDM service verify process consists of four verifiers: `verifyStructures()`, 
@@ -219,7 +219,7 @@ code related to the `verifyStructures()` verifier:
     
     }
 
-If you examine the code above, you'll see that the `verifyStructures()` verfier
+If you examine the code above, you'll see that the `verifyStructures()` verifier
 throws portal exceptions, calling a series of other methods. Each method handles
 a smaller and smaller portion of the validation.
 
