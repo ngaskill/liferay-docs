@@ -13,7 +13,7 @@ The `SessionContext` class is very powerful and lets you use Screens in many
 different scenarios. For example, you can use `SessionContext` to request 
 information with the JSON WS API provided by Liferay. You can also use 
 `SessionContext` to create anonymous sessions, or to log in a user without 
-showing a Login Screenlet.
+showing a Login Screenlet. 
 
 This tutorial explains some common `SessionContext` use cases, and and also 
 describes the class's most important methods. 
@@ -23,11 +23,12 @@ describes the class's most important methods.
 When working with Liferay Screens, you may wish to call the remote JSON web 
 services provided by the Liferay Mobile SDK. Every operation with the Liferay 
 Mobile SDK needs a Liferay Session to provide the server address, user 
-credentials, and any other required parameters. Since the Login Screenlet 
-creates a session when a user successfully logs in, you can retrieve this 
-session with the `SessionContext` method `createSessionFromCurrentSession()`. 
-You can then use that session to make the Mobile SDK service call. The following 
-example shows this for calling the Mobile SDK's `BookmarksEntryService`: 
+credentials, and any other required parameters. Since Login Screenlet creates a 
+session when a user successfully logs in, you can retrieve this session with the 
+`SessionContext` method `createSessionFromCurrentSession()`. You can then set a 
+callback to the session and use it to make the Mobile SDK service call. The 
+following example shows this for calling the Mobile SDK's 
+`BookmarksEntryService`: 
 
     Session sessionFromCurrentSession = SessionContext.createSessionFromCurrentSession();
     sessionFromCurrentSession.setCallback(callback);
@@ -155,7 +156,7 @@ this tutorial.
 | `loadStoredCredentials(StorageType storageType)` | `void` | Loads the session and user information from the `StorageType` parameter, and uses it as the current session and user. |
 
 For more information, see the 
-[`SessionContext` source code in GitHub](https://github.com/liferay/liferay-screens/blob/master/android/library/core/src/main/java/com/liferay/mobile/screens/context/SessionContext.java).
+[`SessionContext` source code in GitHub](https://github.com/liferay/liferay-screens/blob/master/android/library/src/main/java/com/liferay/mobile/screens/context/SessionContext.java). 
 
 ## Related Topics [](id=related-topics)
 

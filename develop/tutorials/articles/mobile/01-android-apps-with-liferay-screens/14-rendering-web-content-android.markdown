@@ -27,12 +27,15 @@ needed to render it in a small display). The following Screenlet XML shows this:
         android:layout_height="match_parent"
         app:articleId="YOUR_ARTICLE_ID" />
 
-To render the content *exactly* as it appears on your mobile site, however, you 
-must provide the CSS inline or use a template. The HTML returned isn't aware of 
-a Liferay instance's global CSS. 
+Note that the HTML returned isn't aware of a Liferay instance's global CSS. To 
+render the content *exactly* as it appears on your mobile site, you must provide 
+the CSS inline or use a template. You can provide the CSS inline in the 
+[Web Content Display Screenlet listener method](/develop/reference/-/knowledge_base/7-0/webcontentdisplayscreenlet-for-android#listener) 
+that receives the HTML. For example, your `onWebContentReceived` implementation 
+can add CSS to the HTML and then return this modified HTML. 
 
 You can also use a listener to modify the HTML, as explained in the 
-[Screenlet reference documentation](/develop/reference/-/knowledge_base/7-0/webcontentdisplayscreenlet-for-android).
+[Screenlet reference documentation](/develop/reference/-/knowledge_base/7-0/webcontentdisplayscreenlet-for-android). 
 
 In the default security policy, an Android `WebView` doesn't execute a page's 
 JavaScript. You can enable such JavaScript execution by setting the 
@@ -55,13 +58,13 @@ You can also use the `isJavascriptEnabled()` method to check this property's
 setting. 
 
 As you can see, this is all straightforward. What could go wrong? Famous last 
-words. A common mistake is to use the default `groupId` instead of the one for 
-the site that contains your `JournalArticle` entities. 
-
-If you need to use a default `groupId` in the rest of your app, but render 
-another site's HTML, you can set the Web Content Display Screenlet's `groupId` 
-with the `app:groupId` attribute. You can alternatively use the `setGroupId` 
-method in the activity or fragment code that uses the Screenlet. 
+words. A common mistake is to use the default `groupId` setting in your app's 
+`server_context.xml` file, instead of the `groupId` for the site that contains 
+your `JournalArticle` entities. If you need to use a default `groupId` for the 
+rest of your app, but render another site's HTML, you can set the Web Content 
+Display Screenlet's `groupId` with the `app:groupId` attribute in the 
+Screenlet's XML. Alternatively, you can  use the `setGroupId` method in the 
+activity or fragment code that uses the Screenlet. 
 
 ## Using Templates [](id=using-templates)
 
@@ -102,8 +105,8 @@ want. To do this, your layout should inherit from
 `WebContentStructuredDisplayView` and read the information parsed and stored in 
 the `webContent` entity. By displaying two structure fields with such a custom 
 layout, the 
-[test app](https://github.com/liferay/liferay-screens/tree/master/android/samples/test-app) 
-contains a complete example of this:
+[Liferay Screens Test App](https://github.com/liferay/liferay-screens/tree/master/android/samples/test-app) 
+contains a complete example of this: 
 
 1. The 
    [layout file `webcontentdisplaystructured_example.xml`](https://github.com/liferay/liferay-screens/blob/master/android/samples/test-app/src/main/res/layout/webcontentdisplaystructured_example.xml) 
@@ -162,6 +165,9 @@ contains a complete example of this:
             liferay:layoutId="@layout/webcontentdisplaystructured_example"
             liferay:offlinePolicy="REMOTE_FIRST"
             liferay:structureId="@string/liferay_article_structured_structure_id" />
+
+Note that the View created in these steps is an Extended View, as detailed in 
+[the View creation tutorial](/develop/tutorials/-/knowledge_base/7-0/creating-android-views#extended-view). 
 
 Great! Now you know how to use structured web content with Web Content Display 
 Screenlet. Next, you'll learn how to display a list of web content articles in 

@@ -15,20 +15,19 @@ Now get ready to package and distribute Screenlets like a pro!
 ## Create a New Android Module [](id=create-a-new-android-module)
 
 Android Studio's *Create New Module* wizard can automatically create a module
-and add it to your `settings.gradle` file. Go to *File* &rarr; *New Module...*,
-select *Android Library* in the More Modules section, and click *Next*. Then
-name your module and click *Next*. The wizard's final step lets you add a new
-activity. Since your module doesn't need one, select *Blank Activity* and click
-*Finish*. Android Studio creates a new `build.gradle` file with an Android
-Library configuration and adds the new module to your `settings.gradle` file.
+and add it to your `settings.gradle` file. Go to *File* &rarr; *New* &rarr; 
+*New Module...*, select *Android Library*, and click *Next*. Then name your 
+module and click *Finish*. Android Studio creates a new `build.gradle` file with 
+an Android Library configuration and adds the new module to your 
+`settings.gradle` file. 
 
 If you prefer to create a new module manually, examine the `build.gradle` file
-from the
-[Material View set](https://github.com/liferay/liferay-screens/blob/master/android/viewsets/material/build.gradle)
-or
-[Westeros app](https://github.com/liferay/liferay-screens/blob/master/android/viewsets/westeros/build.gradle)
+from the 
+[Material View Set](https://github.com/liferay/liferay-screens/blob/master/android/viewsets/material/build.gradle) 
+or 
+[Westeros app](https://github.com/liferay/liferay-screens/blob/master/android/viewsets/westeros/build.gradle) 
 as an example. After creating the module, import it into your project by
-specifying its location in
+specifying its location in 
 [`settings.gradle`](https://github.com/liferay/liferay-screens/blob/master/android/samples/test-app/settings.gradle).
 Here's an example configuration: 
 
@@ -37,7 +36,7 @@ Here's an example configuration:
     include ':YOUR_MODULE_NAME'
     project(':YOUR_MODULE_NAME').projectDir = new File(settingsDir, 'RELATIVE_ROUTE_TO_YOUR_MODULE')
 
-Now that you have a module, you're ready to configure its dependencies.
+Now that you have a module, you're ready to configure its dependencies. 
 
 ## Configure Dependencies Between Each Module [](id=configure-dependencies-between-each-module)
 
