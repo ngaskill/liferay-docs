@@ -7,8 +7,8 @@
 - Liferay 7.0 CE, Liferay DXP 
 - Liferay Screens Compatibility Plugin 
   ([CE](http://www.liferay.com/marketplace/-/mp/application/54365664) or 
-  [EE](http://www.liferay.com/marketplace/-/mp/application/54369726), 
-  depending on your portal edition). This app is preinstalled in Liferay 7.0 CE 
+  [DE](http://www.liferay.com/marketplace/-/mp/application/54369726), 
+  depending on your Liferay edition). This app is preinstalled in Liferay 7.0 CE 
   and Liferay DXP instances. 
 
 ## Compatibility [](id=compatibility)
@@ -17,7 +17,8 @@
 
 ## Features [](id=features)
 
-Comment List Screenlet can list all the comments of an `Asset`. Also allows to update or delete the comment by the user.
+Comment List Screenlet can list all the comments of an asset in a Liferay 
+instance. It also lets the user update or delete comments. 
 
 ## Module [](id=module)
 
@@ -25,10 +26,13 @@ Comment List Screenlet can list all the comments of an `Asset`. Also allows to u
 
 ## Themes [](id=themes)
 
-The Default Theme use `UITableView` to show all the comments.
-Other Views may use a different component, such as `UICollectionView` or others, to show the items.
+The Default Theme uses an 
+[iOS `UITableView`](https://developer.apple.com/reference/uikit/uitableview) 
+to show an asset's comments. Other Themes may use a different component, such as 
+[iOS's `UICollectionView`](https://developer.apple.com/reference/uikit/uicollectionview) 
+or others, to show the items. 
 
-![Figure 1: Comment List Screenlet using the Default (`default`) Theme.](../../images/screens-ios-commentlist.png)
+![Figure 1: Comment List Screenlet using the Default Theme.](../../images/screens-ios-commentlist.png)
 
 ## Offline [](id=offline)
 
@@ -46,44 +50,42 @@ connection.
 
 | Attribute | Data type | Explanation |
 |-----------|-----------|-------------|
-| `className` | `string` | The class name of the `Asset` that we want to list its comments. It's required when we are instantiating the screenlet with `className` and `classPK`. For example, for `BlogsEntry` object in Liferay 7.0 version, its `className` is [`com.liferay.blogs.kernel.model.BlogsEntry`](https://github.com/liferay/liferay-portal/blob/master/portal-kernel/src/com/liferay/blogs/kernel/model/BlogsEntry.java). |
-| `classPK` | `number` | This is the asset’s identifier and it's unique. This attribute is used only with `className`. |
-| `offlinePolicy` | `string` | Offline mode type. See [Offline](#offline) section. The default value is *remote-first*. |
-| `editable` | `boolean` | Lets the user edit the comment or not. |
+| `className` | `string` | The asset's fully qualified class name. For example, a blog entry's `className` is [`com.liferay.blogs.kernel.model.BlogsEntry`](https://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/blogs/kernel/model/BlogsEntry.html). The `className` and `classPK` attributes are required to instantiate the Screenlet. |
+| `classPK` | `number` | The asset’s unique identifier. The `className` and `classPK` attributes are required to instantiate the Screenlet. |
+| `offlinePolicy` | `string` | The offline mode setting. The default is `remote-first`. See [the Offline section](/develop/reference/-/knowledge_base/7-0/comment-list-screenlet-for-ios#offline) for details. |
+| `editable` | `boolean` | Whether the user can edit the comment. |
 | `autoLoad` | `boolean` | Whether the list should automatically load when the Screenlet appears in the app's UI. The default value is `true`. |
-| `refreshControl` | `boolean` | Defines whether a standard [UIRefreshControl](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIRefreshControl_class/) is shown when the user does the pull to refresh gesture. The default value is `true`. |
+| `refreshControl` | `boolean` | Defines whether a standard [iOS `UIRefreshControl`](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIRefreshControl_class/) is shown when the user does the pull to refresh gesture. The default value is `true`. |
 | `firstPageSize` | `number` | The number of items retrieved from the server for display on the first page. The default value is `50`. |
 | `pageSize` | `number` | The number of items retrieved from the server for display on the second and subsequent pages. The default value is `25`. |
-| `obcClassName` | `string` | The `OrderByComparator` class name to sort the results. If you don't want to sort the results, you can omit this property. You can only use classes that extend `OrderByComparator<MBMessage>`. |
+| `obcClassName` | `string` | The name of the [`OrderByComparator` class](https://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/portal/kernel/util/OrderByComparator.html) to use to sort the results. You can only use classes that extend `OrderByComparator<MBMessage>`. If you don't want to sort the results, you can omit this property. |
 
 ## Methods [](id=methods)
 
 | Method | Return | Explanation |
 |-----------|-----------|-------------| 
-| `loadList()` | `boolean` | Starts the request to load the comments list. This list is shown when the response is received. Returns true if the request is sent. |
+| `loadList()` | `boolean` | Starts the request to load the list. This list is shown when the response is received. Returns `true` if the request is sent. | 
 
 ## Delegate [](id=delegate)
 
-`CommentListScreenlet` delegates some events to an object that conforms to 
-the `ComentListScreenletDelegate` protocol. This protocol lets you implement 
-the following methods: 
+Comment List Screenlet delegates some events to an object that conforms to the 
+Coment List Screenlet Delegate protocol. This protocol lets you implement the 
+following methods: 
 
-- `- screenlet:onListResponseComments:`: Called when the comments are 
-  received.
-    
-- `- screenlet:onCommentListError:`: Called when an error occurs in the 
-  process. The `NSError` object describes the error. 
+- `- screenlet:onListResponseComments:`: Called when the Screenlet receives the 
+  comments. 
 
-- `- screenlet:onSelectedComment:`: Called when a comment is 
-  selected.
-    
-- `- screenlet:onDeletedComment:`: Called when a comment is 
-  deleted.
-  
-- `- screenlet:onCommentDelete:`: Called when a comment is prepared for 
-  deleting.
-  
-- `- screenlet:onUpdatedComment:`: Called when a comment is 
-  updated.
-  
-- `- screenlet:onCommentUpdate:`: Called when a comment is prepared for updating.
+- `- screenlet:onCommentListError:`: Called when an error occurs in the process. 
+  The `NSError` object describes the error. 
+
+- `- screenlet:onSelectedComment:`: Called when a comment is selected.
+
+- `- screenlet:onDeletedComment:`: Called when a comment is deleted.
+
+- `- screenlet:onCommentDelete:`: Called when the Screenlet prepares a comment 
+  for deletion. 
+
+- `- screenlet:onUpdatedComment:`: Called when a comment is updated. 
+
+- `- screenlet:onCommentUpdate:`: Called when the Screenlet prepares a comment 
+  for update. 
