@@ -49,9 +49,8 @@ execute more than one query on a local or remote store, the sequence is done
 in the corresponding Interactor. If a Screenlet supports more than one user 
 action or use case, an Interactor must be created for each. Interactors are 
 typically bound to one specific Liferay version, and instantiated by a Server 
-Connector. 
-
-Interactors are run in a background thread and can therefore contain background heavy operations without having to worry about blocking the UI thread.
+Connector. Interactors run in a background thread and can therefore perform 
+intensive operations without blocking the UI thread. 
 
 **Views:** a set of layouts and accompanying custom view classes that present 
 Screenlets to the user.
