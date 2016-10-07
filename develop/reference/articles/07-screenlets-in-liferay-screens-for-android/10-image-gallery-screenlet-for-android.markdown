@@ -36,7 +36,8 @@ to show the items.
 ## Offline [](id=offline)
 
 This Screenlet supports offline mode so it can function without a network 
-connection. For more information on how offline mode works, see the 
+connection when loading or uploading images (deleting images while offline is 
+unsupported). For more information on how offline mode works, see the 
 [tutorial its architecture](/develop/tutorials/-/knowledge_base/7-0/architecture-of-offline-mode-in-liferay-screens). 
 This Screenlet supports the `REMOTE_ONLY`, `CACHE_ONLY`, `REMOTE_FIRST`, and 
 `CACHE_FIRST` offline mode policies. 
@@ -51,8 +52,8 @@ instance:
 | `REMOTE_FIRST` | The Screenlet loads the list from the Liferay instance. If this succeeds, the Screenlet shows the list to the user and stores it in the local cache for later use. If a connection issue occurs, the Screenlet retrieves the list from the local cache. If the list doesn't exist there, the Screenlet uses the listener to notify the developer about the error. | Use this policy to show the most recent version of the data when connected, but show an outdated version when there's no connection. |
 | `CACHE_FIRST` | The Screenlet loads the list from the local cache. If the list isn't there, the Screenlet requests it from the Liferay instance and notifies the developer about any errors that occur (including connectivity errors). | Use this policy to save bandwidth and loading time in case you have local (but probably outdated) data. |
 
-These policies take the following actions when uploading an image to or deleting 
-an image from a Liferay instance: 
+These policies take the following actions when uploading an image to a Liferay 
+instance: 
 
 | Policy | What happens | When to use |
 |--------|-----------|---------------|
