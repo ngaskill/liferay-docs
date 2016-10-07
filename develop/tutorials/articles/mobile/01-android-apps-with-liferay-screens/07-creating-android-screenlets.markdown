@@ -290,34 +290,18 @@ from a Liferay instance. An Interactor is made up of several components:
    results. Screens uses the 
    [EventBus](https://greenrobot.github.io/EventBus/) 
    library for this. Screens supplies the 
-   [`JSONObjectEvent` class](https://github.com/liferay/liferay-screens/blob/master/android/library/src/main/java/com/liferay/mobile/screens/base/interactor/JSONObjectEvent.java) 
+   [`BasicEvent` class](https://github.com/liferay/liferay-screens/blob/master/android/library/src/main/java/com/liferay/mobile/screens/base/interactor/event/BasicEvent.java) 
    and 
-   [`JSONArrayEvent` class](https://github.com/liferay/liferay-screens/blob/master/android/library/src/main/java/com/liferay/mobile/screens/base/interactor/JSONArrayEvent.java) 
+   [`BaseListEvent` class](https://github.com/liferay/liferay-screens/blob/master/android/library/src/main/java/com/liferay/mobile/screens/base/list/interactor/BaseListEvent.java) 
    for communicating `JSONObject` and `JSONArray` results within Screenlets, 
-   respectively. These classes extend the abstract class 
-   [`BasicEvent`](https://github.com/liferay/liferay-screens/blob/master/android/library/src/main/java/com/liferay/mobile/screens/base/interactor/BasicEvent.java). 
-   Likewise, you can create your own event classes by extending `BasicEvent`. 
+   respectively. 
+   You can create your own event classes by extending `BasicEvent`. 
    You should create your own event classes when you must communicate objects 
    other than `JSONObject` or `JSONArray`. The example Add Bookmark Screenlet 
    only needs to communicate `JSONObject` instances, so it uses 
-   `JSONObjectEvent`. 
+   `BasicEvent`. 
 
-2. The callback class. Because Android doesn't allow network requests on its 
-   main UI thread, a callback class is required to route the server call 
-   asynchronously through a background thread. The callback class also handles 
-   the JSON returned by the server call, creating the appropriate event object 
-   that contains the server call's results. For creating `JSONObject` results, 
-   screens supplies the 
-   [`JSONObjectCallback` class](https://github.com/liferay/liferay-screens/blob/master/android/library/src/main/java/com/liferay/mobile/screens/base/interactor/JSONObjectCallback.java). 
-   If your results must be a type other than `JSONObject`, however, you should 
-   create your own callback class. You can do this by extending the 
-   [abstract class `InteractorAsyncTaskCallback`](https://github.com/liferay/liferay-screens/blob/master/android/library/src/main/java/com/liferay/mobile/screens/base/interactor/InteractorAsyncTaskCallback.java). 
-   If your callback class needs to make calls in batch, it should instead extend 
-   [the abstract class `InteractorBatchAsyncTaskCallback`](https://github.com/liferay/liferay-screens/blob/master/android/library/src/main/java/com/liferay/mobile/screens/base/interactor/InteractorBatchAsyncTaskCallback.java). 
-   The example Add Bookmark Screenlet's results are `JSONObject` instances, so 
-   the Screenlet uses the `JSONObjectCallback` class. 
-
-3. The listener interface. This defines the methods the app developer needs to 
+2. The listener interface. This defines the methods the app developer needs to 
    respond to the Screenlet's behavior. For example, 
    [Login Screenlet's listener](/develop/reference/-/knowledge_base/7-0/loginscreenlet-for-android#listener) 
    defines the `onLoginSuccess` and `onLoginFailure` methods. Screens calls 
@@ -335,109 +319,74 @@ from a Liferay instance. An Interactor is made up of several components:
             void onAddBookmarkSuccess();
         }
 
-4. The Interactor interface. This interface defines the method that makes the 
-   server call. It also extends 
-   [Screens's `Interactor` interface](https://github.com/liferay/liferay-screens/blob/master/android/library/src/main/java/com/liferay/mobile/screens/base/interactor/Interactor.java) 
-   with the listener as a type argument. Any classes that implement your 
-   Interactor interface can therefore send the server call's results to any 
-   classes that implement the listener. For example, 
-   [Add Bookmark Screenlet's Interactor interface](https://github.com/liferay/liferay-screens/blob/master/android/samples/addbookmarkscreenlet/src/main/java/com/liferay/mobile/screens/bookmark/interactor/AddBookmarkInteractor.java) 
-   extends `Interactor<AddBookmarkListener>`, and defines the `addBookmark` 
-   method used to add a bookmark in the server: 
-
-        public interface AddBookmarkInteractor extends Interactor<AddBookmarkListener> {
-
-            void addBookmark(String url, String title, long folderId) throws Exception;
-        }
-
-5. The Interactor class. This class must implement the Interactor interface, and 
+3. The Interactor class. This class must
    extend 
    [Screens's `BaseRemoteInteractor`](https://github.com/liferay/liferay-screens/blob/master/android/library/src/main/java/com/liferay/mobile/screens/base/interactor/BaseRemoteInteractor.java) 
-   with your listener as a type argument. The latter lets the Interactor class 
-   use the listener to send the server call's results to any classes that 
+   with your listener as a type argument and the type of the event it will use with EventBus. The listener lets the Interactor class send the server call's results to any classes that 
    implement the listener. In the implementation of the method that makes the 
    server call, you must 
    [use the Mobile SDK to make an asynchronous service call](/develop/tutorials/-/knowledge_base/7-0/invoking-services-asynchronously-from-your-android-app). 
-   This means you must get a session, create a callback instance, set the 
-   callback to the session, and then make the server call. You make the server 
+   This means you must get a session (or use the current one with the method `getSession()` and then make the server call. You make the server 
    call by creating an instance of the Mobile SDK service (e.g., 
    `BookmarksEntryService`) that can call the Liferay service you need, and then 
    making the call. The Interactor class must also process the event object that 
    contains the call's results, and then notify the listener of those results. 
-   You do this by implementing the `onEvent` method to invoke EventBus. 
+   You do this by implementing the `onSuccess` and `onFailure` methods to invoke the correspondent getListener() methods. 
 
     For example, the 
-    [`AddBookmarkInteractorImpl` class](https://github.com/liferay/liferay-screens/blob/master/android/samples/addbookmarkscreenlet/src/main/java/com/liferay/mobile/screens/bookmark/interactor/AddBookmarkInteractorImpl.java) 
+    [`AddBookmarkInteractor` class](https://github.com/liferay/liferay-screens/blob/master/android/samples/addbookmarkscreenlet/src/main/java/com/liferay/mobile/screens/bookmark/interactor/AddBookmarkInteractor.java) 
     is Add Bookmark Screenlet's Interactor class. This class implements the 
-    `AddBookmarkInteractor` method `addBookmark`, which adds a bookmark to a 
+    `execute` method which adds a bookmark to a 
     folder in a Liferay instance's Bookmarks portlet. This method first 
     validates the bookmark's URL and folder. It then uses 
-    `SessionContext.createSessionFromCurrentSession()` to create a session from 
-    the session created by Login Screenlet upon successful login. A 
-    `JSONObjectCallback` instance is then created and set to this session. The 
+    `getSession()` to reuse the existing session created by Login Screenlet upon successful login. 
+    The 
     `if` statement in `addBookmark` checks the Liferay version and then uses the 
     session to create the appropriate `BookmarksEntryService` instance for 
-    adding the bookmark to the Liferay instance. Next, the `onEvent` method 
-    processes the `JSONObjectEvent` object to first validate the event, and then 
-    send its results to the listener. Note that the `getListener()` method 
-    returns an instance of the listener. Here's the complete code for 
-    `AddBookmarkInteractorImpl`:  
+    adding the bookmark to the Liferay instance. Next, the `onSuccess` method 
+    uses the `BasicEvent` object to send its results to the listener. Here's the complete code for 
+    `AddBookmarkInteractor`:  
 
-        public class AddBookmarkInteractorImpl extends BaseRemoteInteractor<AddBookmarkListener>
-            implements AddBookmarkInteractor {
-
-            public AddBookmarkInteractorImpl(int targetScreenletId) {
-                super(targetScreenletId);
-            }
-
-            public void addBookmark(String url, String title, long folderId) throws Exception {
-                
-                // validate the URL
-                if (url == null || url.isEmpty() || !URLUtil.isValidUrl(url)) {
-                    throw new IllegalArgumentException("Invalid url");
-                }
-
-                // make sure the bookmark folder in the Liferay instance exists
-                if (folderId == 0) {
-                    throw new IllegalArgumentException("folderId not set");
-                }
-
-                // get a session and set the callback to it
-                Session session = SessionContext.createSessionFromCurrentSession();
-                session.setCallback(new JSONObjectCallback(getTargetScreenletId()));
-                
-                // check the Liferay version and make the correct server call for that version
-                if (LiferayServerContext.isLiferay7()) {
-                    new BookmarksEntryService(session)
-                    .addEntry(LiferayServerContext.getGroupId(), folderId, title, url, "", null);
-                }
-                else {
-                    new com.liferay.mobile.android.v62.bookmarksentry.BookmarksEntryService(session)
-                        .addEntry(LiferayServerContext.getGroupId(), folderId, title, url, "", null);
-                }
-            }
-
-            public void onEvent(JSONObjectEvent event) {
-                
-                // validate the event object
-                if (!isValidEvent(event)) {
-                    return;
-                }
-
-                if (event.isFailed()) {
-
-                    // in the event of a failed server call 
-                    // send the exception to the listener
-                    getListener().onAddBookmarkFailure(event.getException());
-                }
-                else {
-
-                    // in the event of a failed server call
-                    // call the listener's success method
-                    getListener().onAddBookmarkSuccess();
-                }
-            }
-        }
+        @Override
+		public BasicEvent execute(Object[] args) throws Exception {
+			String url = (String) args[0];
+			String title = (String) args[1];
+			long folderId = (long) args[2];
+	
+			validate(url, folderId);
+	
+			JSONObject jsonObject = getJSONObject(url, title, folderId);
+			return new BasicEvent(jsonObject);
+		}
+	
+		@Override
+		public void onSuccess(BasicEvent event) throws Exception {
+			getListener().onAddBookmarkSuccess();
+		}
+	
+		@Override
+		public void onFailure(BasicEvent event) {
+			getListener().onAddBookmarkFailure(event.getException());
+		}
+	
+		private void validate(String url, long folderId) {
+			if (url == null || url.isEmpty() || !URLUtil.isValidUrl(url)) {
+				throw new IllegalArgumentException("Invalid url");
+			} else if (folderId == 0) {
+				throw new IllegalArgumentException("folderId not set");
+			}
+		}
+	
+		@NonNull
+		private JSONObject getJSONObject(String url, String title, long folderId) throws Exception {
+			if (LiferayServerContext.isLiferay7()) {
+				return new BookmarksEntryService(getSession()).addEntry(LiferayServerContext.getGroupId(), folderId, title,
+					url, "", null);
+			} else {
+				return new com.liferay.mobile.android.v62.bookmarksentry.BookmarksEntryService(getSession()).addEntry(
+					LiferayServerContext.getGroupId(), folderId, title, url, "", null);
+			}
+		}
 
 Sweetness! Your Screenlet's Interactor is done. Next, you'll create the 
 Screenlet class. 
@@ -455,8 +404,8 @@ or fragment layout:
         android:id="@+id/login_screenlet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        liferay:basicAuthMethod="email"
-        liferay:layoutId="@layout/login_default"
+        app:basicAuthMethod="email"
+        app:layoutId="@layout/login_default"
         />
 
 The app developer can set the `liferay` attributes `basicAuthMethod` and 
@@ -636,12 +585,12 @@ Next, you must implement `BaseScreenlet`'s abstract methods:
 
 - `createInteractor`: Instantiates the Screenlet's Interactor. For example, Add 
   Bookmark Screenlet's `createInteractor` method calls the 
-  `AddBookmarkInteractorImpl` constructor to create a new instance of this 
+  `AddBookmarkInteractor` constructor to create a new instance of this 
   Interactor:
 
         @Override
         protected AddBookmarkInteractor createInteractor(String actionName) {
-            return new AddBookmarkInteractorImpl(getScreenletId());
+            return new AddBookmarkInteractor(getScreenletId());
         }
 
 - `onUserAction`: Retrieves any data the user has entered in the View, and 
@@ -653,21 +602,15 @@ Next, you must implement `BaseScreenlet`'s abstract methods:
     title), so its `onUserAction` method must retrieve this data. This method 
     does so via a View Model instance it retrieves with the `getViewModel()` 
     method. The `onUserAction` method then calls the Interactor's `addBookmark` 
-    method with the user input. If this operation fails, `onUserAction` calls 
-    the listener's `onAddBookmarkFailure` method with the `Exception`: 
+    method with the user input: 
 
         @Override
         protected void onUserAction(String userActionName, AddBookmarkInteractor interactor, Object... args) {
             AddBookmarkViewModel viewModel = getViewModel();
             String url = viewModel.getURL();
             String title = viewModel.getTitle();
-
-            try {
-                interactor.addBookmark(url, title, _folderId);
-            }
-            catch (Exception e) {
-                onAddBookmarkFailure(e);
-            }
+            
+            interactor.start(url, title, _folderId);
         }
 
 Nice! Your Screenlet is finished! You can now use it 
@@ -703,17 +646,17 @@ XML in the
         android:id="@+id/bookmark_screenlet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        liferay:folderId="@string/bookmark_folder"
-        liferay:layoutId="@layout/bookmark_default" />
+        app:folderId="@string/bookmark_folder"
+        app:layoutId="@layout/bookmark_default" />
 
-Note that the layout specified by `liferay:layoutId` (`bookmark_default`) 
+Note that the layout specified by `app:layoutId` (`bookmark_default`) 
 matches the layout file of the Screenlet's View (`bookmark_default.xml`). This 
 is how you specify the View to display the Screenlet with. For example, if Add 
 Bookmark Screenlet had another View defined in a layout file named 
 `bookmark_awesome.xml`, you could use that layout by specifying 
-`@layout/bookmark_awesome` as the `liferay:layoutId` attribute's value. 
+`@layout/bookmark_awesome` as the `app:layoutId` attribute's value. 
 
-Also note that the `liferay:folderId` attribute specifies 
+Also note that the `app:folderId` attribute specifies 
 `@string/bookmark_folder` as the bookmark folder's ID. This is an alternative 
 way of specifying an attribute's value. Instead of specifying the value 
 directly, the Test App specifies the value in its 
@@ -724,7 +667,7 @@ directly, the Test App specifies the value in its
 	...
 
 This `name` attribute's value, `bookmark_folder` is then used in the Screenlet 
-XML to set the `liferay:folderId` attribute to `20622`.
+XML to set the `app:folderId` attribute to `20622`.
 
 Great! Now you know how to use the Screenlets you create. You also know a 
 convenient way to specify default values for a Screenlet's attributes. 
