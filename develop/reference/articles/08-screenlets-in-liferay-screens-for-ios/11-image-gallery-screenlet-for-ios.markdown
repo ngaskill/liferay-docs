@@ -62,8 +62,8 @@ an image from a Liferay instance:
 |--------|-----------|---------------|
 | `remote-only` | The Screenlet sends the image to the Liferay instance. If a connection issue occurs, the Screenlet uses the delegate to notify the developer about the error, but it also discards the image. | Use this policy to make sure the Liferay instance always has the most recent version of the image. |
 | `cache-only` | The Screenlet stores the image in the local cache. | Use this policy when you need to save the image locally, but don't want to update the image in the Liferay instance (delete or add image). |
-| `remote-first` | The Screenlet sends the image to the Liferay instance. If this succeeds, it also stores the image in the local cache for later use. If a connection issue occurs, then Screenlet stores the image in the local cache with the *dirty flag* enabled. This causes the synchronization process to send the image to the Liferay instance when it runs. | Use this policy when you need to make sure the Screenlet sends the image to the Liferay instance as soon as the connection is restored. |
-| `cache-first` | The Screenlet stores the image in the local cache and then sends it to the Liferay instance. If a connection issue occurs, the Screenlet stores the image in the local cache with the *dirty flag* enabled. This causes the the synchronization process to send the image to the Liferay instance when it runs. | Use this policy when you need to make sure the Screenlet sends the image to the Liferay instance as soon as the connection is restored. Compared to `remote-first`, this policy always stores the image in the cache. The `remote-first` policy only stores the image in the event of a network error. |
+| `remote-first` | The Screenlet sends the image to the Liferay instance. If this succeeds, it also stores the image in the local cache for later use. If a connection issue occurs, the Screenlet stores the image in the local cache and sends it to the Liferay instance when the connection is re-established. | Use this policy when you need to make sure the Screenlet sends the image to the Liferay instance as soon as the connection is restored. |
+| `cache-first` | The Screenlet stores the image in the local cache and then attempts to send it to the Liferay instance. If a connection issue occurs, the Screenlet sends the image to the Liferay instance when the connection is re-established. | Use this policy when you need to make sure the Screenlet sends the image to the Liferay instance as soon as the connection is restored. Compared to `remote-first`, this policy always stores the image in the cache. The `remote-first` policy only stores the image in the event of a network error. |
 
 ## Attributes [](id=attributes)
 
@@ -123,4 +123,13 @@ the following methods:
   View is instantiated. By default, the Screenlet uses a modal view controller 
   to present this View. You only need to implement this method if you want to 
   override this behavior. This method should present the View, passed as 
-  parameter, and then return true. 
+  parameter, and then return `true`. For example, the following example 
+  implementation presents `ImageUploadDetailViewBase` as a parameter, and then 
+  uses it to customize the View's appearance: 
+
+        func screenlet(screenlet: ImageGalleryScreenlet, 
+            onImageUploadDetailViewCreated uploadView: ImageUploadDetailViewBase) -> Bool {
+                self.cardDeck?.cards[safe: 0]?.addPage(uploadView)
+                self.cardDeck?.cards[safe: 0]?.moveRight()
+                return true
+        }

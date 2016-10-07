@@ -35,9 +35,14 @@ to show the items.
 
 ## Offline [](id=offline)
 
-Image Gallery Screenlet supports offline mode so it can function without a network 
-connection. This table shows the offline policy settings that can be used with 
-the Screenlet: 
+This Screenlet supports offline mode so it can function without a network 
+connection. For more information on how offline mode works, see the 
+[tutorial its architecture](/develop/tutorials/-/knowledge_base/7-0/architecture-of-offline-mode-in-liferay-screens). 
+This Screenlet supports the `REMOTE_ONLY`, `CACHE_ONLY`, `REMOTE_FIRST`, and 
+`CACHE_FIRST` offline mode policies. 
+
+These policies take the following actions when loading images from a Liferay 
+instance: 
 
 | Policy | What happens | When to use |
 |--------|--------------|-------------|
@@ -45,6 +50,16 @@ the Screenlet:
 | `CACHE_ONLY` | The Screenlet loads the list from the local cache. If the list isn't there, the Screenlet uses the listener to notify the developer about the error. | Use this policy when you always need to show local data, without retrieving remote information under any circumstance. |
 | `REMOTE_FIRST` | The Screenlet loads the list from the Liferay instance. If this succeeds, the Screenlet shows the list to the user and stores it in the local cache for later use. If a connection issue occurs, the Screenlet retrieves the list from the local cache. If the list doesn't exist there, the Screenlet uses the listener to notify the developer about the error. | Use this policy to show the most recent version of the data when connected, but show an outdated version when there's no connection. |
 | `CACHE_FIRST` | The Screenlet loads the list from the local cache. If the list isn't there, the Screenlet requests it from the Liferay instance and notifies the developer about any errors that occur (including connectivity errors). | Use this policy to save bandwidth and loading time in case you have local (but probably outdated) data. |
+
+These policies take the following actions when uploading an image to or deleting 
+an image from a Liferay instance: 
+
+| Policy | What happens | When to use |
+|--------|-----------|---------------|
+| `REMOTE_ONLY` | The Screenlet sends the image to the Liferay instance. If a connection issue occurs, the Screenlet uses the delegate to notify the developer about the error, but it also discards the image. | Use this policy to make sure the Liferay instance always has the most recent version of the image. |
+| `CACHE_ONLY` | The Screenlet stores the image in the local cache. | Use this policy when you need to save the image locally, but don't want to update the image in the Liferay instance (delete or add image). |
+| `REMOTE_FIRST` | The Screenlet sends the image to the Liferay instance. If this succeeds, it also stores the image in the local cache for later use. If a connection issue occurs, the Screenlet stores the image in the local cache and sends it to the Liferay instance when the connection is re-established. | Use this policy when you need to make sure the Screenlet sends the image to the Liferay instance as soon as the connection is restored. |
+| `CACHE_FIRST` | The Screenlet stores the image in the local cache and then attempts to send it to the Liferay instance. If a connection issue occurs, the Screenlet sends the image to the Liferay instance when the connection is re-established. | Use this policy when you need to make sure the Screenlet sends the image to the Liferay instance as soon as the connection is restored. Compared to `REMOTE_FIRST`, this policy always stores the image in the cache. The `REMOTE_FIRST` policy only stores the image in the event of a network error. |
 
 ## Required Attributes [](id=required-attributes)
 
