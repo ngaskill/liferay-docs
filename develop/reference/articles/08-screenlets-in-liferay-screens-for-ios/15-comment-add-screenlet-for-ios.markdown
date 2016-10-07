@@ -7,7 +7,7 @@
 - Liferay 7.0 CE, Liferay DXP 
 - Liferay Screens Compatibility Plugin 
   ([CE](http://www.liferay.com/marketplace/-/mp/application/54365664) or 
-  [EE](http://www.liferay.com/marketplace/-/mp/application/54369726), 
+  [DE](http://www.liferay.com/marketplace/-/mp/application/54369726), 
   depending on your portal edition). This app is preinstalled in Liferay 7.0 CE 
   and Liferay DXP instances. 
 
@@ -17,7 +17,7 @@
 
 ## Features [](id=features)
 
-Comment Add Screenlet can add one comment of an `Asset`.
+Comment Add Screenlet can add a comment to an asset in a Liferay instance. 
 
 ## Module [](id=module)
 
@@ -25,41 +25,46 @@ Comment Add Screenlet can add one comment of an `Asset`.
 
 ## Themes [](id=themes)
 
-The Default Theme uses `UITextField` and `UIButton` elements to add a comment of an `Asset`. 
-Other Views may use a different component to show the comment.
+The Default Theme uses the iOS elements `UITextField` and `UIButton` to add a 
+comment to an asset. Other Views may use other components to show the comment.
 
-![Figure 1: Comment Add Screenlet using the Default (`default`) Theme.](../../images/screens-ios-commentadd.png)
+![Figure 1: Comment Add Screenlet using the Default Theme.](../../images/screens-ios-commentadd.png)
 
 ## Offline [](id=offline)
 
 This Screenlet supports offline mode so it can function without a network 
-connection. 
+connection. For more information on how offline mode works, see the 
+[tutorial its architecture](/develop/tutorials/-/knowledge_base/7-0/architecture-of-offline-mode-in-liferay-screens). 
+Here are the offline mode policies that you can use with Comment Add Screenlet: 
 
 | Policy | What happens | When to use |
 |--------|--------------|-------------|
-| `remote-only` | The Screenlet loads the list from the Liferay instance. If a connection issue occurs, the Screenlet uses the delegate to notify the developer about the error. If the Screenlet successfully loads the list, it stores the data in the local cache for later use. | Use this policy when you always need to show updated data, and show nothing when there's no connection. |
-| `cache-only` | The Screenlet loads the list from the local cache. If the list isn't there, the Screenlet uses the delegate to notify the developer about the error. | Use this policy when you always need to show local data, without retrieving remote information under any circumstance. |
-| `remote-first` | The Screenlet loads the list from the Liferay instance. If this succeeds, the Screenlet shows the list to the user and stores it in the local cache for later use. If a connection issue occurs, the Screenlet retrieves the list from the local cache. If the list doesn't exist there, the Screenlet uses the delegate to notify the developer about the error. | Use this policy to show the most recent version of the data when connected, but show a possibly outdated version when there's no connection. |
-| `cache-first` | The Screenlet loads the list from the local cache. If the list isn't there, the Screenlet requests it from the Liferay instance and notifies the developer about any errors that occur (including connectivity errors). | Use this policy to save bandwidth and loading time in case you have local (but possibly outdated) data. |
+| `remote-only` | The Screenlet sends the data to the Liferay instance. If a connection issue occurs, the Screenlet uses the listener to notify the developer about the error. If the Screenlet successfully sends the data, it also stores it in the local cache. | Use this policy when you always need to send updated data, and send nothing when there's no connection. |
+| `cache-only` | The Screenlet sends the data to the local cache. If an error occurs, the Screenlet uses the listener to notify the developer. | Use this policy when you always need to store local data without sending remote information under any circumstance. |
+| `remote-first` | The Screenlet sends the data to the Liferay instance. If this succeeds, the Screenlet also stores the data in the local cache. If a connection issue occurs, the Screenlet stores the data to the local cache and sends it to the Liferay instance when the connection is restored. If an error occurs, the Screenlet uses the listener to notify the developer. | Use this policy to send the most recent version of the data when connected, and store the data for later synchronization when there's no connection. |
+| `cache-first` | The Screenlet sends the data to the local cache, then sends it to the Liferay instance. If sending the data to the Liferay instance fails, the Screenlet still stores the data locally and then notifies the developer about any errors that occur (including connectivity errors). | Use this policy to save bandwidth and store local (but possibly outdated) data. |
 
 ## Attributes [](id=attributes)
 
 | Attribute | Data type | Explanation |
 |-----------|-----------|-------------|
-| `className` | `string` | The class name of the `Asset` that we want to add a comment. It's required when we are instantiating the screenlet with `className` and `classPK`. For example, if we want to add a comment to a blog, for `BlogsEntry` object in Liferay 7.0 version, its `className` is [`com.liferay.blogs.kernel.model.BlogsEntry`](https://github.com/liferay/liferay-portal/blob/master/portal-kernel/src/com/liferay/blogs/kernel/model/BlogsEntry.java). | 
-| `classPK` | `number` | This is the comment identifier and it's unique. This attribute is used only with `className`. |
-| `offlinePolicy` | `string` | Offline mode type. See [Offline](#offline) section. The default value is *remote-first*. |
+| `className` | `string` | The asset's fully qualified class name. For example, a blog entry's `className` is [`com.liferay.blogs.kernel.model.BlogsEntry`](https://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/blogs/kernel/model/BlogsEntry.html). The `className` and `classPK` attributes are required to instantiate the Screenlet. | 
+| `classPK` | `number` | The asset’s unique identifier. The `className` and `classPK` attributes are required to instantiate the Screenlet. |
+| `offlinePolicy` | `string` | The offline mode setting. The default value is `remote-first`. See [the Offline section](/develop/reference/-/knowledge_base/7-0/comment-add-screenlet-for-ios#offline) for details. |
 
 ## Delegate [](id=delegate)
 
-`CommentAddScreenlet` delegates some events to an object that conforms to 
-the `CommentAddScreenletDelegate` protocol. This protocol lets you implement 
-the following methods:
+Comment Add Screenlet delegates some events to an object that conforms to the 
+`CommentAddScreenletDelegate` protocol. This protocol lets you implement 
+the following methods: 
 
-- `- screenlet:onCommentAdded:`: Called when the comment are added.
+- `- screenlet:onCommentAdded:`: Called when the Screenlet adds a comment. 
 
-- `- screenlet:onAddCommentError:`: Called when an error occurs in the process. The `NSError` object describes the error.
-   
-- `- screenlet:onCommentUpdated:`: Called when a comment is prepared for updating.
+- `- screenlet:onAddCommentError:`: Called when an error occurs while adding a 
+  comment. The `NSError` object describes the error. 
 
-- `- screenlet:onUpdateCommentError:`: Called when an error occurs in the process. The `NSError` object describes the error.
+- `- screenlet:onCommentUpdated:`: Called when the Screenlet prepares a comment 
+  for update. 
+
+- `- screenlet:onUpdateCommentError:`: Called when an error occurs while 
+  updating a comment. The `NSError` object describes the error. 
