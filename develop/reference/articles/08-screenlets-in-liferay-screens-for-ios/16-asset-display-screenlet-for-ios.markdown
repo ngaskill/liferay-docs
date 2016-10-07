@@ -7,8 +7,8 @@
 - Liferay 7.0 CE, Liferay DXP 
 - Liferay Screens Compatibility Plugin 
   ([CE](http://www.liferay.com/marketplace/-/mp/application/54365664) or 
-  [EE](http://www.liferay.com/marketplace/-/mp/application/54369726), 
-  depending on your portal edition). This app is preinstalled in Liferay 7.0 CE 
+  [DE](http://www.liferay.com/marketplace/-/mp/application/54369726), 
+  depending on your Liferay edition). This app is preinstalled in Liferay 7.0 CE 
   and Liferay DXP instances. 
 
 ## Compatibility [](id=compatibility)
@@ -17,7 +17,14 @@
 
 ## Features [](id=features)
 
-Asset Display Screenlet can render an `Asset` without knowing what kind of `Asset` is. Nowadays, the screenlet displays `DLFileEntry` (image, video, audio and PDF), `BlogsEntry` and `WebContent`. You can display your custom `Asset` with `AssetDisplayScreenlet` because exists a listener method for it (see [Delegates](#listener) section).
+Asset Display Screenlet can display an asset from a Liferay instance. The 
+Screenlet can currently display Documents and Media files (`DLFileEntry` images, 
+videos, audio files, and PDFs), blogs entries (`BlogsEntry`) and web content 
+articles (`WebContent`). 
+
+Asset Display Screenlet can also display your custom asset types. See 
+[the delegate section of this document](/develop/reference/-/knowledge_base/7-0/asset-display-screenlet-for-ios#delegate) 
+for details. 
 
 ## Module [](id=module)
 
@@ -25,72 +32,87 @@ Asset Display Screenlet can render an `Asset` without knowing what kind of `Asse
 
 ## Themes [](id=themes)
 
-The Default Theme uses different element to show an `Asset` depending on its type. For example, for images, the screenlet uses `UIImageView`, for blogs entry uses `UILabel`, `UserPortraitScreenlet` and others.
+The Default View uses different UI elements to show each asset type. For 
+example, it displays images with `UIImageView`, and blogs with `UILabel`. 
 
-This screenlet renders another screenlet:
+This Screenlet can also render other Screenlets: 
 
-- Images: `ImageDisplayScreenlet`.
-- Videos: `VideoDisplayScreenlet`.
-- Audios: `AudioDisplayScreenlet`.
-- PDFs: `PdfDisplayScreenlet`.
-- `BlogsEntry`: `BlogsEntryDisplayScreenlet`.
-- `WebContent`: `WebContentDisplayScreenlet`.
+- Images: Image Display Screenlet
+- Videos: Video Display Screenlet
+- Audios: Audio Display Screenlet
+- PDFs: Pdf Display Screenlet
+- Blogs entries: Blogs Entry Display Screenlet
+- Web content: Web Content Display Screenlet
 
-For images, videos, audios and PDFs see [BaseFileDisplayScreenlet](../base-file-display-screenlet-for-ios).
+These Screenlets can also be used alone without Asset Display Screenlet. 
 
-These screenlets can be used alone without `AssetDisplayScreenlet`.
+![Figure 1: Asset Display Screenlet using the Default Theme.](../../images/screens-ios-assetdisplay.png)
 
-![Figure 1: Asset Display Screenlet using the Default (`default`) Theme.](../../images/screens-ios-assetdisplay.png)
+## Offline [](id=offline)
+
+This Screenlet supports offline mode so it can function without a network 
+connection. For more information on how offline mode works, see the 
+[tutorial its architecture](/develop/tutorials/-/knowledge_base/7-0/architecture-of-offline-mode-in-liferay-screens). 
+Here are the offline mode policies that you can use with this Screenlet: 
+
+| Policy | What happens | When to use |
+|--------|--------------|-------------|
+| `remote-only` | The Screenlet loads the data from the Liferay instance. If a connection issue occurs, the Screenlet uses the listener to notify the developer about the error. If the Screenlet successfully loads the data, it stores it in the local cache for later use. | Use this policy when you always need to show updated data, and show nothing when there's no connection. |
+| `cache-only` | The Screenlet loads the data from the local cache. If the data isn't there, the Screenlet uses the listener to notify the developer about the error. | Use this policy when you always need to show local data, without retrieving remote information under any circumstance. |
+| `remote-first` | The Screenlet loads the data from the Liferay instance. If this succeeds, the Screenlet shows the data to the user and stores it in the local cache for later use. If a connection issue occurs, the Screenlet retrieves the data from the local cache. If the data doesn't exist there, the Screenlet uses the listener to notify the developer about the error. | Use this policy to show the most recent version of the data when connected, but show an outdated version when there's no connection. |
+| `cache-first` | The Screenlet loads the data from the local cache. If the data isn't there, the Screenlet requests it from the Liferay instance and notifies the developer about any errors that occur (including connectivity errors). | Use this policy to save bandwidth and loading time in case you have local (but probably outdated) data. |
 
 ## Attributes [](id=attributes)
 
 | Attribute | Data type | Explanation |
 |-----------|-----------|-------------|
-| `assetEntryId` | `number` | The primary key parameter for displaying the `Asset`. | 
-| `className` | `string` | The class name of the `Asset` that we want to display. It's required when we are instantiating the screenlet with `className` and `classPK`. For example, if we want to display a blog entry, for `BlogsEntry` object in Liferay 7.0 version, its `className` is [`com.liferay.blogs.kernel.model.BlogsEntry`](https://github.com/liferay/liferay-portal/blob/master/portal-kernel/src/com/liferay/blogs/kernel/model/BlogsEntry.java). | 
-| `classPK` | `number` | This is the asset identifier and it's unique. This attribute is used only with `className`. |
-| `autoLoad` | `boolean` | Whether the list should automatically load when the Screenlet appears in the app's UI. The default value is `true`. |
-| `offlinePolicy` | `string` | The offline mode setting. The default value is `remote-first`. See the [Offline](#offline) section for details. |
-
+| `assetEntryId` | `number` | The primary key of the asset. | 
+| `className` | `string` | The asset's fully qualified class name. For example, a blog entry's `className` is [`com.liferay.blogs.kernel.model.BlogsEntry`](https://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/blogs/kernel/model/BlogsEntry.html). The `className` and `classPK` attributes are required to instantiate the Screenlet. | 
+| `classPK` | `number` | The asset’s unique identifier. The `className` and `classPK` attributes are required to instantiate the Screenlet. |
+| `autoLoad` | `boolean` | Whether the asset automatically loads when the Screenlet appears in the app's UI. The default value is `true`. |
+| `offlinePolicy` | `string` | The offline mode setting. The default value is `remote-first`. See [the Offline section](/develop/reference/-/knowledge_base/7-0/asset-display-screenlet-for-ios#offline) for details. |
 
 ## Delegate [](id=delegate)
 
-`AssetDisplayScreenlet` delegates some events to an object that conforms to 
+Asset Display Screenlet delegates some events to an object that conforms to 
 the `AssetDisplayScreenletDelegate` protocol. This protocol lets you implement 
-the following methods:
+the following methods: 
 
-- `- screenlet:onAssetResponse:`: Called when the asset are received.
+- `- screenlet:onAssetResponse:`: Called when the Screenlet receives the asset. 
 
-- `- screenlet:onAssetError:`: Called when an error occurs in the process. The `NSError` object describes the error.
+- `- screenlet:onAssetError:`: Called when an error occurs in the process. The 
+  `NSError` object describes the error. 
    
-- `- screenlet:onConfigureScreenlet:`: Called when the inner screenlet has been created successfully and we want to configure or customize it. For example:
+- `- screenlet:onConfigureScreenlet:`: Called when the child Screenlet (the 
+  Screenlet rendered inside Asset Display Screenlet) has been successfully 
+  initialized. Use this method to configure or customize it. The example 
+  implementation here sets the child Blogs Entry Display Screenlet's background 
+  color to gray: 
 
-	```
-	func screenlet(screenlet: AssetDisplayScreenlet, onConfigureScreenlet, 
-		childScreenlet: BaseScreenlet?, onAsset asset: Asset) {
-		if childScreenlet is BlogsEntryDisplayScreenlet {
-			childScreenlet?.screenletView?.backgroundColor = UIColor.grayColor()
-		}
-	}
+        func screenlet(screenlet: AssetDisplayScreenlet, onConfigureScreenlet, 
+            childScreenlet: BaseScreenlet?, onAsset asset: Asset) {
+                if childScreenlet is BlogsEntryDisplayScreenlet {
+                    childScreenlet?.screenletView?.backgroundColor = UIColor.grayColor()
+                }
+        }
 
-- `- screenlet:onAsset:`: Called when we want to render a custom `Asset`. For example:
+- `- screenlet:onAsset:`: Called to render a custom asset. The following example 
+  implementation renders a user from a Liferay instance (`User`): 
 
-	```
-	func screenlet(screenlet: AssetDisplayScreenlet, onAsset asset: Asset)
-		-> 	UIView? {
-		if let type = asset.attributes["object"]?.allKeys.first as? String {
-			if type == "user" {
-				let vc = self.storyboard?
-					.instantiateViewControllerWithIdentifier("UserDisplay")
-					as? UserDisplayViewController
-						
-				if let userVc = vc {
-					self.addChildViewController(userVc)
-					screenlet.addSubview(userVc.view)
-					userVc.view.frame = screenlet.bounds
-					userVc.user = User(attributes: asset.attributes)
-				}
-			}
-		}
-		return nil
-	}
+        func screenlet(screenlet: AssetDisplayScreenlet, onAsset asset: Asset) -> UIView? {
+            if let type = asset.attributes["object"]?.allKeys.first as? String {
+                if type == "user" {
+                    let vc = self.storyboard?
+                    .instantiateViewControllerWithIdentifier("UserDisplay")
+                    as? UserDisplayViewController
+
+                    if let userVc = vc {
+                        self.addChildViewController(userVc)
+                        screenlet.addSubview(userVc.view)
+                        userVc.view.frame = screenlet.bounds
+                        userVc.user = User(attributes: asset.attributes)
+                    }
+                }
+            }
+            return nil
+        }
