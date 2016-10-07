@@ -28,13 +28,12 @@ Screenlet renders any header image the blogs entry may have.
 - Default
 - Material
 
-The Default View can use different elements to show a blogs entry 
+The Default View can use different components to show a blogs entry 
 (`BlogsEntry`). For example, it uses an Android `TextView` to show the blog's 
 text, and 
 [User Portrait Screenlet](/develop/reference/-/knowledge_base/7-0/userportraitscreenlet-for-android) 
-to show the profile picture of the Liferay user who posted it. 
-
-Note that other Views may use different components to show the blog entry. 
+to show the profile picture of the Liferay user who posted it. Note that other 
+Views may use different components. 
 
 ![Figure 1: Blogs Entry Display Screenlet using the Default (left) and Material (right) Views.](../../images/screens-android-blogsentrydisplay.png)
 
