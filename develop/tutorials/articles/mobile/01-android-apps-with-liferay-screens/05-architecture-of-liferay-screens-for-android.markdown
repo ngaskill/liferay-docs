@@ -95,9 +95,6 @@ standard layout files and updates the UI with data changes. When developing your
 own Views that extend a parent View, you can read the parent Screenlet's 
 properties or call its methods from this class. 
 
-[**InteractorAsyncTaskCallback:**](https://github.com/liferay/liferay-screens/blob/master/android/library/core/src/main/java/com/liferay/mobile/screens/base/interactor/InteractorAsyncTaskCallback.java)
-receives asynchronous responses from the Liferay Mobile SDK's `AsyncTask` class.
-
 [**EventBus:**](https://github.com/greenrobot/EventBus) notifies the Interactor
 when asynchronous operations complete. It decouples the `AsyncTask` class
 instance from the activity life cycle, to avoid problems typically associated
