@@ -7,7 +7,7 @@ Liferay Screens applies architectural ideas from
 canonical implementation of these architectures, because it isn't an app, but it
 borrows from them to separate presentation layers from business-logic. This
 tutorial explains Screen's high-level architecture, its components' low-level
-architecture, and the Android Screenlet lifecyle. Now go ahead and get started
+architecture, and the Android Screenlet lifecycle. Now go ahead and get started
 examining Screens's building blocks! 
 
 ## High-Level Architecture [](id=high-level-architecture)
@@ -30,7 +30,7 @@ and Interactors.
 **Screenlets:** Java view classes for inserting into any activity or fragment 
 view hierarchy. They render a selected layout in the runtime and in Android 
 Studio's visual editor and react to UI events, sending any necessary server 
-requests. You can set a screentlet's properties from its layout XML file and 
+requests. You can set a screenlet's properties from its layout XML file and 
 Java classes. The Screenlets bundled with Liferay Screens are known collectively 
 as the 
 [Screenlet Library](/develop/reference/-/knowledge_base/7-0/screenlets-in-liferay-screens-for-android). 
@@ -50,6 +50,8 @@ in the corresponding Interactor. If a Screenlet supports more than one user
 action or use case, an Interactor must be created for each. Interactors are 
 typically bound to one specific Liferay version, and instantiated by a Server 
 Connector. 
+
+Interactors are run in a background thread and can therefore contain background heavy operations without having to worry about blocking the UI thread.
 
 **Views:** a set of layouts and accompanying custom view classes that present 
 Screenlets to the user.
