@@ -26,16 +26,14 @@ Screenlet renders any header image the blogs entry may have.
 ## Views [](id=views)
 
 - Default
-- Material
 
-The Default View can use different components to show a blogs entry 
-(`BlogsEntry`). For example, it uses an Android `TextView` to show the blog's 
-text, and 
+The Default View uses different components to show a blogs entry (`BlogsEntry`). 
+For example, it uses an Android `TextView` to show the blog's text, and 
 [User Portrait Screenlet](/develop/reference/-/knowledge_base/7-0/userportraitscreenlet-for-android) 
 to show the profile picture of the Liferay user who posted it. Note that other 
-Views may use different components. 
+custom Views may use different components. 
 
-![Figure 1: Blogs Entry Display Screenlet using the Default (left) and Material (right) Views.](../../images/screens-android-blogsentrydisplay.png)
+![Figure 1: Blogs Entry Display Screenlet using the Default View.](../../images/screens-android-blogsentrydisplay.png)
 
 ## Offline [](id=offline)
 
@@ -73,9 +71,9 @@ If you don't use `entryId`, you must use both of the following attributes:
 
 ## Listener [](id=listener)
 
-Blogs Entry Display Screenlet delegates some events to a class that 
-implements `AssetDisplayListener`. This interface lets you implement the 
-following methods: 
+Because a blog entry is an asset, Blogs Entry Display Screenlet delegates its 
+events to a class that implements `AssetDisplayListener`. This interface lets 
+you implement the following method: 
 
 - `onRetrieveAssetSuccess(AssetEntry assetEntry)`: Called when the Screenlet 
   successfully loads the blog entry. 

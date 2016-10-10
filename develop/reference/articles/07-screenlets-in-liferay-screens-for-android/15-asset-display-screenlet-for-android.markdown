@@ -32,14 +32,14 @@ for details.
 ## Views [](id=views)
 
 - Default
-- Material
 
-![Figure 1: Asset Display Screenlet using the Default (left) and Material (right) Views.](../../images/screens-android-assetdisplay.png)
+![Figure 1: Asset Display Screenlet using the Default View.](../../images/screens-android-assetdisplay.png)
 
 The Default View uses different UI elements to show each asset type. For 
-example, it displays images with `ImageView`, and blogs with `TextView`. 
+example, it displays images with `ImageView`, and blogs with `TextView`. Note 
+that other custom Views may use different UI elements. 
 
-This Screenlet can also render other Screenlets:
+This Screenlet can also render other Screenlets: 
 
 - Images: Image Display Screenlet
 - Videos: Video Display Screenlet

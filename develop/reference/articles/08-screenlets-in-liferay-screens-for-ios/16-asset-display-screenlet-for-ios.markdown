@@ -97,7 +97,9 @@ the following methods:
         }
 
 - `- screenlet:onAsset:`: Called to render a custom asset. The following example 
-  implementation renders a user from a Liferay instance (`User`): 
+  implementation renders a user from a Liferay instance (`User`). If the asset 
+  is a user, this method instantiates a custom `UserDisplayViewController` to 
+  render that user: 
 
         func screenlet(screenlet: AssetDisplayScreenlet, onAsset asset: Asset) -> UIView? {
             if let type = asset.attributes["object"]?.allKeys.first as? String {
