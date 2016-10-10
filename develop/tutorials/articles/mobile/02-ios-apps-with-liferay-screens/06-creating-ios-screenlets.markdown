@@ -3,7 +3,7 @@
 The built-in
 [Screenlets](/develop/reference/-/knowledge_base/7-0/screenlets-in-liferay-screens-for-ios)
 cover common use cases for mobile apps that use Liferay. They
-authenticate users, interact with Dynamic Data Lists, view assets, and more.
+authenticate users, interact with Dynamic Data Lists, display assets, and more.
 What if, however, there's no Screenlet for *your* use case? No problem! You can
 create your own. Extensibility is a key strength of Liferay Screens. 
 
@@ -17,40 +17,42 @@ In general, you use the following steps to create Screenlets:
 1. Plan Your Screenlet: Your Screenlet's features and use cases determine where 
    you'll create it, and the Liferay remote services you'll call. 
 
-2. Create Your Screenlet's UI (it's View): Although this tutorial presents all 
-   the information you need to create a View for your Screenlet, you may first 
+2. Create Your Screenlet's UI (it's Theme): Although this tutorial presents all 
+   the information you need to create a Theme for your Screenlet, you may first 
    want to learn the general steps for 
-   [creating a View](/develop/tutorials/-/knowledge_base/7-0/creating-ios-themes). 
-   For more information on View in general, see 
-   [the tutorial on using Views with Screenlets](https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/using-themes-in-ios-screenlets). 
+   [creating a Theme](/develop/tutorials/-/knowledge_base/7-0/creating-ios-themes). 
+   For more information on Themes in general, see 
+   [the tutorial on using Themes with Screenlets](https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/using-themes-in-ios-screenlets). 
 
 3. Create the Screenlet's Interactor. Interactors are Screenlet components that 
    make server calls. 
 
 4. Create the Screenlet class. The Screenlet class is the Screenlet's central 
-   component. It controls the Screenlet's behavior, and is the component the app 
+   component. It controls the Screenlet's behavior and is the component the app 
    developer interacts with when inserting a Screenlet. 
 
-To understand the components that make up a Screenlet, you might want to first
-analyze the
-[architecture of Liferay Screens for iOS](/develop/tutorials/-/knowledge_base/7-0/architecture-of-liferay-screens-for-ios). 
+Before getting started, make sure that you're familiar with the architecture of 
+Liferay Screens. 
+[Click here](/develop/tutorials/-/knowledge_base/7-0/architecture-of-liferay-screens-for-ios) 
+to read the Screens architecture tutorial. 
+
 Without further ado, let the Screenlet creation begin! 
 
 ## Planning Your Screenlet
 
 Before creating your Screenlet, you must determine what it needs to do and how 
 you want developers to use it. This determines where you'll create your 
-Screenlet and its functionality. 
+Screenlet, and its functionality. 
 
 Where you should create your Screenlet depends on how you plan to use it. If you
 want to reuse or redistribute it, you should create it in an empty Cocoa Touch
 Framework project in Xcode. You can then use CocoaPods to publish it. The
 section
 [Publish Your Themes Using CocoaPods](/develop/tutorials/-/knowledge_base/7-0/creating-ios-themes#publish-your-themes-using-cocoapods)
-in the tutorial
+in the tutorial 
 [Creating iOS Themes](/develop/tutorials/-/knowledge_base/7-0/creating-ios-themes)
 explains how to publish an iOS Screenlet. Even though that section refers to
-Themes, the steps for preparing Screenlets for publishing are the same. If you
+Themes, the steps for preparing Screenlets for publication are the same. If you
 don't plan to reuse or redistribute your Screenlet, create it in your app's
 Xcode project. 
 
@@ -77,7 +79,9 @@ parameters:
 
 - `description`: The new bookmark's description. 
 
-- `serviceContext`: A Liferay `ServiceContext` object. 
+- `serviceContext`: A 
+  [Liferay `ServiceContext`](https://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/portal/kernel/service/ServiceContext.html) 
+  object. 
 
 Add Bookmark Screenlet must therefore account for each of these parameters. When 
 saving a bookmark, the Screenlet asks the user to enter the bookmark's URL and 
@@ -90,10 +94,10 @@ Great! Now you're ready to create your Screenlet's Theme!
 
 ## Creating the Screenlet's UI
 
-In Liferay Screens for iOS, a Screenlet's UIs is called a View. Every Screenlet 
-must have at least one View. A View consists of the following components: 
+In Liferay Screens for iOS, a Screenlet's UIs is called a Theme. Every Screenlet 
+must have at least one Theme. A Theme consists of the following components: 
 
-1. An XIB file: defines the UI components that the View presents to the end 
+1. An XIB file: defines the UI components that the Theme presents to the end 
    user. 
 
 2. A View class: renders the UI, handles user interactions, and communicates 
@@ -101,18 +105,17 @@ must have at least one View. A View consists of the following components:
 
 First, create a new XIB file and use Interface Builder to construct your 
 Screenlet's UI. In many cases, the actions performed by the Screenlet must be 
-triggered from the View. To achieve this, make sure to use a 
+triggered from the Theme. To achieve this, make sure to use a 
 `restorationIdentifier` property to assign a unique ID to each UI component that 
-triggers an action. This ID is the action name recovered in the Screenlet class. 
-The user triggers the action by interacting with the UI component. If the action 
-only changes the UI's state (that is, changes the UI component's properties), 
-then you can associate that component's event to an `IBAction` method as usual. 
-Actions using `restorationIdentifier` are intended for use by actions that need 
-an Interactor (such as actions that make server requests or retrieve data from a 
-database). 
+triggers an action. The user triggers the action by interacting with the UI 
+component. If the action only changes the UI's state (that is, changes the UI 
+component's properties), then you can associate that component's event to an 
+`IBAction` method as usual. Actions using `restorationIdentifier` are intended 
+for use by actions that need an Interactor, such as actions that make server 
+requests or retrieve data from a database. 
 
 For example, Add Bookmark Screenlet's UI needs text boxes for entering a 
-bookmark's URL and title. This UI also needs a button to support the Screenlet 
+bookmark's URL and title. This UI also needs a button to support the Screenlet's 
 action: sending the bookmark to a Liferay instance. The 
 [XIB file `AddBookmarkView_default.xib`](https://github.com/liferay/liferay-screens/tree/master/ios/Samples/Bookmark/AddBookmarkScreenlet/Basic/Themes/AddBookmarkView_default.xib) 
 defines this UI. Because the button triggers the Screenlet's action, it contains 
@@ -121,11 +124,11 @@ defines this UI. Because the button triggers the Screenlet's action, it contains
 ![Figure 1: Here's the sample Add Bookmark Screenlet's XIB file rendered in Interface Builder.](../../../images/screens-ios-xcode-add-bookmark.png)
 
 Now you must create your Screenlet's View class. This class controls the UI you 
-just defined. Screens provides the default functionality required by all View 
-classes in the 
-[`BaseScreenletView` class](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseScreenletView.swift). 
-Your View class must therefore extend `BaseScreenletView` to provide the 
-functionality unique to your Screenlet's View. Name your View class according to 
+just defined. In the 
+[`BaseScreenletView` class](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseScreenletView.swift), 
+Screens provides the default functionality required by all View classes. Your 
+View class must therefore extend `BaseScreenletView` to provide the 
+functionality unique to your Screenlet. Name your View class according to 
 [the naming convention](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices#ios-naming-convention) 
 in the 
 [iOS best practices tutorial](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices). 
@@ -139,8 +142,8 @@ For example,
 [`AddBookmarkView_default`](https://github.com/liferay/liferay-screens/tree/master/ios/Samples/Bookmark/AddBookmarkScreenlet/Basic/Themes/AddBookmarkView_default.swift) 
 is Add Bookmark Screenlet's View class. This class extends `BaseScreenletView` 
 and contains `@IBOutlet` references to the XIB's text fields. The getters for 
-these references let the View retrieve the data the user enters into the 
-corresponding text field:
+these references let the Theme retrieve the data the user enters into the 
+corresponding text field: 
 
     import UIKit
     import LiferayScreens
@@ -164,10 +167,10 @@ custom class. In Add Bookmark Screenlet, for example, `AddBookmarkView_default`
 is set as the `AddBookmarkView_default.xib` file's custom class in Interface 
 Builder. 
 
-If you're using CocoaPods, make sure to explicitly specify a valid module for 
-the custom class--the grayed-out *Current* default value only suggests a module. 
+If you're using CocoaPods, make sure to explicitly set a valid module for the 
+custom class--the grayed-out *Current* default value only suggests a module. 
 
-![Figure 2: This XIB file's custom class's module is NOT specified.](../../../images/screens-ios-theme-custom-module-wrong.png)
+![Figure 2: In this XIB file, the custom class's module is NOT specified.](../../../images/screens-ios-theme-custom-module-wrong.png)
 
 ![Figure 3: The XIB file is bound to the custom class name, with the specified module.](../../../images/screens-ios-theme-custom-module-right.png)
 
@@ -175,78 +178,111 @@ Next, you'll create your Screenlet's Interactor.
 
 ## Creating the Interactor
 
-Create an Interactor class for each use case of your Screenlet. Each Interactor 
-must extend the Liferay Screens 
-[`Interactor`](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/Interactor.swift) 
-class. The name of this class should follow the 
-[Naming Convention](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices#ios-naming-convention) 
+Create an Interactor class for each of your Screenlet's use cases. In the 
+[`Interactor` class](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/Interactor.swift), 
+Screens provides the default functionality required by all Interactor classes. 
+Your Interactor class must therefore extend `Interactor` to provide the 
+functionality unique to your Screenlet. Name your Interactor class according to 
+[the naming convention](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices#ios-naming-convention) 
 specified in the 
-[Best Practices](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices).
+[iOS best practices tutorial](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices). 
 
-Interactors work synchronously, but, you can use Callbacks (delegates) or 
-Connectors to run their operations in the background. Here's what you need to 
-know to implement an Interactor: 
+Interactors work synchronously, but you can use callbacks (delegates) or 
+Connectors to run their operations in the background. For example, the Liferay 
+Mobile SDK provides the 
+[`LRCallback` protocol](https://github.com/liferay/liferay-mobile-sdk/blob/master/ios/Source/Core/LRCallback.h) 
+for this purpose. This is described in 
+[the Mobile SDK tutorial on invoking Liferay services asynchronously](/develop/tutorials/-/knowledge_base/7-0/invoking-services-asynchronously-from-your-ios-app). 
+Screens bridges this protocol to make it available in Swift. Your Interactor 
+class can conform this protocol make its server calls asynchronously. To 
+implement an Interactor class: 
 
-- You must receive all needed properties, along with the Screenlet in the 
-  Interactor initializer.
-- You must override `Interactor`'s `start` method to perform operations (e.g., 
-  invoke a Liferay portal operation via a Liferay Mobile SDK service). 
-- You can save a response to a property and make its value accessible. 
-- You must invoke methods `callOnSuccess` or `callOnFailure` to execute closures 
-  `onSuccess` or `onFailure`, respectively. 
+- Your initializer must receive all required properties and a reference to the 
+  Screenlet. 
+- Override `Interactor`'s `start` method to perform the server operations your 
+  Screenlet requires (e.g., invoke a Liferay operation via a Liferay Mobile SDK 
+  service). 
+- Save the server response to an accessible property, if necessary. For example, 
+  if the server call returns objects from a Liferay instance, then you should 
+  store these objects to an accessible property. This way your Screenlet can 
+  display those results to the user. 
+- You must invoke the methods `callOnSuccess` and `callOnFailure` to execute the 
+  closures `onSuccess` and `onFailure`, respectively. 
 
-The sample Add Bookmark Screenlet's Interactor class 
+For example, the sample Add Bookmark Screenlet's Interactor class 
 [`AddBookmarkInteractor`](https://github.com/liferay/liferay-screens/tree/master/ios/Samples/Bookmark/AddBookmarkScreenlet/Basic/Interactor/AddBookmarkInteractor.swift) 
-adds a bookmark to the Liferay instance:
+makes the server call that adds a bookmark to a Liferay instance. This class 
+extends the `Interactor` class and conforms the `LRCallback` protocol. The 
+latter ensures that the Interactor's server call runs asynchronously: 
 
-    import UIKit
-    import LiferayScreens
+    public class AddBookmarkInteractor: Interactor, LRCallback {...
+
+To save the server call's results, `AddBookmarkInteractor` defines the public 
+variable `resultBookmarkInfo`. This class also defines public constants for the 
+bookmark's folder ID, title, and URL. The initializer sets these variables and 
+calls `Interactor`'s constructor with a reference to the base Screenlet class 
+(`BaseScreenlet`):
+
+    public var resultBookmarkInfo: [String:AnyObject]?
+    public let folderId: Int64
+    public let title: String
+    public let url: String
+
+    public init(screenlet: BaseScreenlet, folderId: Int64, title: String, url: String) {
+        self.folderId = folderId
+        self.title = title
+        self.url = url
+        super.init(screenlet: screenlet)
+    }
+
+The `AddBookmarkInteractor` class's `start` method makes the server call. To do 
+so, it must first get a `Session`. Since Login Screenlet creates a session 
+automatically upon successful login, the `start` method retrieves this session 
+with `SessionContext.createSessionFromCurrentSession()`. To make the server call 
+asynchronously, the `start` method must set a callback to this session. Because 
+`AddBookmarkInteractor` conforms the `LRCallback` protocol, setting `self` as 
+the session's callback accomplishes this. The `start` method must then create a 
+`LRBookmarksEntryService_v7` instance, and call this instance's 
+`addEntryWithGroupId` method. The latter method calls a Liferay instance's 
+`add-entry` service for `BookmarksEntry`. The `start` method therefore provides 
+the `groupId`, `folderId`, `name`, `url`, `description`, and `serviceContext` 
+arguments to `addEntryWithGroupId`. Note that this example provides a hardcoded 
+string for the `description`. Also, the `serviceContext` is `nil` because the 
+Mobile SDK handles the `ServiceContext` object for you: 
+
+    override public func start() -> Bool {
+        let session = SessionContext.createSessionFromCurrentSession()
+        session?.callback = self
     
-    
-    public class AddBookmarkInteractor: Interactor, LRCallback {
-    	
-    	public var resultBookmarkInfo: [String:AnyObject]?
-    
-    	public let folderId: Int64
-    	public let title: String
-    	public let url: String
-    
-    
-    	//MARK: Initializer
-    
-    	public init(screenlet: BaseScreenlet, folderId: Int64, title: String, url: String) {
-    		self.folderId = folderId
-    		self.title = title
-    		self.url = url
-    		super.init(screenlet: screenlet)
-    	}
-    
-    
-    	//MARK: Interactor
-    
-    	override public func start() -> Bool {
-    		let session = SessionContext.createSessionFromCurrentSession()
-    		session?.callback = self
-    
-    		let service = LRBookmarksEntryService_v7(session: session)
-    
-    		do {
-    			try service.addEntryWithGroupId(LiferayServerContext.groupId,
-    			                                folderId: folderId,
-    			                                name: title,
-    			                                url: url,
-    			                                description: "Added from Liferay Screens",
-    			                                serviceContext: nil)
-    			
-    			return true
-    		}
-    		catch {
-    			return false
-    		}
-    	}
-    
-    
-    	//MARK: LRCallback
+        let service = LRBookmarksEntryService_v7(session: session)
+
+        do {
+            try service.addEntryWithGroupId(LiferayServerContext.groupId,
+                            folderId: folderId,
+                            name: title,
+                            url: url,
+                            description: "Added from Liferay Screens",
+                            serviceContext: nil)
+
+            return true
+        }
+        catch {
+            return false
+        }
+    }
+
+Lastly, the `AddBookmarkInteractor` class must conform the `LRCallback` protocol 
+by implementing the `onFailure` and `onSuccess` methods. The `onFailure` method 
+communicates the `NSError` object that results from a failed server call. It 
+does this by calling the `callOnFailure` method with the error. The Screenlet 
+calls the `onSuccess` method when the server call succeeds. This method contains 
+the server call's results in its `result` argument, which it saves in the 
+`resultBookmarkInfo` variable. The method finishes by calling `callOnSuccess`: 
+<!-- 
+Are these methods or closures? Also, where do callOnFailure and callOnSuccess 
+come from? They're not explained anywhere, so when they appear here it is 
+confusing. 
+-->
     
     	public func onFailure(error: NSError!) {
     		self.callOnFailure(error)
@@ -261,12 +297,16 @@ adds a bookmark to the Liferay instance:
     
     }
 
-In this example, we extend the Interactor from `LRCallback` class in order to 
-make the interaction run asynchronously. This is the method provided by the 
-Mobile SDK to run asyncronous services. Please refer to 
+<!--
+Commenting out until tutorial is published:
+
+Refer to 
 [this](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets-advanced#using-connector-instead-callback) 
 chapter of the [advanced tutorial](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets-advanced) 
-if you want to use Connectors instead of Callbacks.
+if you want to use Connectors instead of Callbacks. 
+-->
+
+Next, you'll create the Screenlet class. 
 
 ## Creating the Screenlet Class
 
@@ -352,13 +392,17 @@ For reference, the sample Add Bookmark Screenlet's final code is
 You're done! Your Screenlet is a ready-to-use component that you can add to your 
 storyboard. You can even [package](/develop/tutorials/-/knowledge_base/7-0/creating-ios-themes#publish-your-themes-using-cocoapods) 
 it to contribute to the Screens project or distribute with CocoaPods. Now you 
-know how to create Screenlets for iOS.
+know how to create iOS Screenlets! 
+
+<!--
+Commenting out until tutorial is published:
 
 If you want to go deeper into the development of a Screenlet, please refer to 
 our 
 [advanced tutorial](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets-advanced), 
 where we teach cool things like: multiview support, event notification from your 
 Screenlet, and much more! 
+-->
 
 ## Related Topics [](id=related-topics)
 
