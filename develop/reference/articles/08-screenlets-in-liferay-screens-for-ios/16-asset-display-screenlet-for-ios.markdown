@@ -49,6 +49,7 @@ These screenlets can be used alone without `AssetDisplayScreenlet`.
 | `assetEntryId` | `number` | The primary key parameter for displaying the `Asset`. | 
 | `className` | `string` | The class name of the `Asset` that we want to display. It's required when we are instantiating the screenlet with `className` and `classPK`. For example, if we want to display a blog entry, for `BlogsEntry` object in Liferay 7.0 version, its `className` is [`com.liferay.blogs.kernel.model.BlogsEntry`](https://github.com/liferay/liferay-portal/blob/master/portal-kernel/src/com/liferay/blogs/kernel/model/BlogsEntry.java). | 
 | `classPK` | `number` | This is the asset identifier and it's unique. This attribute is used only with `className`. |
+| `assetEntry` | `Asset` | You can load an `Asset` with this attribute without calling the server method. |
 | `autoLoad` | `boolean` | Whether the list should automatically load when the Screenlet appears in the app's UI. The default value is `true`. |
 | `offlinePolicy` | `string` | The offline mode setting. The default value is `remote-first`. See the [Offline](#offline) section for details. |
 
