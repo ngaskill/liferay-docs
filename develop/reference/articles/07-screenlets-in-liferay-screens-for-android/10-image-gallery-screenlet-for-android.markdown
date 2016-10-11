@@ -29,9 +29,15 @@ with configurable page size, and supports i18n in asset values.
 
 The Default Views use a standard Android `RecyclerView` to show the scrollable 
 list. Other Views may use a different component, such as `ViewPager` or others, 
-to show the items. 
+to show the items.
 
-![Figure 1: Image Gallery Screenlet using the Default (`default`) Views.](../../images/screens-android-gallery.png)
+This screenlet has three different Views:
+
+1. Grid (This is the Default View)
+2. Slideshow
+3. List
+
+![Figure 1: Image Gallery Screenlet using the Default (`default`) Views.](../../images/screens-android-imagegallery.png)
 
 ## Offline [](id=offline)
 
