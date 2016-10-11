@@ -16,36 +16,75 @@ thread. Alternatively, you can call `execute` directly if you want it to run in
 the current thread. 
 
 Here's an example `execute` method: 
-<!-- include the full method (its signature and body) -->
 
-    long companyId = (long) args[0];
-    String login = (String) args[1];
-    BasicAuthMethod basicAuthMethod = (BasicAuthMethod) args[2];
-    String userName = (String) args[3];
-    String apiPassword = (String) args[4];
+	@Override
+	public ForgotPasswordEvent execute(Object[] args) throws Exception {
 
-    validate(companyId, login, basicAuthMethod, userName, apiPassword);
+		long companyId = (long) args[0];
+		String login = (String) args[1];
+		BasicAuthMethod basicAuthMethod = (BasicAuthMethod) args[2];
+		String anonymousApiUserName = (String) args[3];
+		String anonymousApiPassword = (String) args[4];
 
-    Authentication authentication = new BasicAuthentication(userName, apiPassword);
-    Session anonymousSession = new SessionImpl(LiferayServerContext.getServer(), authentication);
-    ForgotPasswordConnector connector = ServiceProvider.getInstance().getForgotPasswordConnector(anonymousSession);
+		validate(companyId, login, basicAuthMethod, anonymousApiUserName, anonymousApiPassword);
 
-    Boolean sent = getBasicEventNew(companyId, login, basicAuthMethod, connector);
+		Authentication authentication = new BasicAuthentication(anonymousApiUserName, anonymousApiPassword);
+		Session anonymousSession = new SessionImpl(LiferayServerContext.getServer(), authentication);
+		ForgotPasswordConnector connector = ServiceProvider.getInstance().getForgotPasswordConnector(anonymousSession);
 
-    return new ForgotPasswordEvent(sent);
+		Boolean sent = getBasicEventNew(companyId, login, basicAuthMethod, connector);
+
+		return new ForgotPasswordEvent(sent);
+	}
 
 When calling it in synchronous mode, you can write remote calls or heavy 
 operations that won't block the UI thread but at the same time the results will 
 be delivered to the UI thread by calling the attached listener.
+
 <!-- 
 When you say "synchronous mode" here, do you mean making the server call in 
 the execute method without manually setting a callback? Also, provide example 
 code of this. 
+
+Yes, callbacks are not needed anymore.
 -->
+
+For example, this is the full code of the *execute* method for adding an comment:
+
+	@Override
+	public CommentEvent execute(CommentEvent event) throws Exception {
+
+		String className = event.getClassName();
+		long classPK = event.getClassPK();
+		String body = event.getBody();
+
+		validate(className, classPK, body);
+
+		JSONObject jsonObject = new ScreenscommentService(getSession()).addComment(className, classPK, body);
+
+		event.setCommentEntry(new CommentEntry(JSONUtil.toMap(jsonObject)));
+		return event;
+	}
+	
+Notice that we do the the request to the portal without adding a callback to the Liferay Session, callbacks are not needed anymore.
+
 
 The interactor receives the arguments as a varargs and returns an event that is 
 going to be sent via an EventBus to the success and error callbacks.
-<!-- Provide example code -->
+
+Analysing the previous code, this segment is responsible of casting the parameters from the varargs:
+
+	long companyId = (long) args[0];
+	String login = (String) args[1];
+	BasicAuthMethod basicAuthMethod = (BasicAuthMethod) args[2];
+	String anonymousApiUserName = (String) args[3];
+	String anonymousApiPassword = (String) args[4];
+	
+And this one creates an event to return it:
+
+	return new ForgotPasswordEvent(sent);
+	
+Note that you can define whatever arguments you want to receive in your interactor and pass a DTO or a POJO as your interface. That way you won't have to cast each parameter.
 
 The new architecture provides several event classes that you can use if you 
 don't want to store specific information in your event class. For example you 
@@ -96,7 +135,7 @@ loads a comment entry is listed here:
 	
 In the `execute` method we use the commentId, an argument passed through a 
 varargs, to do a request against a Portal API and return an event that stores 
-the json information. `CommentEvent` is a POJO that inherits from `BasicEvent` 
+the JSON information. `CommentEvent` is a POJO that inherits from `BasicEvent` 
 and has a no-args constructor.
 
 We use the event to notify the screenlet with a listener, with this code:
@@ -139,6 +178,35 @@ The only difference is that the interactor expects an event class (instead of
 varargs) in the execute method. The event class acts as the interface of the 
 interactor.
 
+Here is a complete example of a write operation, the code responsible of deleting a rating:
+
+	@Override
+	public RatingEvent execute(RatingEvent event) throws Exception {
+
+		ScreensratingsentryService ratingsEntryService =
+			new ScreensratingsentryService(SessionContext.createSessionFromCurrentSession());
+
+		JSONObject jsonObject = ratingsEntryService.deleteRatingsEntry(event.getClassPK(), event.getClassName(),
+			event.getRatingGroupCounts());
+
+		event.setJSONObject(jsonObject);
+		return event;
+	}
+
+	@Override
+	public void onSuccess(RatingEvent event) throws Exception {
+		JSONObject result = event.getJSONObject();
+		AssetRating assetRating = new AssetRating(result.getLong("classPK"), result.getString("className"),
+			toIntArray(result.getJSONArray("ratings")), result.getDouble("average"), result.getDouble("userScore"),
+			result.getDouble("totalScore"), result.getInt("totalCount"));
+		getListener().onRatingOperationSuccess(assetRating);
+	}
+
+	@Override
+	public void onFailure(RatingEvent event) {
+		getListener().error(event.getException(), RatingScreenlet.DELETE_RATING_ACTION);
+	}
+
 ## New BaseListInteractor
 
 The interactor that deals with remote operations that can be paginated expects 
@@ -178,3 +246,42 @@ request.
 
 The event class returned from `createEntity` will have to inherit from 
 `ListEvent` and provide a cache key and a method unwrapping the business entity.
+
+Here is the full example of the code responsible of listing web contents:
+
+	public class WebContentListInteractor
+		extends BaseListInteractor<BaseListInteractorListener<WebContent>, WebContentDisplayEvent> {
+
+		@Override
+		protected String getIdFromArgs(Object... args) {
+			long folderId = (long) args[0];
+	
+			return String.valueOf(folderId);
+		}
+	
+		@Override
+		protected JSONArray getPageRowsRequest(Query query, Object... args) throws Exception {
+	
+			long folderId = (long) args[0];
+	
+			JournalContentConnector journalContentConnector =
+				ServiceProvider.getInstance().getJournalContentConnector(getSession());
+			return journalContentConnector.getJournalArticles(groupId, folderId, query.getStartRow(), query.getEndRow(),
+				query.getComparatorJSONWrapper());
+		}
+	
+		@Override
+		protected Integer getPageRowCountRequest(Object... args) throws Exception {
+	
+			long folderId = (long) args[0];
+	
+			JournalContentConnector journalContentConnector =
+				ServiceProvider.getInstance().getJournalContentConnector(getSession());
+			return journalContentConnector.getJournalArticlesCount(groupId, folderId);
+		}
+	
+		@Override
+		protected WebContentDisplayEvent createEntity(Map<String, Object> stringObjectMap) {
+			return new WebContentDisplayEvent(new WebContent(stringObjectMap, locale));
+		}
+	}
