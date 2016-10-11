@@ -28,19 +28,19 @@ with configurable page size, and supports i18n in asset values.
 
 ## Themes [](id=themes)
 
-The Default Theme uses 
+The default Theme uses 
 [the `CosmosView` library](https://github.com/marketplacer/Cosmos) 
-to show an asset's rating. Other Views may use a different component, such as 
-`UIButton` or others, to show the items.
+to show an asset's rating. Other custom Themes may use a different component, 
+such as `UIButton` or others, to show the items.
 
-This screenlet has four different Views: 
+This screenlet has four different Themes: 
  
 1. Like 
-2. Thumbs (This is the Default View) 
+2. Thumbs (default) 
 3. Stars 
 4. Emojis 
 
-![Figure 1: Rating Screenlet using the Default (`default`) Theme.](../../images/screens-ios-ratings.png)
+![Figure 1: Rating Screenlet's different Themes.](../../images/screens-ios-ratings.png)
 
 ## Offline [](id=offline)
 

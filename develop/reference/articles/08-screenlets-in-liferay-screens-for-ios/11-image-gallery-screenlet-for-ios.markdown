@@ -29,19 +29,17 @@ with configurable page size, and supports i18n in asset values.
 
 ## Themes [](id=themes)
 
-- Default
+The default Theme uses a standard iOS `UICollectionView` to show the scrollable 
+list as a grid. Other custom Themes may use a different component, such as 
+`UITableView` or others, to show the contents. 
 
-The Default Theme uses a standard iOS `UICollectionView` to show the scrollable 
-list as a grid. Other Themes may use a different component, such as 
-`UITableView` or others, to show the contents.
+This screenlet has three different Views: 
 
-This screenlet has three different Views:
-
-1. Grid (This is the Default View)
+1. Grid (default)
 2. Slideshow
 3. List
 
-![Figure 1: Image Gallery Screenlet using the Default Theme.](../../images/screens-ios-imagegallery.png)
+![Figure 1: Image Gallery Screenlet using the Grid, Slideshow, and List Themes.](../../images/screens-ios-imagegallery.png)
 
 ## Offline [](id=offline)
 

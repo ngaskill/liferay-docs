@@ -27,17 +27,17 @@ with configurable page size, and supports i18n in asset values.
 
 ## Views [](id=views)
 
-The Default Views use a standard Android `RecyclerView` to show the scrollable 
-list. Other Views may use a different component, such as `ViewPager` or others, 
-to show the items.
+The included Views use a standard Android `RecyclerView` to show the scrollable 
+list. Other custom Views may use a different component, such as `ViewPager` or 
+others, to show the items. 
 
 This screenlet has three different Views:
 
-1. Grid (This is the Default View)
+1. Grid (default)
 2. Slideshow
 3. List
 
-![Figure 1: Image Gallery Screenlet using the Default (`default`) Views.](../../images/screens-android-imagegallery.png)
+![Figure 1: Image Gallery Screenlet using the Grid, Slideshow, and List Views.](../../images/screens-android-imagegallery.png)
 
 ## Offline [](id=offline)
 
@@ -127,10 +127,14 @@ Therefore, Image Gallery Screenlet's listener methods are as follows:
 - `onImageUploadEnd(ImageEntry entry)`: Called when an item finishes uploading. 
 
 - `showUploadImageView(String actionName, String picturePath, int screenletId)`: 
-  Called when the View for uploading an image is going to be displayed. The 
-  default behavior is to show the default View in a dialog. You only have to 
-  change this method if you want to change this behavior, for example, show a upload view in other activity. You should return true in this method, so the Screenlet will not execute its default behaviour.
-  
-In this method, You have to create a custom view that extends from `BaseDetailUploadView`. This view needs to be initalized with the `initializeUploadView` method.
-  
-- `provideImageUploadDetailView()`: Called when the upload view is needed. If you want this view to have a custom xml layout you need to return its layout id in this method. That layout have to have as xml root the class `DefaultUploadDetailView`. If you return 0 in this method, the screenlet will inflate the defaul view.
+  Called when the View for uploading an image is instantiated. The default 
+  behavior is to show the default View in a dialog. To retain this behavior, all 
+  this method needs to do is return `false`. To change the default behavior, use 
+  the `initializeUploadView` method to initialize a custom View that extends 
+  `BaseDetailUploadView`. Then return `true` to prevent the Screenlet from 
+  executing the default behavior. 
+
+- `provideImageUploadDetailView()`: Called when the Screenlet provides the image 
+  upload View. To inflate the default View, return `0` in this method. 
+  Alternatively, display this View with a custom layout by returning its layout 
+  ID. Such a layout must have `DefaultUploadDetailView` as its root class. 
