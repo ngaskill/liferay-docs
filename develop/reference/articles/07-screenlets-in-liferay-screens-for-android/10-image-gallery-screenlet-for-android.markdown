@@ -132,7 +132,18 @@ Therefore, Image Gallery Screenlet's listener methods are as follows:
   this method needs to do is return `false`. To change the default behavior, use 
   the `initializeUploadView` method to initialize a custom View that extends 
   `BaseDetailUploadView`. Then return `true` to prevent the Screenlet from 
-  executing the default behavior. 
+  executing the default behavior. For example, the following sample 
+  implementation uses `initializeUploadView` to initialize the custom View 
+  instance `uploadDetailView`. It then performs a custom UI action 
+  (`uploadImageCard.goRight()`) and returns `true`: 
+
+        @Override
+        public boolean showUploadImageView(String actionName, String picturePath, int screenletId) {
+            uploadDetailView.initializeUploadView(actionName, picturePath, screenletId);
+            uploadImageCard.goRight();
+
+            return true;
+        }
 
 - `provideImageUploadDetailView()`: Called when the Screenlet provides the image 
   upload View. To inflate the default View, return `0` in this method. 
