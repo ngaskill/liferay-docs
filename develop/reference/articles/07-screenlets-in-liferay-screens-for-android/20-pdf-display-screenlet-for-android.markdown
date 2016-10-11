@@ -1,4 +1,4 @@
-# Pdf Display Screenlet for Android [](id=pdf-display-screenlet-for-android)
+# PDF Display Screenlet for Android [](id=pdf-display-screenlet-for-android)
 
 ## Requirements [](id=requirements)
 
@@ -16,10 +16,8 @@
 
 ## Features [](id=features)
 
-Pdf Display Screenlet can display a `DLFileEntry` of type pdf from a
-Liferay instance. You can specify which extensions are allowed in the screenlet.
-
-This screenlet has a base class called `BaseFileDisplayScreenlet`. All the screenlets which works with `DLFileEntry` should extend this class although it can't be used on its own.
+PDF Display Screenlet displays a PDF file from a Liferay Instance's Documents 
+and Media Library. 
 
 ## Module [](id=module)
 
@@ -29,9 +27,10 @@ This screenlet has a base class called `BaseFileDisplayScreenlet`. All the scree
 
 - Default
 
-![Figure 1: Pdf Display Screenlet using the Default View.](../../images/screens-android-pdfdisplay.png)
+The Default View uses Android's `PdfRenderer` to display the PDF. Note that 
+`PdfRenderer` requires an Android API level of 21 or higher. 
 
-The Default View uses an `PdfRenderer` for displaying the pdf if the device has API greater than or equal to 21.
+![Figure 1: PDF Display Screenlet using the Default View.](../../images/screens-android-pdfdisplay.png)
 
 ## Offline [](id=offline)
 
@@ -61,16 +60,17 @@ If you don't use `entryId`, you must use both of the following attributes:
 | Attribute | Data type | Explanation |
 |-----------|-----------|-------------|
 | `layoutId` | `@layout` | The layout to use to show the View. |
-| `autoLoad` | `boolean` | Whether the asset automatically loads when the Screenlet appears in the app's UI. The default value is `true`. |
-| `entryId` | `number` | The primary key of the asset. | 
-| `className` | `string` | The asset's fully qualified class name. For PDFs, the `className` is [`com.liferay.document.library.kernel.model.DLFileEntry`](https://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/document/library/kernel/model/DLFileEntry.html). The `className` and `classPK` attributes are required to instantiate the Screenlet. |
-| `classPK` | `number` | The asset’s unique identifier. The `className` and `classPK` attributes are required to instantiate the Screenlet. |
+| `autoLoad` | `boolean` | Whether the PDF automatically loads when the Screenlet appears in the app's UI. The default value is `true`. |
+| `entryId` | `number` | The primary key of the PDF file. | 
+| `className` | `string` | The PDF file's fully qualified class name. Since files in a Documents and Media Library are `DLFileEntry` objects, their `className` is [`com.liferay.document.library.kernel.model.DLFileEntry`](https://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/document/library/kernel/model/DLFileEntry.html). The `className` and `classPK` attributes are required to instantiate the Screenlet. |
+| `classPK` | `number` | The PDF file’s unique identifier. The `className` and `classPK` attributes are required to instantiate the Screenlet. |
 | `cachePolicy` | `string` | The offline mode setting. See [the Offline section](/develop/reference/-/knowledge_base/7-0/asset-display-screenlet-for-android#offline) for details. |
 
 ## Listener [](id=listener)
 
-Pdf Display Screenlet delegates some events to a class that implements 
-`AssetDisplayListener`. This interface lets you implement the following methods: 
+Because PDF files are assets, PDF Display Screenlet delegates its events to a 
+class that implements `AssetDisplayListener`. This interface lets you implement 
+the following methods: 
 
 - `onRetrieveAssetSuccess(AssetEntry assetEntry)`: Called when the Screenlet 
-  successfully loads the asset.
+  successfully loads the PDF file. 

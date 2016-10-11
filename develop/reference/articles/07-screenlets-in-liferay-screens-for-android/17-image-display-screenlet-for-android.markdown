@@ -16,10 +16,8 @@
 
 ## Features [](id=features)
 
-Image Display Screenlet can display a `DLFileEntry` of type image from a
-Liferay instance. You can specify which extensions are allowed in the screenlet.
-
-This screenlet has a base class called `BaseFileDisplayScreenlet`. All the screenlets which works with `DLFileEntry` should extend this class although it can't be used on its own.
+Image Display Screenlet displays an image file from a Liferay instance's 
+Documents and Media Library. 
 
 ## Module [](id=module)
 
@@ -29,9 +27,9 @@ This screenlet has a base class called `BaseFileDisplayScreenlet`. All the scree
 
 - Default
 
-![Figure 1: Image Display Screenlet using the Default View.](../../images/screens-android-imagedisplay.png)
+The Default View uses an Android `ImageView` to display the image. 
 
-The Default View uses an `ImageView` for displaying the image.
+![Figure 1: Image Display Screenlet using the Default View.](../../images/screens-android-imagedisplay.png)
 
 ## Offline [](id=offline)
 
@@ -61,16 +59,17 @@ If you don't use `entryId`, you must use both of the following attributes:
 | Attribute | Data type | Explanation |
 |-----------|-----------|-------------|
 | `layoutId` | `@layout` | The layout to use to show the View. |
-| `autoLoad` | `boolean` | Whether the asset automatically loads when the Screenlet appears in the app's UI. The default value is `true`. |
-| `entryId` | `number` | The primary key of the asset. | 
-| `className` | `string` | The asset's fully qualified class name. For images, the `className` is [`com.liferay.document.library.kernel.model.DLFileEntry`](https://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/document/library/kernel/model/DLFileEntry.html). The `className` and `classPK` attributes are required to instantiate the Screenlet. |
-| `classPK` | `number` | The asset’s unique identifier. The `className` and `classPK` attributes are required to instantiate the Screenlet. |
-| `cachePolicy` | `string` | The offline mode setting. See [the Offline section](/develop/reference/-/knowledge_base/7-0/asset-display-screenlet-for-android#offline) for details. |
+| `autoLoad` | `boolean` | Whether the image automatically loads when the Screenlet appears in the app's UI. The default value is `true`. |
+| `entryId` | `number` | The primary key of the image. | 
+| `className` | `string` | The image's fully qualified class name. Since files in a Documents and Media Library are `DLFileEntry` objects, their `className` is [`com.liferay.document.library.kernel.model.DLFileEntry`](https://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/document/library/kernel/model/DLFileEntry.html). The `className` and `classPK` attributes are required to instantiate the Screenlet. |
+| `classPK` | `number` | The image’s unique identifier. The `className` and `classPK` attributes are required to instantiate the Screenlet. |
+| `cachePolicy` | `string` | The offline mode setting. See [the Offline section](/develop/reference/-/knowledge_base/7-0/image-display-screenlet-for-android#offline) for details. |
 
 ## Listener [](id=listener)
 
-Image Display Screenlet delegates some events to a class that implements 
-`AssetDisplayListener`. This interface lets you implement the following methods: 
+Because images are assets, Image Display Screenlet delegates its events to a 
+class that implements `AssetDisplayListener`. This interface lets you implement 
+the following methods: 
 
 - `onRetrieveAssetSuccess(AssetEntry assetEntry)`: Called when the Screenlet 
-  successfully loads the asset.
+  successfully loads the image. 

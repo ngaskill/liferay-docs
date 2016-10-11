@@ -8,7 +8,7 @@
   ([CE](http://www.liferay.com/marketplace/-/mp/application/54365664) or 
   [DE](http://www.liferay.com/marketplace/-/mp/application/54369726), 
   depending on your Liferay edition). This app is preinstalled in Liferay 7.0 CE 
-  and Liferay DXP instances.
+  and Liferay DXP instances. 
 
 ## Compatibility [](id=compatibility)
 
@@ -16,10 +16,8 @@
 
 ## Features [](id=features)
 
-Video Display Screenlet can display a `DLFileEntry` of type video from a
-Liferay instance. You can specify which extensions are allowed in the screenlet.
-
-This screenlet has a base class called `BaseFileDisplayScreenlet`. All the screenlets which works with `DLFileEntry` should extend this class although it can't be used on its own.
+Video Display Screenlet displays a video file from a Liferay instance's 
+Documents and Media Library. 
 
 ## Module [](id=module)
 
@@ -29,9 +27,9 @@ This screenlet has a base class called `BaseFileDisplayScreenlet`. All the scree
 
 - Default
 
-![Figure 1: Video Display Screenlet using the Default View.](../../images/screens-android-videodisplay.png)
+The Default View uses an Android `VideoView` for displaying the video. 
 
-The Default View uses an `VideoView` for displaying the video.
+![Figure 1: Video Display Screenlet using the Default View.](../../images/screens-android-videodisplay.png)
 
 ## Offline [](id=offline)
 
@@ -61,16 +59,17 @@ If you don't use `entryId`, you must use both of the following attributes:
 | Attribute | Data type | Explanation |
 |-----------|-----------|-------------|
 | `layoutId` | `@layout` | The layout to use to show the View. |
-| `autoLoad` | `boolean` | Whether the asset automatically loads when the Screenlet appears in the app's UI. The default value is `true`. |
-| `entryId` | `number` | The primary key of the asset. | 
-| `className` | `string` | The asset's fully qualified class name. For videos, the `className` is [`com.liferay.document.library.kernel.model.DLFileEntry`](https://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/document/library/kernel/model/DLFileEntry.html). The `className` and `classPK` attributes are required to instantiate the Screenlet. |
-| `classPK` | `number` | The asset’s unique identifier. The `className` and `classPK` attributes are required to instantiate the Screenlet. |
-| `cachePolicy` | `string` | The offline mode setting. See [the Offline section](/develop/reference/-/knowledge_base/7-0/asset-display-screenlet-for-android#offline) for details. |
+| `autoLoad` | `boolean` | Whether the video automatically loads when the Screenlet appears in the app's UI. The default value is `true`. |
+| `entryId` | `number` | The primary key of the video file. | 
+| `className` | `string` | The video file's fully qualified class name. Since files in a Documents and Media Library are `DLFileEntry` objects, the `className` is [`com.liferay.document.library.kernel.model.DLFileEntry`](https://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/document/library/kernel/model/DLFileEntry.html). The `className` and `classPK` attributes are required to instantiate the Screenlet. |
+| `classPK` | `number` | The video file’s unique identifier. The `className` and `classPK` attributes are required to instantiate the Screenlet. |
+| `cachePolicy` | `string` | The offline mode setting. See [the Offline section](/develop/reference/-/knowledge_base/7-0/video-display-screenlet-for-android#offline) for details. |
 
 ## Listener [](id=listener)
 
-Video Display Screenlet delegates some events to a class that implements 
-`AssetDisplayListener`. This interface lets you implement the following methods: 
+Because videos are assets, Video Display Screenlet delegates its events to a 
+class that implements `AssetDisplayListener`. This interface lets you implement 
+the following methods: 
 
 - `onRetrieveAssetSuccess(AssetEntry assetEntry)`: Called when the Screenlet 
-  successfully loads the asset.
+  successfully loads the video. 

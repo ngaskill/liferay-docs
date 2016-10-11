@@ -66,16 +66,13 @@ Here are the offline mode policies that you can use with this Screenlet:
 
 ## Required Attributes [](id=required-attributes)
 
-- `entryId`
+- `entryId` or `assetEntry`
 
-If you don't use `entryId`, you must use both of the following attributes: 
+If you don't use `entryId` or `assetEntry`, you must use both of the following 
+attributes: 
 
 - `className`
 - `classPK`
-
-But, if you have an `Asset` object, you can load it directly with:
-
-- `assetEntry`
 
 ## Attributes [](id=attributes)
 
@@ -86,7 +83,7 @@ But, if you have an `Asset` object, you can load it directly with:
 | `entryId` | `number` | The primary key of the asset. | 
 | `className` | `string` | The asset's fully qualified class name. For example, a blog entry's `className` is [`com.liferay.blogs.kernel.model.BlogsEntry`](https://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/blogs/kernel/model/BlogsEntry.html). The `className` and `classPK` attributes are required to instantiate the Screenlet. |
 | `classPK` | `number` | The asset’s unique identifier. The `className` and `classPK` attributes are required to instantiate the Screenlet. |
-| `assetEntry` | `Asset` | You can load an `Asset` with this attribute without calling the server method. |
+| `assetEntry` | `Asset` | The `Asset` object to display, selected from a list of assets. Note that if you use this attribute, the Screenlet doesn't need to call the server. |
 | `cachePolicy` | `string` | The offline mode setting. See [the Offline section](/develop/reference/-/knowledge_base/7-0/asset-display-screenlet-for-android#offline) for details. |
 | `imageLayoutId` | `@layout` | The layout to use to show an image (`DLFileEntry`). |
 | `videoLayoutId` | `@layout` | The layout to use to show a video (`DLFileEntry`). |

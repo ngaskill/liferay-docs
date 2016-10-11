@@ -63,21 +63,25 @@ reference documents:
   Lets the user comment on an asset. 
 
 - [**Asset Display Screenlet:**](/develop/reference/-/knowledge_base/7-0/asset-display-screenlet-for-android) 
-  Displays an asset. Currently, this Screenlet can display `DLFileEntry` 
-  (document library files), `BlogsEntry` (blogs articles), and `WebContent` (web 
-  content articles). You can also use it to display custom assets. 
+  Displays an asset. Currently, this Screenlet can display Documents and Media 
+  Library files (`DLFileEntry` entities), blogs articles (`BlogsEntry` 
+  entities), and web content articles (`WebContent` entities). You can also use 
+  it to display custom assets. 
 
 - [**Blogs Entry Display Screenlet:**](/develop/reference/-/knowledge_base/7-0/blogs-entry-display-screenlet-for-android) 
-  Shows a single blog entry file.
+  Shows a single blog entry. 
 
 - [**Image Display Screenlet:**](/develop/reference/-/knowledge_base/7-0/image-display-screenlet-for-android) 
-  Shows a single image file.
+  Shows a single image file from a Liferay instance's Documents and Media 
+  Library. 
 
 - [**Video Display Screenlet:**](/develop/reference/-/knowledge_base/7-0/video-display-screenlet-for-android) 
-  Shows a single video file.
+  Shows a single video file from a Liferay instance's Documents and Media 
+  Library. 
 
 - [**Audio Display Screenlet:**](/develop/reference/-/knowledge_base/7-0/audio-display-screenlet-for-android) 
-  Shows a single audio file.
+  Shows a single audio file from a Liferay instance's Documents and Media 
+  Library. 
 
-- [**Pdf Display Screenlet:**](/develop/reference/-/knowledge_base/7-0/pdf-display-screenlet-for-android) 
-  Shows a single pdf file.
+- [**PDF Display Screenlet:**](/develop/reference/-/knowledge_base/7-0/pdf-display-screenlet-for-android) 
+  Shows a single PDF file from a Liferay instance's Documents and Media Library. 

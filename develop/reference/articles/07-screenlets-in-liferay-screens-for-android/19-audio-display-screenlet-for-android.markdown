@@ -16,10 +16,8 @@
 
 ## Features [](id=features)
 
-Audio Display Screenlet can display a `DLFileEntry` of type audio from a
-Liferay instance. You can specify which extensions are allowed in the screenlet.
-
-This screenlet has a base class called `BaseFileDisplayScreenlet`. All the screenlets which works with `DLFileEntry` should extend this class although it can't be used on its own.
+Audio Display Screenlet displays an audio file from a Liferay instance's 
+Documents and Media Library. 
 
 ## Module [](id=module)
 
@@ -29,9 +27,9 @@ This screenlet has a base class called `BaseFileDisplayScreenlet`. All the scree
 
 - Default
 
-![Figure 1: Audio Display Screenlet using the Default View.](../../images/screens-android-audiodisplay.png)
+The Default View uses an Android `VideoView` for displaying the audio file. 
 
-The Default View uses an `VideoView` for displaying the audio.
+![Figure 1: Audio Display Screenlet using the Default View.](../../images/screens-android-audiodisplay.png)
 
 ## Offline [](id=offline)
 
@@ -61,16 +59,17 @@ If you don't use `entryId`, you must use both of the following attributes:
 | Attribute | Data type | Explanation |
 |-----------|-----------|-------------|
 | `layoutId` | `@layout` | The layout to use to show the View. |
-| `autoLoad` | `boolean` | Whether the asset automatically loads when the Screenlet appears in the app's UI. The default value is `true`. |
-| `entryId` | `number` | The primary key of the asset. | 
-| `className` | `string` | The asset's fully qualified class name. For audios, the `className` is [`com.liferay.document.library.kernel.model.DLFileEntry`](https://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/document/library/kernel/model/DLFileEntry.html). The `className` and `classPK` attributes are required to instantiate the Screenlet. |
-| `classPK` | `number` | The asset’s unique identifier. The `className` and `classPK` attributes are required to instantiate the Screenlet. |
-| `cachePolicy` | `string` | The offline mode setting. See [the Offline section](/develop/reference/-/knowledge_base/7-0/asset-display-screenlet-for-android#offline) for details. |
+| `autoLoad` | `boolean` | Whether the audio file automatically loads when the Screenlet appears in the app's UI. The default value is `true`. |
+| `entryId` | `number` | The primary key of the audio file. | 
+| `className` | `string` | The audio file's fully qualified class name. Since files in a Documents and Media Library are `DLFileEntry` objects, their `className` is [`com.liferay.document.library.kernel.model.DLFileEntry`](https://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/document/library/kernel/model/DLFileEntry.html). The `className` and `classPK` attributes are required to instantiate the Screenlet. |
+| `classPK` | `number` | The audio file’s unique identifier. The `className` and `classPK` attributes are required to instantiate the Screenlet. |
+| `cachePolicy` | `string` | The offline mode setting. See [the Offline section](/develop/reference/-/knowledge_base/7-0/audio-display-screenlet-for-android#offline) for details. |
 
 ## Listener [](id=listener)
 
-Audio Display Screenlet delegates some events to a class that implements 
-`AssetDisplayListener`. This interface lets you implement the following methods: 
+Because audio files are assets, Audio Display Screenlet delegates its events to 
+a class that implements `AssetDisplayListener`. This interface lets you 
+implement the following methods: 
 
 - `onRetrieveAssetSuccess(AssetEntry assetEntry)`: Called when the Screenlet 
-  successfully loads the asset.
+  successfully loads the audio file. 
