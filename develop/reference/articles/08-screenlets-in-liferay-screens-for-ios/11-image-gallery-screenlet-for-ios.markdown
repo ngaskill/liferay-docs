@@ -121,6 +121,5 @@ the following methods:
 
 - `- screenlet:onImageUploadDetailViewCreated:`: Called when the image upload 
   View is instantiated. By default, the Screenlet uses a modal view controller 
-  to present this View. You only need to implement this method if you want to 
-  override this behavior. This method should present the View, passed as 
-  parameter, and then return true. 
+  to show this View. You only need to implement this method if you want to 
+  override this behavior, for example, you want to show the view in a popover window. Then you have to override this method and show the view within it as you want, and after that you should return true, which means that the Screenlet doesn't have to show this view.

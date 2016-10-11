@@ -106,12 +106,9 @@ Therefore, Image Gallery Screenlet's listener methods are as follows:
 
 - `showUploadImageView(String actionName, String picturePath, int screenletId)`: 
   Called when the View for uploading an image is going to be displayed. The 
-  default behavior is to show a default View in a dialog. You only have to 
-  change this method if you want to change this behavior. For example, if you 
-  want to present the upload detail view in other activity. You have to return 
-  true if you dont want the default behavior. 
-
-- `provideImageUploadDetailView()`: Called when the View for uploading an image 
-  is initialized. This method lets you to change the default View. To do so, you 
-  must create a new View that extends from `BaseDetailUploadView` and return the 
-  layout identifier from your new view. 
+  default behavior is to show the default View in a dialog. You only have to 
+  change this method if you want to change this behavior, for example, show a upload view in other activity. You should return true in this method, so the Screenlet will not execute its default behaviour.
+  
+In this method, You have to create a custom view that extends from `BaseDetailUploadView`. This view needs to be initalized with the `initializeUploadView` method.
+  
+- `provideImageUploadDetailView()`: Called when the upload view is needed. If you want this view to have a custom xml layout you need to return its layout id in this method. That layout have to have as xml root the class `DefaultUploadDetailView`. If you return 0 in this method, the screenlet will inflate the defaul view.
