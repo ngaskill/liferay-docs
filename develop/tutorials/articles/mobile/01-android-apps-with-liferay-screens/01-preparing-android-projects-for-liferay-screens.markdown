@@ -51,26 +51,8 @@ can find them under Gradle Scripts in your Android Studio project. This
 screenshot highlights the app module's `build.gradle` file: 
 
 ![Figure 1: The app module's `build.gradle` file.](../../../images/screens-android-gradle-app-module.png)
-
-In the app module's `build.gradle` file, add these lines just after the closing 
-`buildTypes` brace: 
-
-    packagingOptions {
-      exclude 'META-INF/LICENSE'
-      exclude 'META-INF/NOTICE'
-    }
-
-This code helps prevent errors such as 
-`Duplicate files copied in APK META-INF/NOTICE` when building with Gradle. 
-
-Next, add the following code on the first level (on the same level as the
-`android` element): 
-
-    repositories {
-      jcenter()
-    }
-
-Finally, add the following line of code inside the `dependencies` element: 
+ 
+Add the following line of code inside the `dependencies` element: 
 
     compile 'com.liferay.mobile:liferay-screens:+'
 
