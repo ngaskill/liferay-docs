@@ -29,7 +29,15 @@ thumbs, stars, and emojis.
 The Default View uses an 
 [Android `RatingBar`](https://developer.android.com/reference/android/widget/RatingBar.html) 
 to show an asset's rating. Other Views may show the rating with a different 
-Android component such as `Button`, `ImageButton`, or others. 
+Android component such as `Button`, `ImageButton`, or others.
+
+This screenlet has five different Views:
+
+1. Like
+2. Thumbs (This is the Default View)
+3. Stars
+4. Reactions
+5. Emojis
 
 ![Figure 1: Rating Screenlet using the Default (`default`) View.](../../images/screens-android-ratings.png)
 
