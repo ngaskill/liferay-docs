@@ -450,8 +450,6 @@ adds bookmarks to.
 
 - `defaultTitle`: Sets each Bookmark's default title. 
 
-
-
 Now that you've defined your Screenlet's attributes, you're ready to create the 
 Screenlet class.
 
@@ -569,7 +567,7 @@ Next, you must implement `BaseScreenlet`'s abstract methods:
     used to inflate a View reference (`view`), which is then cast to a View 
     Model instance (`viewModel`). The View Model instance's `setTitle` method is 
     then called with `defaultTitle` to set the bookmark's default title. The 
-    method concludes by returnin the View reference. 
+    method concludes by returning the View reference. 
 
         @Override
         protected View createScreenletView(Context context, AttributeSet attributes) {
@@ -621,11 +619,7 @@ Next, you must implement `BaseScreenlet`'s abstract methods:
             String url = viewModel.getURL();
             String title = viewModel.getTitle();
 
-            try {
-                interactor.start(url, title, folderId);
-            } catch (Exception e) {
-                onAddBookmarkFailure(e);
-            }
+            interactor.start(url, title, folderId);
         }
 
 Nice! Your Screenlet is finished! You can now use it 

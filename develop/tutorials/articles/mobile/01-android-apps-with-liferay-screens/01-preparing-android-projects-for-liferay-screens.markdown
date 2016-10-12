@@ -52,25 +52,8 @@ screenshot highlights the app module's `build.gradle` file:
 
 ![Figure 1: The app module's `build.gradle` file.](../../../images/screens-android-gradle-app-module.png)
 
-In the app module's `build.gradle` file, add these lines just after the closing 
-`buildTypes` brace: 
-
-    packagingOptions {
-      exclude 'META-INF/LICENSE'
-      exclude 'META-INF/NOTICE'
-    }
-
-This code helps prevent errors such as 
-`Duplicate files copied in APK META-INF/NOTICE` when building with Gradle. 
-
-Next, add the following code on the first level (on the same level as the
-`android` element): 
-
-    repositories {
-      jcenter()
-    }
-
-Finally, add the following line of code inside the `dependencies` element: 
+In the app module's `build.gradle` file, add the following line of code inside 
+the `dependencies` element: 
 
     compile 'com.liferay.mobile:liferay-screens:+'
 
@@ -85,8 +68,8 @@ you to *sync* your app with its Gradle files. Syncing with the Gradle files is
 required to incorporate any changes you make to them. Syncing also downloads and 
 installs any new dependencies, like the Liferay Screens dependency that you just
 added. Sync the Gradle files now by clicking the *Sync Now* link in the message.
-The following screenshot shows an edited `build.gradle` file with the Sync Now
-link highlighted by a red box: 
+The following screenshot shows the top of an edited `build.gradle` file with the 
+Sync Now link highlighted by a red box: 
 
 ![Figure 2: After editing the app module's `build.gradle` file, click *Sync Now* to incorporate the changes in your app.](../../../images/screens-android-gradle-sync.png)
 

@@ -128,15 +128,11 @@ just defined. In the
 [`BaseScreenletView` class](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseScreenletView.swift), 
 Screens provides the default functionality required by all View classes. Your 
 View class must therefore extend `BaseScreenletView` to provide the 
-functionality unique to your Screenlet. Name your View class according to 
-[the naming convention](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices#ios-naming-convention) 
-in the 
-[iOS best practices tutorial](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices). 
-To support your UI, use standard `@IBOutlet`s and `@IBAction`s to connect all 
-your XIB's UI components and events to your View class. You should also 
-implement getters and setters to get values from and set values to the UI 
-components. Your View class should also implement any required animations or 
-front-end logic. 
+functionality unique to your Screenlet. To support your UI, use standard 
+`@IBOutlet`s and `@IBAction`s to connect all your XIB's UI components and events 
+to your View class. You should also implement getters and setters to get values 
+from and set values to the UI components. Your View class should also implement 
+any required animations or front-end logic. 
 
 For example, 
 [`AddBookmarkView_default`](https://github.com/liferay/liferay-screens/tree/master/ios/Samples/Bookmark/AddBookmarkScreenlet/Basic/Themes/AddBookmarkView_default.swift) 
@@ -182,10 +178,7 @@ Create an Interactor class for each of your Screenlet's use cases. In the
 [`Interactor` class](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/Interactor.swift), 
 Screens provides the default functionality required by all Interactor classes. 
 Your Interactor class must therefore extend `Interactor` to provide the 
-functionality unique to your Screenlet. Name your Interactor class according to 
-[the naming convention](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices#ios-naming-convention) 
-specified in the 
-[iOS best practices tutorial](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices). 
+functionality unique to your Screenlet. 
 
 Interactors work synchronously, but you can use callbacks (delegates) or 
 Connectors to run their operations in the background. For example, the Liferay 
@@ -274,16 +267,13 @@ Mobile SDK handles the `ServiceContext` object for you:
 Lastly, the `AddBookmarkInteractor` class must conform the `LRCallback` protocol 
 by implementing the `onFailure` and `onSuccess` methods. The `onFailure` method 
 communicates the `NSError` object that results from a failed server call. It 
-does this by calling the `callOnFailure` method with the error. The Screenlet 
-calls the `onSuccess` method when the server call succeeds. This method contains 
-the server call's results in its `result` argument, which it saves in the 
-`resultBookmarkInfo` variable. The method finishes by calling `callOnSuccess`: 
-<!-- 
-Are these methods or closures? Also, where do callOnFailure and callOnSuccess 
-come from? They're not explained anywhere, so when they appear here it is 
-confusing. 
--->
-    
+does this by calling the base `Interactor` class's `callOnFailure` method with 
+the error. When the server call succeeds, the `onSuccess` method sets the server 
+call's results (the `result` argument) to the `resultBookmarkInfo` variable. The 
+`onSuccess` method finishes by calling the base `Interactor` class's 
+`callOnSuccess` method to communicate the success status throughout the 
+Screenlet: 
+
     	public func onFailure(error: NSError!) {
     		self.callOnFailure(error)
     	}
@@ -296,9 +286,8 @@ confusing.
     	}
     
     }
-
 <!--
-Commenting out until tutorial is published:
+Commenting out until advanced tutorial is published:
 
 Refer to 
 [this](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets-advanced#using-connector-instead-callback) 
@@ -321,10 +310,6 @@ reasonably confident this won't happen).
 is a base Screenlet class implementation. Since `BaseScreenlet` provides most of 
 a Screenlet class's required functionality, your Screenlet class should extend 
 `BaseScreenlet`. This lets you focus on your Screenlet's unique functionality. 
-You should name your Screenlet class according to the 
-[naming conventions](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices#ios-naming-convention) 
-specified in the 
-[iOS best practices tutorial](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices). 
 Your Screenlet class must also include any `@IBInspectable` properties your 
 Screenlet requires and a reference to your Screenlet's View class. To perform 
 your Screenlet's action, your Screenlet class must override `BaseScreenlet`'s 
@@ -335,7 +320,7 @@ define what happens when the server call succeeds or fails, respectively.
 For example, the 
 [`AddBookmarkScreenlet` class](https://github.com/liferay/liferay-screens/blob/master/ios/Samples/Bookmark/AddBookmarkScreenlet/Basic/AddBookmarkScreenlet.swift) 
 is the Screenlet class in Add Bookmark Screenlet. This class extends 
-`BaseScreenlet` and contains an `@IBInspectable` varaible for the bookmark 
+`BaseScreenlet` and contains an `@IBInspectable` variable for the bookmark 
 folder's ID (`folderId`). The `AddBookmarkScreenlet` class's `createInteractor` 
 method first gets a reference to the View class (`AddBookmarkView_default`). It 
 then creates an `AddBookmarkInteractor` instance with this Screenlet class 
@@ -393,9 +378,8 @@ You're done! Your Screenlet is a ready-to-use component that you can add to your
 storyboard. You can even [package](/develop/tutorials/-/knowledge_base/7-0/creating-ios-themes#publish-your-themes-using-cocoapods) 
 it to contribute to the Screens project or distribute with CocoaPods. Now you 
 know how to create iOS Screenlets! 
-
 <!--
-Commenting out until tutorial is published:
+Commenting out until advanced tutorial is published:
 
 If you want to go deeper into the development of a Screenlet, please refer to 
 our 
@@ -405,8 +389,9 @@ Screenlet, and much more!
 -->
 
 ## Related Topics [](id=related-topics)
-
+<!--
 [Creating iOS Screenlets (Advanced)](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets-advanced)
+-->
 
 [Using Screenlets in iOS Apps](/develop/tutorials/-/knowledge_base/7-0/using-screenlets-in-ios-apps)
 

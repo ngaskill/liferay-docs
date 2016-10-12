@@ -30,7 +30,7 @@ and Interactors.
 **Screenlets:** Java view classes for inserting into any activity or fragment 
 view hierarchy. They render a selected layout in the runtime and in Android 
 Studio's visual editor and react to UI events, sending any necessary server 
-requests. You can set a screenlet's properties from its layout XML file and 
+requests. You can set a Screenlet's properties from its layout XML file and 
 Java classes. The Screenlets bundled with Liferay Screens are known collectively 
 as the 
 [Screenlet Library](/develop/reference/-/knowledge_base/7-0/screenlets-in-liferay-screens-for-android). 
