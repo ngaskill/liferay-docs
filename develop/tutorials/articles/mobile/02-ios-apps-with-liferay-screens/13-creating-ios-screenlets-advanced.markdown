@@ -213,32 +213,31 @@ inserted by the user:
    steps detailed in the 
    [basic Screenlet creation tutorial](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets).
    For example, here's the Interactor class for Add Bookmark Screenlet's 
-   `get-title` action:
+   `get-title` action: 
 
         import UIKit
         import LiferayScreens
-        
+
         public class GetWebTitleInteractor: Interactor {
-        
+
             public var resultTitle: String?
-            
+
             var url: String
-            
-            
+
             //MARK: Initializer
-            
+
             public init(screenlet: BaseScreenlet, url: String) {
                 self.url = url
                 super.init(screenlet: screenlet)
             }
-            
+
             override public func start() -> Bool {
                 if let URL = NSURL(string: url) {
-                
+
                     // Use the NSURLSession class to retrieve the HTML
                     NSURLSession.sharedSession().dataTaskWithURL(URL) {
                             (data, response, error) in
-                    
+
                         if let errorValue = error {
                             self.callOnFailure(errorValue)
                         }
@@ -246,33 +245,40 @@ inserted by the user:
                             if let data = data, html = NSString(data: data, encoding: NSUTF8StringEncoding) {
                                 self.resultTitle = self.parseTitle(html)
                             }
-                    
+
                             self.callOnSuccess()
                         }
                     }.resume()
-                    
+
                     return true
                 }
-                
+
                 return false
             }
-            
+
             // Parse the title from a webpage HTML
             private func parseTitle(html: NSString) -> String {
                 let range1 = html.rangeOfString("<title>")
                 let range2 = html.rangeOfString("</title>")
-                
+
                 let start = range1.location + range1.length
-                
+
                 return html.substringWithRange(NSMakeRange(start, range2.location - start))
             }
-    
+
         }
 
-7. And finally, update your `createInteractor` method in the Screenlet's class 
-   so it returns the correct interactor in each case:
-    
-        override public func createInteractor(name name: String, sender: AnyObject?) -> Interactor? {
+7. Update your Screenlet class's `createInteractor` method so it returns the 
+   correct Interactor for each action. For example, the `createInteractor` 
+   method in `AddBookmarkScreenlet` contains a `switch` statement that returns 
+   an `AddBookmarkInteractor` or `GetWebTitleInteractor` instance when the add 
+   bookmark or get title action is called, respectively. Note that the 
+   `createAddBookmarkInteractor()` and `createGetTitleInteractor()` methods 
+   create these instances. Although you don't have to create your Interactor 
+   instances in separate methods, doing so leads to cleaner code: 
+
+       ... 
+       override public func createInteractor(name name: String, sender: AnyObject?) -> Interactor? {
             switch name {
             case AddBookmarkScreenlet.AddBookmarkAction:
                 return createAddBookmarkInteractor()
@@ -282,54 +288,62 @@ inserted by the user:
                 return nil
             }
         }
-        
+
         private func createAddBookmarkInteractor() -> Interactor {
             let interactor = AddBookmarkInteractor(screenlet: self,
                                                    folderId: folderId,
                                                    title: viewModel.title!,
                                                    url: viewModel.URL!)
-    
+
             //Called when interactor finish succesfully
             interactor.onSuccess = {
                 let bookmarkName = interactor.resultBookmarkInfo!["name"] as! String
                 print("Bookmark \"\(bookmarkName)\" saved!")
             }
-    
+
             //Called when interactor finish with error
             interactor.onFailure = { _ in
                 print("An error occurred saving the bookmark")
             }
-    
+
             return interactor
         }
-    
+
         private func createGetTitleInteractor() -> Interactor {
             let interactor = GetWebTitleInteractor(screenlet: self, url: viewModel.URL!)
-    
+
             //Called when interactor finish succesfully
             interactor.onSuccess = {
                 let title = interactor.resultTitle
                 self.viewModel.title = title
             }
-    
+
             //Called when interactor finish with error
             interactor.onFailure = { _ in
                 print("An error occurred retrieving the title")
             }
-    
+
             return interactor
         }
+        ...
 
-**A final tip:** you may find that you need to perform a particular action 
-programatically. For this, the 
-[`BaseScreenletView`](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseScreenletView.swift) 
-class has a set of `userAction` methods which can be called to perform an action 
-whenever we want.
+Great! Now you know how to use multiple Interactors in your Screenlets. The next 
+section shows you how to trigger actions programmatically. 
 
-For example, imagine we want to trigger the "get-title" action whenever the user 
-leaves the URL TextField. Since [`BaseScreenletView`](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseScreenletView.swift) 
-becomes the delegate of all `UITextField` by default, we'll just need to add the 
-`textFieldEndEditing` and call the `userAction` method in its implementation:
+## Triggering the Action Programmatically
+
+<!-- Should you call the userAction methods in your View class? -->
+In the preceding example, the user triggers the actions when they press buttons 
+in the UI. What if you need to trigger the action programmatically? No problem! 
+The 
+[`BaseScreenletView` class](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseScreenletView.swift) 
+contains a set of `userAction` methods that you can call in your View class to 
+perform actions programmatically. For example, you may decide to trigger the 
+`get-title` action whenever the user leaves the `URLTextField`. Since 
+`BaseScreenletView` is the delegate for all `UITextField` objects by default, 
+you can do this by implementing the 
+[`textFieldDidEndEditing` method](https://developer.apple.com/reference/uikit/uitextfielddelegate/1619591-textfielddidendediting) 
+to call the `userAction` method with the action name: 
 
     func textFieldDidEndEditing(textField: UITextField) {
         if textField == URLTextField {
@@ -337,50 +351,62 @@ becomes the delegate of all `UITextField` by default, we'll just need to add the
         }
     }
 
-## Using Connector instead of Callback [](id=using-connector-instead-callback)
+## Using Connector Instead of a Callback
 
-As written in the 
-[architecture of iOS Liferay Screens](/develop/tutorials/-/knowledge_base/7-0/architecture-of-liferay-screens-for-ios) 
-a Connector is a class that can interact with local and remote data sources and 
-Liferay instances. 
+<!-- Why would you use a Connector instead of a callback? -->
+In Liferay Screens, a Connector is a class that can interact with local and 
+remote data sources and Liferay instances. For more information on Connectors, 
+see the 
+[tutorial on the architecture of Liferay Screens for iOS](/develop/tutorials/-/knowledge_base/7-0/architecture-of-liferay-screens-for-ios). 
+To use a Connector, your Screenlet's Interactor must extend the 
+[`ServerConnectorInteractor` class](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseConnectors/ServerConnectorInteractor.swift) 
+instead of `LRCallback`. Alternatively, you could extend one of 
+`ServerConnectorInteractor`'s subclasses, depending on your use case:
 
-Connectors provide cache, code synchronization, data validation, request queue 
-and allow our Interactor to abstract great part of its logic.
+- [`ServerReadConnectorInteractor`:](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseConnectors/ServerReadConnectorInteractor.swift)
+  Your Interactor can extend this class when implementing an action that 
+  retrieves information from a server or data source. 
 
-In order to use Connectors in our Screenlet our Interactor will need to extend 
-from 
-[`ServerConnectorInteractor`](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseConnectors/ServerConnectorInteractor.swift) 
-instead of `LRCallback`. Alternatively we could use one of its subclasses: 
-[`ServerReadConnectorInteractor`](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseConnectors/ServerReadConnectorInteractor.swift) 
-when you are implementing a "reading" use case and [`ServerWriteConnectorInteractor`](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseConnectors/ServerWriteConnectorInteractor.swift) 
-when the use case is to write something. Once the preceding step is completed 
-the only methods your Interactor should override are: `createConnector` (where 
-you will return the Connector instance) and `completedConnector` (where you can 
-recover the result). The name of the Connector class should follow the 
-[Naming Convention](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices#ios-naming-convention) 
+- [`ServerWriteConnectorInteractor`:](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseConnectors/ServerWriteConnectorInteractor.swift)
+  Your Interactor can extend this class when implementing an action that writes 
+  information to a server or data source. 
+
+When extending `ServerConnectorInteractor` or one of its subclasses, your 
+Interactor only needs to override the `createConnector` and `completedConnector` 
+methods. These methods create a Connector instance and recover the Connector's 
+result, respectively. When you create your Connector class, be sure to follow 
+the 
+[naming convention](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices#ios-naming-convention) 
 specified in the 
-[Best Practices](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices).
+[best practices tutorial](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices). 
+<!-- 
+Is there a default Connector implementation, or will developers always have to 
+create one manually? For example, when using a callback, developers can use 
+LRCallback without having to create a separate callback manually. 
+-->
 
-Let's update our `AddBookmarkInteractor` so it use a Connector instead of 
-Callbacks:
+As an example, this section shows you how to create and use a Connector class 
+with the sample Add Bookmark Screenlet. First, you'll create the Connector class 
+with the following steps: 
 
-1. First create the connector class (`AddBookmarkLiferayConnector`) and extend 
-   it from 
-   [`ServerConnector`](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseConnectors/ServerConnector.swift).
+1. Create your Connector class by extending the 
+   [`ServerConnector` class](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseConnectors/ServerConnector.swift). 
+   For example, here's the class declaration for Add Bookmark Screenlet's 
+   Connector class, `AddBookmarkLiferayConnector`:
 
-        import UIKit
-        import LiferayScreens
-        
         public class AddBookmarkLiferayConnector: ServerConnector {
+            ...
         }
 
-2. Add the properties needed for the service and create an initializer with 
-   those properties.
+2. Add the properties needed to call the Mobile SDK service and create an 
+   initializer with those properties. For example, `AddBookmarkLiferayConnector` 
+   needs properties for the bookmark's folder ID, title, and URL. It also needs 
+   an initializer to set those properties: 
 
         public let folderId: Int64
         public let title: String
         public let url: String
-        
+
         public init(folderId: Int64, title: String, url: String) {
             self.folderId = folderId
             self.title = title
@@ -388,38 +414,49 @@ Callbacks:
             super.init()
         }
 
-3. Override the `validateData` method and insert validations for each property 
-   that need it. Use the 
-   [`ValidationError`](https://github.com/liferay/liferay-screens/blob/develop/ios/Framework/Core/Extensions/NSError%2BScreens.swift) 
-   class to encapsulate the errors:
+3. Override the `validateData` method to implement validation for each property 
+   that needs it. You can use the 
+   [`ValidationError` class](https://github.com/liferay/liferay-screens/blob/develop/ios/Framework/Core/Extensions/NSError%2BScreens.swift) 
+   to encapsulate the errors. For example, the following `validateData` 
+   implementation in `AddBookmarkLiferayConnector` ensures that `folderId` is 
+   greater than `0`, and `title` and `url` contain values. This method also uses 
+   `ValidationError` to represent the error: 
 
         override public func validateData() -> ValidationError? {
             let error = super.validateData()
-            
+
             if error == nil {
-            
+
                 if folderId <= 0 {
                     return ValidationError("Undefined folderId")
                 }
-                
+
                 if title.isEmpty {
                     return ValidationError("Title cannot be empty")
                 }
-                
+
                 if url.isEmpty {
                     return ValidationError("URL cannot be empty")
                 }
             }
-            
+
             return error
         }
 
-4. Override the `doRun` method where you'll call the Bookmark service. Get the 
-   result from the service and store it in a public property. Also, you need to 
-   control empty results as well as service errors:
+4. Override the `doRun` method to call the Mobile SDK service that you need to 
+   call. In this method, retrieve the result from the service and store 
+   it in a public property. Also be sure to handle errors and empty results.
+   For example, the following code defines the `resultBookmarkInfo` property for 
+   saving the service's results retrieved in the `doRun` method. This method's 
+   service call is identical to the one in the `AddBookmarkInteractor` class's 
+   `start` method from the 
+   [basic Screenlet creation tutorial](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets). 
+   The `doRun` method, however, takes the additional step of saving the result 
+   to the `resultBookmarkInfo` property. Also note that this `doRun` method 
+   handles errors as `NSError` objects:
 
         public var resultBookmarkInfo: [String:AnyObject]?
-        
+
         override public func doRun(session session: LRSession) {
 
             let service = LRBookmarksEntryService_v7(session: session)
@@ -431,7 +468,7 @@ Callbacks:
                                                              url: url,
                                                              description: "Added from Liferay Screens",
                                                              serviceContext: nil)
-    
+
                 if let result = result as? [String: AnyObject] {
                     resultBookmarkInfo = result
                     lastError = nil
@@ -445,27 +482,39 @@ Callbacks:
                 lastError = error
                 resultBookmarkInfo = nil
             }
-        
+
         }
 
-5. Change the superclass of `AddBookmarkInteractor` from `LRCallback` to 
-   `ServerWriteConnectorInteractor`, and remove `LRCallback` methods.
+Well done! Now you have your Connector class. To see the finished example 
+`AddBookmarkLiferayConnector` class, 
+[click here](https://github.com/liferay/liferay-screens/blob/master/ios/Samples/Bookmark/AddBookmarkScreenlet/Advanced/Connector/AddBookmarkLiferayConnector.swift). 
 
-        import UIKit
-        import LiferayScreens
-        
-        
+Now you must change your Interactor to use your new Connector. To do so, follow 
+these steps: 
+
+1. Change your Interactor class's superclass to `ServerConnectorInteractor` or 
+   one of its subclasses, and remove any code that conforms a callback protocol. 
+   For example, the `AddBookmarkInteractor` class in the 
+   [basic Screenlet creation tutorial](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets) 
+   extends `Interactor` and conforms the `LRCallback` protocol. To use a 
+   connector, `AddBookmarkInteractor` should instead extend 
+   `ServerWriteConnectorInteractor` because it writes data to a Liferay 
+   instance. It's also unneccesary for `AddBookmarkInteractor` to conform the 
+   `LRCallback` protocol. You can therefore remove the Interactor's `start`, 
+   `onFailure`, and `onSuccess` methods. At this point, your Interactor should 
+   contain only the properties and initializer that it requires:
+
         public class AddBookmarkInteractor: ServerWriteConnectorInteractor {
-            
+
             public var resultBookmarkInfo: [String:AnyObject]?
-        
+
             public let folderId: Int64
             public let title: String
             public let url: String
-        
-        
+
+
             //MARK: Initializer
-        
+
             public init(screenlet: BaseScreenlet, folderId: Int64, title: String, url: String) {
                 self.folderId = folderId
                 self.title = title
@@ -473,16 +522,22 @@ Callbacks:
                 super.init(screenlet: screenlet)
             }
         }
-        
-6. Override `createConnector` and return an instance of the 
-   `AddBookmarkLiferayConnector`:
+
+2. Override the `createConnector` method to return an instance of your 
+   Connector. For example, the `createConnector` method in 
+   `AddBookmarkInteractor` returns a `AddBookmarkLiferayConnector` instance 
+   created with the `folderId`, `title`, and `url` properties: 
 
         public override func createConnector() -> ServerConnector? {
             return AddBookmarkLiferayConnector(folderId: folderId, title: title, url: url)
         }
-        
-7. Finally, override `completedConnector`, get the result from the connector and 
-   store it in the `resultBookmarkInfo` property of your Interactor:
+
+3. Override the `completedConnector` method to get the result from the Connector 
+   and store it in the appropriate property. For example, the 
+   `completedConnector` method in `AddBookmarkInteractor` first casts its 
+   `ServerConnector` argument to `AddBookmarkLiferayConnector`. It then gets 
+   the Connector's `resultBookmarkInfo` property and sets it to the Interactor's 
+   property of the same name: 
 
         override public func completedConnector(c: ServerConnector) {
             if let addCon = (c as? AddBookmarkLiferayConnector),
@@ -490,14 +545,20 @@ Callbacks:
                 self.resultBookmarkInfo = bookmarkInfo
             }
         }
-        
-That will cover the "add bookmark" action, but... what about getting the title 
-of the urls? Since the use case is getting the data from an URL, process it and 
-extract its title we can use another subclass of `ServerConnector`: 
-[`HttpConnector`](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseConnectors/HttpConnector.swift). 
-Created for that specific action, retrieving the data from an URL encapsulated 
-in a `NSData` object. Using this Connector, our `GetWebTitleInteractor` will be 
-like this:
+
+That's it! If your Screenlet uses multiple Interactors, you can use the same 
+steps to change them to use Connectors. There's one special use case, however, 
+that warrants extra attention: retrieving data from a non-Liferay URL. In this 
+case, you can't subclass `ServerConnectorInteractor` or use its subclasses in 
+your Connector because they're designed to communicate with Liferay instances. 
+You don't have to create a Connector at all, though. Screens provides 
+[the ready-to-use `HttpConnector`](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseConnectors/HttpConnector.swift) 
+for interacting with non-Liferay URL's. All you need to do is change your 
+Interactor to use `HttpConnector`. For example, the Add Bookmark Screenlet 
+action that retrieves a URL's title doesn't interact with a Liferay instance; it 
+retrieves the title directly from the URL. Here's the `GetWebTitleInteractor` 
+changed to use `HttpConnector`:
+<!-- Revise and explain -->
 
     import UIKit
     import LiferayScreens
