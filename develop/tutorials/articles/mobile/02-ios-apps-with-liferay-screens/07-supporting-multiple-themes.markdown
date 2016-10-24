@@ -1,4 +1,4 @@
-# Supporting Multiple Themes
+# Supporting Multiple Themes in Your Screenlet
 
 Themes let you present the same Screenlet with a different look and feel. For 
 example, if you have multiple apps that use the same Screenlet, you can use 
