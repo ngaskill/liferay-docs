@@ -151,19 +151,22 @@ existing presenter class. Use the following steps to do this:
    overridden `hideHUDFromView` method stops this animation and restores the 
    button:
 
-        public override func showHUDInView(view: UIView, message: String?, forInteractor interactor: Interactor) {
-            guard interactor is GetWebTitleInteractor else {
-                return super.showHUDInView(view, message: message, forInteractor: interactor)
-            }
+        public override func showHUDInView(view: UIView, message: String?, 
+            forInteractor interactor: Interactor) {
+                guard interactor is GetWebTitleInteractor else {
+                    return super.showHUDInView(view, message: message, 
+                        forInteractor: interactor)
+                }
 
-            button?.hidden = true
-            activityIndicator?.startAnimating()
+                button?.hidden = true
+                activityIndicator?.startAnimating()
         }
 
-        public override func hideHUDFromView(view: UIView?, message: String?, forInteractor interactor: Interactor, 
-            withError error: NSError?) {
+        public override func hideHUDFromView(view: UIView?, message: String?, 
+            forInteractor interactor: Interactor, withError error: NSError?) {
                 guard interactor is GetWebTitleInteractor else {
-                    return super.hideHUDFromView(view, message: message, forInteractor: interactor, withError: error)
+                    return super.hideHUDFromView(view, message: message, 
+                        forInteractor: interactor, withError: error)
                 }
 
                 activityIndicator?.stopAnimating()
