@@ -354,7 +354,7 @@ to call the `userAction` method with the action name:
         }
     }
 
-## Using a Connector Instead of a Callback
+## Use a Connector with Your Screenlet Instead of a Callback
 
 <!-- 
 Why would you use a Connector instead of a callback? In other words, what 
