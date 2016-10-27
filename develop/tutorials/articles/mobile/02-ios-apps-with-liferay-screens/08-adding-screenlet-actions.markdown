@@ -9,7 +9,8 @@ the `restorationId` of the UI components that trigger them. You should set this
 `restorationId` to a constant in your Screenlet. 
 
 This tutorial walks you through the steps necessary to add an action to your 
-Screenlet. As an example, this tutorial uses the 
+Screenlet, and trigger an action programmatically. As an example, this tutorial 
+uses the 
 [advanced version of the sample Add Bookmark Screenlet](https://github.com/liferay/liferay-screens/tree/master/ios/Samples/Bookmark/AddBookmarkScreenlet/Advanced). 
 This Screenlet is similar to the sample Add Bookmark Screenlet created in 
 [the Screenlet creation tutorial](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets). 
@@ -66,7 +67,7 @@ Use the following steps to add an action to your your Screenlet:
 4. Update your View class or View Model protocol to account for the new action. 
    For example, Add Bookmark Screenlet contains a View Model 
    (`AddBookmarkViewModel`) so it can 
-   [support multiple Themes](). 
+   [support multiple Themes](/develop/tutorials/-/knowledge_base/7-0/supporting-multiple-themes-in-your-screenlet). 
    This View Model must allow the new action to set its `title` variable: 
 
         import UIKit
@@ -93,11 +94,12 @@ Use the following steps to add an action to your your Screenlet:
 6. Create a new Interactor class for the new action. To do this, use the same 
    steps detailed in the 
    [Screenlet creation tutorial](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets#creating-the-interactor). 
-   For example, here's the Interactor class for Add Bookmark Screenlet's 
-   Get Title action: 
+   For example, here's the Interactor class for Add Bookmark Screenlet's Get 
+   Title action: 
 
         import UIKit
         import LiferayScreens
+
 
         public class GetWebTitleInteractor: Interactor {
 
@@ -210,4 +212,27 @@ Use the following steps to add an action to your your Screenlet:
         }
         ...
 
-Great! Now you know how to support multiple actions in your Screenlets. 
+Great! Now you know how to support multiple actions in your Screenlets. The next 
+section shows you how to trigger your actions programmatically. 
+
+## Triggering Actions Programmatically
+
+The user triggers Add Bookmark Screenlet’s actions when they press buttons in 
+the UI. What if you need to trigger the action programmatically? No problem! The 
+[`BaseScreenletView` class](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseScreenletView.swift) 
+contains a set of `userAction` methods that you can call in your View class to 
+perform actions programmatically. For example, it’s possible to automatically 
+trigger Add Bookmark Screenlet’s Get Title action whenever the user leaves the 
+`URLTextField`. Since `BaseScreenletView` is the delegate for all `UITextField` 
+objects by default, This is done in the View class (`AddBookmarkView_default`) 
+by implementing the 
+[`textFieldDidEndEditing` method](https://developer.apple.com/reference/uikit/uitextfielddelegate/1619591-textfielddidendediting) 
+to call the `userAction` method with the action name: 
+
+    func textFieldDidEndEditing(textField: UITextField) {
+        if textField == URLTextField {
+            userAction(name: AddBookmarkScreenlet.GetTitleAction)
+        }
+    }
+
+That’s it! Now you know how to trigger your Screenlet actions programmatically. 
