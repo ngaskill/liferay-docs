@@ -1,142 +1,132 @@
-# iOS Best Practices [](id=ios-best-practices)
+# iOS Best Practices
 
-This document includes best practices that every iOS developer using Liferay
-Screens should follow. This are good practices in order to achieve readability,
-and get cleaner and less buggy code. For code style conventions (on Swift),
-please refer to the [Swift Style Guide](https://github.com/liferay/liferay-screens/blob/master/ios/swift-style-guide.md).
+When developing iOS projects with Liferay Screens, there are a few best 
+practices that you should follow to ensure your code is as clean and bug-free as 
+possible. This tutorial lists these. Note that this tutorial doesn’t cover Swift 
+coding conventions for contributing to the Liferay Screens project on GitHub. 
+[Click here](https://github.com/liferay/liferay-screens/blob/master/ios/swift-style-guide.md) 
+to see these.
 
-## Naming Convention [](id=ios-naming-convention)
+## Naming Conventions
 
-All your components should follow the same naming convention. Not only in order
-to packaging or distributing them, but also for a better understanding of the
-Screens library. If you get used to this nomenclature, it will be much easier
-to locate and understand files in Screens.
+Using the naming conventions described here leads to consistency and a better 
+understanding of the Screens library. This makes working with your Screenlets 
+much simpler. 
 
-### Screenlet folder
+### Screenlet Folder
 
-First of all, all Screenlet components
-have to be placed inside the Screenlet folder, which should be named in
-accordance to its content (there are a few exceptions that we'll review later).
+Your Screenlet folder’s name should indicate your Screenlet’s functionality. For 
+example, 
+[Login Screenlet’s folder is named `LoginScreenlet`](https://github.com/liferay/liferay-screens/tree/master/ios/Framework/Core/Auth/LoginScreenlet). 
 
-For example the comment add Screenlet is placed inside a folder named *"Add"*,
-which is in another folder named *"Comment"*, so when you read it, you can
-understand the contents of that folder.
-
-    object/action/action...
+If you have multiple Screenlets that operate on the same entity, you can place 
+them inside a folder named for that entity. For example, 
+[Asset Display Screenlet](/develop/reference/-/knowledge_base/7-0/asset-display-screenlet-for-ios) 
+and 
+[Asset List Screenlet](/develop/reference/-/knowledge_base/7-0/assetlistscreenlet-for-ios) 
+both work with Liferay assets. They’re therefore in the Screens library’s 
+[`Asset` folder](https://github.com/liferay/liferay-screens/tree/master/ios/Framework/Core/Asset). 
 
 ### Screenlets
 
-Screenlets are the main component of the Screens library, and for that, naming
-them is a matter of great importance. Screenlets should (class and file) should
-be named referencing its (principal) action as prefix and always ending it with
-the word *"Screenlet"*. So, for example, a Screenlet uses to login users is a
-`LoginScreenlet` or a Screenlet used to display an image gallery is a
-`ImageGalleryScreenlet`.
-
-    ActionScreenlet
+Naming Screenlets properly is very important; they’re the main focus of Liferay 
+Screens. Your Screenlet should be named with its principal action first, 
+followed by *Screenlet*. Its Screenlet class should also follow this pattern. 
+For example, 
+[Login Screenlet’s](/develop/reference/-/knowledge_base/7-0/loginscreenlet-for-ios) 
+principal action is to log users into a Liferay instance. Its Screenlet class is 
+`LoginScreenlet`. 
 
 ### View Models
 
-ViewModels should be placed along with the Screenlet (in the Screenlet root
-folder) and with the same name as the Screenlet but changing the word
-`Screenlet` for `ViewModel`. For example, the `ForgotPasswordScreenlet` has a
-`ForgotPasswordViewModel`.
-
-    ActionViewModel
+You should place View Models in your Screenlet’s root folder, and name them 
+after your Screenlet. For example, 
+[Forgot Password Screenlet’s](/develop/reference/-/knowledge_base/7-0/forgotpasswordscreenlet-for-ios) 
+View Model is in the 
+[`ForgotPasswordScreenlet` folder](https://github.com/liferay/liferay-screens/tree/master/ios/Framework/Core/Auth/ForgotPasswordScreenlet) 
+and is named `ForgotPasswordViewModel`. 
 
 ### Interactors
 
-Interactors should be placed in a folder name `Interactors` inside the Screenlet
-root folder. Its name should indicate the use case they handle, and should have
-in it the name of the object of the interaction (which usually matches the
-Screenlet class prefix), and end it with the word *"Interactor"*. For example,
-`RatingScreenlet` has three interactors inside the `Interactors` folder:
-`UpdateRatingInteractor`, `DeleteRatingInteractor` and `LoadRatingInteractor`.
+You should place your Screenlet’s Interactors in a folder named `Interactors` in 
+your Screenlet’s root folder. You should name each Interactor with its action 
+first, followed by *Interactor*. For example, 
+[Rating Screenlet](/develop/reference/-/knowledge_base/7-0/rating-screenlet-for-ios) 
+has three Interactors in 
+[its `Interactors` folder](https://github.com/liferay/liferay-screens/tree/master/ios/Framework/Core/Rating/Interactors): 
 
-    Interactors/ActionObjectInteractor
-    Interactors/ObjectActionInteractor
+- `DeleteRatingInteractor`: Deletes an asset’s ratings
+- `LoadRatingsInteractor`: Loads an asset’s ratings
+- `UpdateRatingInteractor`: Updates an asset’s ratings
 
 ### Connectors
 
-Connectors should be named exactly with the same rules as the Interactors, but,
-changing the word *"Interactor"* for *"Connector"*. In the case that the
-connector perform a call to a Liferay Service, the *"Connector"* suffix should
-be preceded by the word *"Liferay"*. So, for example, the connector for adding
-comments to a Liferay instance is called `CommentAddLiferayConnector`, but, a
-connector used to get the title from a webpage should be called:
-`GetWebsiteTitleConnector`.
+Name your Connectors with the same naming conventions as Interactors, replacing 
+*Interactor* with *Connector*. If your Connector calls a Liferay service, 
+precede *Connector* with *Liferay*. For example, 
+[the Connector `CommentAddLiferayConnector`](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Comment/Add/Connectors/CommentAddLiferayConnector.swift) 
+adds comments to an asset in a Liferay instance. A Connector that retrieves a 
+webpage’s title from any URL would be called `GetWebsiteTitleConnector`. 
 
-    Connectors/ActionObject(Liferay)Connector
-    Connectors/ObjectAction(Liferay)Connector
+### Themes
 
-### Views/Themes
+Place your Screenlet’s Themes in a folder named *Themes* in your Screenlet’s 
+root folder. If you’re creating a group of similarly styled Themes for multiple 
+Screenlets, however, then you can place them in a separate *Themes* folder 
+outside of your Screenlets’ root folders. This is what the Screens Library does 
+for 
+[its Default and Flat7 Themes](https://github.com/liferay/liferay-screens/tree/master/ios/Framework/Themes). 
+The `Default` and `Flat7` folders each contain similarly styled Themes for 
+several Screenlets. Also note that each Screenlet’s Theme is in its own folder. 
+For example, 
+[Forgot Password Screenlet’s](/develop/reference/-/knowledge_base/7-0/forgotpasswordscreenlet-for-ios) 
+Default Theme is in 
+[the folder `Themes/Default/Auth/ForgotPasswordScreenlet`](https://github.com/liferay/liferay-screens/tree/master/ios/Framework/Themes/Default/Auth/ForgotPasswordScreenlet). 
+Note that the `Auth` folder is the Screenlet’s module. Creating your Screenlets 
+and Themes in modules isn’t required. 
 
-Views should be put in a *"Views"* or *"Themes"* folder inside the Screenlet
-root folder. Except when you are creating several views of the same Theme, for
-different Screenlets. In that case you should place all your views inside your
-Theme's folder. Views (both XIBs and classes) should be called like the
-Screenlet, but changing the word *"Screenlet"* for *"View"* and adding the
-following suffix: *"_themeName"*, where `themeName` is the name of the theme of
-this view, the default suffix should be *"_default"*.
+Recall that a Theme consists of an XIB file and a View class. Name these after 
+your Screenlet, but with *View* instead of *Screenlet*. The filenames should 
+also be suffixed with `_yourThemeName`. For example, the XIB file and View class 
+for Forgot Password Screenlet’s Default theme are 
+`ForgotPasswordView_default.xib` and `ForgotPasswordView_default.swift`, 
+respectively. 
 
-    Views/ActionView_themeName
-    Default/ActionView_default
-    Blue/ActionView_blue
+## Avoid Hardcoded Elements
 
-## Avoid Hard Coded Elements [](id=avoid-hard-coded-elements)
+Using constants instead of hardcoded elements is a simple way to avoid bugs. 
+Constants reduce the likelihood that you’ll make a typo when referring to common 
+elements. They also gather these elements in a single location. For example, 
+when you 
+[add an action to your Screenlet](https://www.liferay.com/), 
+each Screenlet action used as a `restorationIdentifier` in the View class is 
+defined as a constant in the Screenlet class. The Screenlet class’s 
+`createInteractor` method then uses the constants to distinguish between the 
+actions. If you instead typed each action manually in both places, a typo could 
+break your Screenlet and would be difficult to track down. Defining the actions 
+in one place via constants avoids this potentially maddening complication. 
 
-Bugs in hard coded elements are really difficult to track down so you should avoid
-using them. And how to do that? By using constants. Whenever you need to use
-a hard coded string, int, float... you should put a constant instead,
-as simply as that.
+Screenlet attributes, like those listed in each Screenlet’s 
+[reference documentation](/develop/reference/-/knowledge_base/7-0/screenlets-in-liferay-screens-for-ios), 
+are another good example of this. Although you can set these directly in 
+Interface Builder, it’s better to set them via constants in a `plist` file. This 
+puts all your Screenlets’ attributes in a single location that is also subject 
+to version control. For instructions on setting attributes in a `plist` file, 
+[see the Configuring Communication with Liferay section](/develop/tutorials/-/knowledge_base/7-0/preparing-ios-projects-for-liferay-screens#configuring-communication-with-liferay) 
+of the tutorial on preparing iOS projects for Liferay Screens. 
 
-A good example for this, is the name of the actions, which (if you follow the
-[Creating iOS Screenlets (Advanced) tutorial](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets-advanced#ios-adding-another-use-case))
-you should know they are established by the `restorationIdentifier` of a UI
-component. So, for this case it's better to create a constant inside
-Screeenlet's class referencing the action, and use that constant inside the
-`didSet` of the outlet of your Screenlet inside the view than hard coding it
-inside the Interface Builder. For example:
+To retrieve these values in your code, you can use the following `LiferayServerContext` methods:
 
-Instead of doing this:
+- `propertyForKey`: Get a property as an `AnyObject`
+- `numberPropertyForKey`: Get a property as an `NSNumber`.
+- `longPropertyForKey`: Get a property as an `Int64`.
+- `intPropertyForKey`: Get a property as an `Int`.
+- `booleanPropertyForKey`: Get a property as a `Bool`.
+- `datePropertyForKey`: Get a property as an `NSDate`.
+- `stringPropertyForKey`: Get a property as a `String`.
 
-![Figure 1: Don't hard code restoration identifiers.](../../../images/screens-ios-harcoded-strings.png)
-
-Do this:
-
-    public class AddBookmarkScreenlet: BaseScreenlet {
-        
-        static let AddBookmarkAction = "add-bookmark"
-        ...
-    }
-
-    class AddBookmarkView_default: BaseScreenletView, AddBookmarkViewModel {
-
-        @IBOutlet weak var addBookmarkButton: UIButton? {
-            didSet {
-                addBookmarkButton?.restorationIdentifier = AddBookmarkScreenlet.AddBookmarkAction
-            }
-        }
-
-        ...
-    }
-
-Another good example would be the Screenlets `@IBInspectables` properties.
-Setting this properties directly in a Storyboard or a XIB file is great when you
-are testing, but, they are not so great when you are debugging why your
-Screenlet is using a wrong id. In order to avoid this kind of bugs, you should
-add all your ids, classnames... to the .plist file that sets the server context.
-You should be familiar with this file if you followed the
-[Configuring Communication with Liferay chapter](/develop/tutorials/-/knowledge_base/7-0/preparing-ios-projects-for-liferay-screens#configuring-communication-with-liferay)
-of the [Preparing iOS Projects for Liferay Screens](/develop/tutorials/-/knowledge_base/7-0/preparing-ios-projects-for-liferay-screens).
-
-So, for example, your .plist file could look like this:
-
-![Figure 2: Don't hard code ids inside IB.](../../../images/screens-ios-harcoded-ids.png)
-
-And how can you retrieve those ids? You can retrieve them by using the method
-`propertyForKey` of the class `LiferayServerContext`. For example, doing
-something like this:
+For example, the following code retrieves the `galleryFolderId` value and sets 
+it to Image Gallery Screenlet’s `folderId` attribute:
 
     @IBOutlet weak var imageGalleryScreenlet: ImageGalleryScreenlet? {
         didSet {
@@ -144,23 +134,21 @@ something like this:
             imageGalleryScreenlet?.presentingViewController = self
 
             imageGalleryScreenlet?.repositoryId = LiferayServerContext.groupId
-            if let folderId = LiferayServerContext.propertyForKey("galleryFolderId") as? NSNumber {
-                imageGalleryScreenlet?.folderId = folderId.longLongValue
-            }
+            imageGalleryScreenlet?.folderId = LiferayServerContext.longPropertyForKey("galleryFolderId")
         }
     }
 
-## Pass the Necessary Information on Initializers [](id=pass-necessary-information-ios)
+## Stay in Your Layer
 
-You never should access variables that are not in your "layer", understanding by
-layer, the separation made for the library in the
-[Architecture of Liferay Screens](/develop/tutorials/-/knowledge_base/7-0/architecture-of-liferay-screens-for-ios).
+When accessing variables that belong to other Screenlet components, you should 
+avoid those outside your current Screenlet layer. This achieves better 
+decoupling between the layers, which tends to reduce bugs and simplify 
+maintenance. For an explanation of the layers in Liferay Screens, see 
+[the architecture tutorial](/develop/tutorials/-/knowledge_base/7-0/architecture-of-liferay-screens-for-ios).
+For example, you shouldn’t directly access View variables from an Interactor. 
+This Interactor’s `start` method gets a View instance and accesses its `title` 
+variable: 
 
-This means that, for example, you shouldn't access view variables from an
-Interactor. Instead you should send them from the Screenlet in the Interactor's
-initialization.
-
-    //Instead of something like this
     public class MyInteractor: Interactor {
         override func start() -> Bool {
             if let view = self.screenlet.screenletView as? MyView {
@@ -170,7 +158,9 @@ initialization.
         }
     }
 
-    //Do something like this
+Instead, you should pass the variable to the Interactor’s initializer. The 
+Interactor now contains its own `title` variable, set in its initializer:
+
     public class MyInteractor: Interactor {
 
         public let title: String
@@ -183,22 +173,49 @@ initialization.
         }
     }
 
-    public class MyScreenelt: BaseScreenlet {
+The Screenlet class’s `createInteractor` method calls this initializer when 
+creating an instance of the Interactor. Also note that the Screenlet’s View 
+Model is used to retrieve the View’s `title`. As explained in the tutorial 
+[Supporting Multiple Themes in Your Screenlet](https://www.liferay.com/), 
+a View Model serves as an abstraction layer for your View, which lets you use 
+different Themes with a Screenlet: 
+
+    public class MyScreenlet: BaseScreenlet {
+        ...
         override public func createInteractor(name name: String, sender: AnyObject?) -> Interactor? {
             let interactor = MyInteractor(self, title: viewModel.title)
             ...
         }
+        ...
     }
 
-However, as you may have noticed from the previous example, they are some
-"places" when you can break this rule (otherwise it wouldn't be possible to
-interact between layers). Some of this "places" are:
+There are, however, a few places where you can break this rule (otherwise it 
+wouldn't be possible for layers to interact): 
 
-- The `createInteractor` method in the Screenlet class. Here you should access
-your view computed variables to get the input from the user. Also, when setting
-the `onSuccess` closure from the Interactor, you can retrieve the "result"
-object.
-- The `completedConnector` method of the `ServerConnectorInteractor`. In this
-method you can retrieve the "result" object from the associated Connector.
-- The different view model properties/methods inside the Screenlet class, in
-order to tell the view what to do.
+- The Screenlet class’s `createInteractor` method. To get the user’s input, this 
+  method must access the View’s computed properties. 
+
+- The Interactor’s `onSuccess` closure in the Screenlet class. Here, you must 
+  retrieve the Interactor’s result object. 
+
+- When using a Connector, the Interactor’s `completedConnector` method. In this 
+  method, you must retrieve the Connector’s result object. 
+
+- The Screenlet class’s View Model references. This is required for the 
+  Screenlet to communicate with the View. 
+
+## Related Topics
+
+[Creating iOS Screenlets](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets)
+
+[Creating iOS List Screenlets](/develop/tutorials/-/knowledge_base/7-0/creating-ios-list-screenlets)
+
+[Creating iOS Themes](/develop/tutorials/-/knowledge_base/7-0/creating-ios-themes)
+
+[Supporting Multiple Themes in Your Screenlet](https://www.liferay.com/)
+
+[Adding Screenlet Actions](https://www.liferay.com/)
+
+[Create and Use a Connector with Your Screenlet](https://www.liferay.com/)
+
+[Architecture of Liferay Screens for iOS](/develop/tutorials/-/knowledge_base/7-0/architecture-of-liferay-screens-for-ios)
