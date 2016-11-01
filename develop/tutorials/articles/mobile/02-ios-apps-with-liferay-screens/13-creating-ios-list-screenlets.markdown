@@ -5,7 +5,8 @@ lets you display asset lists and DDL lists in your iOS app by using
 [Asset List Screenlet](/develop/reference/-/knowledge_base/7-0/assetlistscreenlet-for-ios) 
 and 
 [DDL List Screenlet](/develop/reference/-/knowledge_base/7-0/ddllistscreenlet-for-ios), 
-respectively. Screens also includes other list Screenlets. See the 
+respectively. Screens also includes list Screenlets for other Liferay entities. 
+See the 
 [Screenlet reference documentation](/develop/reference/-/knowledge_base/7-0/screenlets-in-liferay-screens-for-ios) 
 for a list of all the Screenlets included with Liferay Screens. 
 
@@ -20,20 +21,28 @@ Bookmarks portlet--Bookmark List Screenlet. You can find the finished
 Screenlet's code 
 [here in GitHub](https://github.com/liferay/liferay-screens/tree/master/ios/Samples/Bookmark/BookmarkListScreenlet). 
 
-Note that this tutorial doesn't explain the general Screenlet concepts and 
+Note that this tutorial doesn't explain general Screenlet concepts and 
 components in detail. Focus is instead placed on creating a Screenlet that 
-displays lists of entities. Before beginning, you should therefore perform both
-the [basic](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets) and [advance](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets-advanced) tutorials. 
+displays lists of entities. Before beginning, you should therefore read the 
+following tutorials: 
+
+- [Creating iOS Screenlets](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets)
+- [Supporting Multiple Themes in Your Screenlet](/develop/tutorials/-/knowledge_base/7-0/supporting-multiple-themes-in-your-screenlet)
+- [Create and Use a Connector with Your Screenlet ](/develop/tutorials/-/knowledge_base/7-0/create-and-use-a-connector-with-your-screenlet)
+- [Add a Screenlet Delegate](/develop/tutorials/-/knowledge_base/7-0/add-a-screenlet-delegate)
+- [Creating and Using Your Screenlet's Model Class](/develop/tutorials/-/knowledge_base/7-0/creating-and-using-your-screenlets-model-class)
 
 You'll create the list Screenlet by following these steps:
 
-1. Creating the Screenlet's View.
+1. Creating the Screenlet's Model class.
 
-2. Creating the Screenlet's Connector.
+2. Creating the Screenlet's Theme.
 
-3. Creating the Screenlet's Interactor.
+3. Creating the Screenlet's Connector.
 
-4. Creating the Screenlet class.
+4. Creating the Screenlet's Interactor.
+
+5. Creating the Screenlet class.
 
 First though, you should understand how pagination works with list Screenlets. 
 
@@ -41,17 +50,27 @@ First though, you should understand how pagination works with list Screenlets.
 
 To ensure that users can scroll smoothly through large lists of items, list 
 Screenlets support 
-[fluent pagination](http://www.iosnomad.com/blog/2014/4/21/fluent-pagination).
-
+[fluent pagination](http://www.iosnomad.com/blog/2014/4/21/fluent-pagination). 
 Liferay Screens gives you some tools to implement fluent pagination with 
-configurable page size, as described in the above link. All list Screenlets in
-Screens use this approach.
+configurable page size, as described in the above link. This tutorial shows you 
+how to use them. All list Screenlets in Screens use this approach. 
 
 Now you're ready to start creating your list Screenlet! 
 
-## Creating the View [](id=creating-the-view)
+## Creating the Model Class
 
-Recall that each Screenlet requires a View to serve as its UI. In Xcode, first 
+Recall that a model class transforms each `[String:AnyObject]` entity Screens 
+receives into a model object representing the Liferay instance's entity. For 
+instructions on creating your model class, see the tutorial 
+[Creating and Using Your Screenlet's Model Class](/develop/tutorials/-/knowledge_base/7-0/creating-and-using-your-screenlets-model-class). 
+The model class that tutorial uses as an example is the same one used here by 
+Bookmark List Screenlet. 
+
+Next, you'll create your Screenlet's Theme. 
+
+## Creating the Theme [](id=creating-the-view)
+
+Recall that each Screenlet requires a Theme to serve as its UI. In Xcode, first 
 create a new XIB file called `BookmarkListView_default.xib`. Use Interface 
 Builder to construct your Screenlet's UI in this file. Since the Screenlet must 
 show a list of items, you should add `UITableView` to this XIB. For example, 
