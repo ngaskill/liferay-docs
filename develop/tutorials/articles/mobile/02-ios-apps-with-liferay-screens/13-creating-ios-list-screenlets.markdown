@@ -270,26 +270,60 @@ it needs, like the `groupId`. For example, `BookmarkListPageLoadInteractor`'s
             folderId: folderId)
     }
 
-Similarly, you'll override the `convertResult` method in the Interactor class to 
-convert each result into a model object. The Screenlet calls this method once 
-for each entity retrieved from the server, with an entity as the method's only 
-argument. For Bookmark List Screenlet, if you followed the [advance tutorial](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets-advanced)
-you should have a `Bookmark` model that you can use in this case. You can
-therefore override this method to create a `Bookmark` instance for each entity:
+Next, override the `convertResult` method to convert each `[String:AnyObject]` 
+result into a model object. The Screenlet calls this method once for each entity 
+retrieved from the server. For example, `BookmarkListPageLoadInteractor`'s 
+`convertResult` method converts the `[String:AnyObject]` result into a 
+`Bookmark` object: 
 
     override public func convertResult(serverResult: [String:AnyObject]) -> AnyObject {
         return Bookmark(attributes: serverResult)
     }
 
-There's one more thing you may want to add to your Interactor class before 
-moving on: support for offline mode. To support offline mode, the Interactor 
-must return a cache key unique to your Screenlet. You'll do this by overriding 
-the `cacheKey` method in the Interactor class. Since this Screenlet shows 
-bookmarks that correspond to a `groupId` and `folderId`, the cache key must 
-include these values. Override this method now: 
+You may also want to support 
+[offline mode](/develop/tutorials/-/knowledge_base/7-0/architecture-of-offline-mode-in-liferay-screens) 
+in your Interactor. To do so, the Interactor must override the `cacheKey` method 
+to return a cache key unique to your Screenlet. For example, 
+`BookmarkListPageLoadInteractor`'s `cacheKey` method returns a cache key that 
+includes the Screenlet's `groupId` and `folderId` settings: 
 
     override public func cacheKey(op: PaginationLiferayConnector) -> String {
         return "\(groupId)-\(folderId)"
+    }
+
+Great! Next, you'll create your Screenlet's delegate. 
+
+## Creating the Delegate
+
+Recall that a delegate is required if you want other classes to respond to your 
+Screenlet's actions. You can create your delegate by following the first step in 
+[the tutorial on adding a Screenlet delegate](/develop/tutorials/-/knowledge_base/7-0/add-a-screenlet-delegate). 
+A list Screenlet's delegate, however, must define an additional method for 
+responding when a list item is selected. For example, Bookmark List Screenlet's 
+delegate needs the following methods: 
+
+- `screenlet(_:onBookmarkListResponse:)`: Returns the `Bookmark` results when 
+  the server call succeeds. 
+
+- `screenlet(_:onBookmarkListError:)`: Returns the `NSError` object when the 
+  server call fails. 
+
+- `screenlet(_:onBookmarkSelected:)`: Returns the `Bookmark` when a user selects 
+  it in the list. 
+
+The `BookmarkListScreenletDelegate` protocol defines these methods:
+
+    @objc public protocol BookmarkListScreenletDelegate : BaseScreenletDelegate {
+
+        optional func screenlet(screenlet: BookmarkListScreenlet,
+                                onBookmarkListResponse bookmarks: [Bookmark])
+
+        optional func screenlet(screenlet: BookmarkListScreenlet,
+                                onBookmarkListError error: NSError)
+
+        optional func screenlet(screenlet: BookmarkListScreenlet,
+                                onBookmarkSelected bookmark: Bookmark)
+
     }
 
 Nice work! Next, you'll create the Screenlet class. 
@@ -297,27 +331,28 @@ Nice work! Next, you'll create the Screenlet class.
 ## Creating the Screenlet Class [](id=creating-the-screenlet-class)
 
 Now that your Screenlet's other components exist, you can create the Screenlet 
-class. A list Screenlet's Screenlet class must extend `BaseListScreenlet`.
-Your Screenlet class must also define the configuration properties required
-for the Screenlet to work. You should define these as `IBInspectable` properties. 
+class. A list Screenlet's Screenlet class must extend `BaseListScreenlet` and 
+define the configurable properties the Screenlet needs. You should define these 
+as `IBInspectable` properties. If you want to support offline mode, you should 
+also add an `offlinePolicy` property. 
 
-Bookmark List Screenlet's Screenlet class requires properties for the `groupId` 
-and `folderId`. If you want to support offline mode, you should also add an 
-`offlinePolicy` property. Create the `BookmarkListScreenlet` class as follows: 
+For example, 
+[Bookmark List Screenlet's Screenlet class](https://github.com/liferay/liferay-screens/blob/master/ios/Samples/Bookmark/BookmarkListScreenlet/BookmarkListScreenlet.swift) 
+contains `IBInspectable` properties for the `groupId`, `folderId`, and 
+`offlinePolicy`: 
 
     public class BookmarkListScreenlet: BaseListScreenlet {
 
         @IBInspectable public var groupId: Int64 = 0
         @IBInspectable public var folderId: Int64 = 0
         @IBInspectable public var offlinePolicy: String? = CacheStrategyType.RemoteFirst.rawValue
-        
-    }
 
-Next, override the method that creates the Interactor for a specific page. In 
-Bookmark List Screenlet, this is the `createPageLoadInteractor` method. The 
-Screenlet calls this method when it needs to load a page. If your Screenlet 
-supports offline mode, you should also pass a `CacheStrategyType` object to
-the interactor, using the value of `offlinePolicy`.
+        ...
+
+Next, override the `createPageLoadInteractor` method to create and return the 
+Interactor for loading a page of entities. If your Screenlet supports offline 
+mode, you should also use `offlinePolicy`'s value to pass a `CacheStrategyType` 
+object to the Interactor. 
 
 Add this method to Bookmark List Screenlet's Screenlet class as follows:
 
@@ -336,31 +371,12 @@ Add this method to Bookmark List Screenlet's Screenlet class as follows:
         return interactor
     }
 
-Next, you must create the delegate for your Screenlet. In order to create this
-delegate, follow the steps described in [this](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets-advanced#add-screenlet-delegate-ios)
-chapter of the [advanced tutorial](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets-advanced).
-You will need delegate methods for success/failure and for row selection.
-For example, for our `BookmarkListScreenlet`:
-
-    @objc public protocol BookmarkListScreenletDelegate : BaseScreenletDelegate {
-        
-        optional func screenlet(screenlet: BookmarkListScreenlet,
-                                onBookmarkListResponse bookmarks: [Bookmark])
-            
-        optional func screenlet(screenlet: BookmarkListScreenlet,
-                                onBookmarkListError error: NSError)
-            
-        optional func screenlet(screenlet: BookmarkListScreenlet,
-                                onBookmarkSelected bookmark: Bookmark)
-        
-    }
-
-Once your delegate is created, you'll first need a reference to this delegate.
-The class `BaseScreenlet`, which `BaseListScreenlet` extends, already defines
-the `delegate` property to store the delegate object. Any list Screenlet
-therefore has this property, and any app developer using the Screenlet can
-assign an object to the property. To avoid casting this `delegate` property to `BookmarkListScreenletDelegate` every time you use it, you can add a computed
-property that does this just once: 
+Now get a reference to your delegate. The `BaseScreenlet` class, which 
+`BaseListScreenlet` extends, already defines the `delegate` property to store 
+the delegate object. Any list Screenlet therefore has this property, and any app 
+developer using the Screenlet can assign an object to the property. To avoid 
+casting this `delegate` property to `BookmarkListScreenletDelegate` every time 
+you use it, you can add a computed property that does this once: 
 
     public var bookmarkListDelegate: BookmarkListScreenletDelegate? {
         return delegate as? BookmarkListScreenletDelegate
@@ -373,42 +389,38 @@ methods:
 
 - `onLoadPageResult`: Called when the Screenlet loads a page successfully. 
   Override this method to call your delegate's 
-  `screenlet(_:onBookmarkListResponse:)` method. 
+  `screenlet(_:onBookmarkListResponse:)` method. For example, here's 
+  `BookmarkListScreenlet`'s `onLoadPageResult` method: 
+
+        override public func onLoadPageResult(page page: Int, rows: [AnyObject], rowCount: Int) {
+            super.onLoadPageResult(page: page, rows: rows, rowCount: rowCount)
+
+            bookmarkListDelegate?.screenlet?(self, onBookmarkListResponse: rows as! [Bookmark])
+        }
 
 - `onLoadPageError`: Called when the Screenlet fails to load a page. Override 
   this method to call your delegate's `screenlet(_:onBookmarkListError:)` 
-  method. 
+  method. For example, here's `BookmarkListScreenlet`'s `onLoadPageError` 
+  method:
 
-- `onSelectedRow`: Called when the user selects an item in the list. Override 
-  this method to call your delegate's `screenlet(_:onBookmarkSelected:)` method. 
+        override public func onLoadPageError(page page: Int, error: NSError) {
+            super.onLoadPageError(page: page, error: error)
 
-Override these methods now: 
+            bookmarkListDelegate?.screenlet?(self, onBookmarkListError: error)
+        }
 
-    override public func onLoadPageResult(page page: Int, rows: [AnyObject], rowCount: Int) {
-        super.onLoadPageResult(page: page, rows: rows, rowCount: rowCount)
+- `onSelectedRow`: Called when an item is selected in the list. Override this 
+  method to call your delegate's `screenlet(_:onBookmarkSelected:)` method. For 
+  example, here's `BookmarkListScreenlet`'s `onSelectedRow` method: 
 
-        bookmarkListDelegate?.screenlet?(self, onBookmarkListResponse: rows as! [Bookmark])
-    }
-
-    override public func onLoadPageError(page page: Int, error: NSError) {
-        super.onLoadPageError(page: page, error: error)
-
-        bookmarkListDelegate?.screenlet?(self, onBookmarkListError: error)
-    }
-
-    override public func onSelectedRow(row: AnyObject) {
-        bookmarkListDelegate?.screenlet?(self, onBookmarkSelected: row as! Bookmark)
-    }
+        override public func onSelectedRow(row: AnyObject) {
+            bookmarkListDelegate?.screenlet?(self, onBookmarkSelected: row as! Bookmark)
+        }
 
 Awesome! You're done! Your list Screenlet, like any other Screenlet, is a 
 ready-to-use component that you can add to your storyboard. You can even
 [package it](/develop/tutorials/-/knowledge_base/7-0/creating-ios-themes#publish-your-themes-using-cocoapods)
-to contribute to the Liferay Screens project, or distribute it with CocoaPods.
-
-If you want to go deeper into the development of a list Screenlet, please refer to 
-our 
-[advanced tutorial](/develop/tutorials/-/knowledge_base/7-0/creating-ios-list-screenlets-advanced), 
-where you can learn to: create custom cells, add sorted lists, add sections and much more!
+to contribute to the Liferay Screens project, or distribute it with CocoaPods. 
 
 ## Related Topics [](id=related-topics)
 
