@@ -71,159 +71,166 @@ Next, you'll create your Screenlet's Theme.
 ## Creating the Theme [](id=creating-the-view)
 
 Recall that each Screenlet requires a Theme to serve as its UI. In Xcode, first 
-create a new XIB file called `BookmarkListView_default.xib`. Use Interface 
-Builder to construct your Screenlet's UI in this file. Since the Screenlet must 
-show a list of items, you should add `UITableView` to this XIB. For example, 
+create a new XIB file for your Theme and name it according to the 
+[naming conventions in the iOS best practices tutorial](ios-best-practices). 
+For example, the XIB for Bookmark List Screenlet's Default Theme is 
+`BookmarkListView_default.xib`. Use Interface Builder to construct your 
+Screenlet's UI in your Theme's XIB. Since the Screenlet must show a list of 
+items, you should add `UITableView` to this XIB. For example, 
 [Bookmark List Screenlet's XIB file](https://github.com/liferay/liferay-screens/blob/master/ios/Samples/Bookmark/BookmarkListScreenlet/Themes/Default/BookmarkListView_default.xib) 
-uses a simple `UITableView` to show the list of bookmarks. The name of this XIB should follow the [Naming Convention](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices#ios-naming-convention) specified in the [Best Practices](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices).
+uses a `UITableView` to show the list of bookmarks. 
 
-Now create a new View class with a name that matches that of the XIB file's 
-prefix. The name of this class should also follow the [Naming Convention](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices#ios-naming-convention) specified in the [Best Practices](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices).
-
-Since the XIB uses `UITableView`, your View class must extend `BaseListTableView`. For example, this is Bookmark List Screenlet's View class declaration: 
+Now create your Theme's View class, also named according to the 
+[naming conventions in the iOS best practices tutorial](ios-best-practices). 
+Since the XIB uses `UITableView`, your View class must extend 
+`BaseListTableView`. For example, this is Bookmark List Screenlet's View class 
+declaration: 
 
     public class BookmarkListView_default: BaseListTableView {...
 
 In Interface Builder, set this new class as your XIB's Custom Class, and assign 
 the `tableView` outlet to your `UITableView` component. 
 
-Next, you must override the methods in the View class that fill the table cells' 
+Next, you must override the View class methods that fill the table cells' 
 contents. There are two methods for this, depending on the type of cell being 
 filled: 
 
 - **Normal cells:** the cells that show the entities. These cells typically use 
-  `UILabel`, `UIImage`, or any other UI component to show the entity's 
-  attributes. Override the `doFillLoadedCell` method to fill this type of cell. 
-- **Progress cell:** the cell that show the entities that are not already loaded. Override the doFillInProgressCell method to fill this type of cell.
+  `UILabel`, `UIImage`, or another UI component to show the entity's attributes. 
+  Override the `doFillLoadedCell` method to fill this type of cell. For example, 
+  Bookmark List Screenlet's View class overrides `doFillLoadedCell` to set each 
+  cell's `textLabel` to a bookmark's name:
 
-In Bookmark List Screenlet, you must override `doFillLoadedCell` to set each 
-cell's `textLabel` to a bookmark's name. 
-Add this method in the `BookmarkListView_default` class now: 
+        override public func doFillLoadedCell(row row: Int, cell: UITableViewCell, object: AnyObject) {
+            let bookmark = object as! Bookmark
 
-    override public func doFillLoadedCell(row row: Int, cell: UITableViewCell, object: AnyObject) {
-        let bookmark = object as! Bookmark
-    
-        cell.textLabel?.text = bookmark.name
-    }
+            cell.textLabel?.text = bookmark.name
+        }
 
-Now you'll override Bookmark List Screenlet's `doFillInProgressCell` method. 
-There's no need to do anything fancy here to indicate that content is loading. 
-Simply set the cell's `textLabel` to the string `"Loading..."`:
+- **Progress cell:** the cell shown at the bottom of the list to indicate that 
+  the list is loading the next page of items. Override the 
+  `doFillInProgressCell` method to fill this type of cell. For example, Bookmark 
+  List Screenlet's View class overrides this method to set the cell's 
+  `textLabel` to the string `"Loading..."`: 
 
-    override public func doFillInProgressCell(row row: Int, cell: UITableViewCell) {
-        cell.textLabel?.text = "Loading..."
-    }
+        override public func doFillInProgressCell(row row: Int, cell: UITableViewCell) {
+            cell.textLabel?.text = "Loading..."
+        }
 
-Now that your View is finished, you can create the Connector. 
+That's it! Now that your Theme is finished, you can create the Connector. 
 
 ## Creating the Connector [](id=creating-the-connector)
 
-Recall that a Screenlet's Connector makes the call that retrieves data from the 
-server. To make a Connector for a list Screenlet, your Connector 
-class must extend `PaginationLiferayConnector`. Your Connector class should also 
-contain any properties it requires to retrieve data. For example, the Bookmark 
-List Screenlet must retrieve bookmarks from a Bookmarks portlet in a specific 
-site. It must also retrieve bookmarks from a specific folder within that 
-Bookmarks portlet. The Screenlet's Connector class must therefore contain 
-properties for the `groupId` (site ID) and `folderId` (Bookmarks folder ID), and 
-an initializer that sets them. Create this class now as follows:
+Recall that a Screenlet's Connector makes the server call to retrieve data. To 
+support pagination, a List Screenlet's Connector class must extend 
+`PaginationLiferayConnector`. The Connector class must also contain any 
+properties it needs to retrieve data. For example, Bookmark List Screenlet must 
+retrieve bookmarks from a Bookmarks portlet in a specific site. It must also 
+retrieve bookmarks from a specific folder in that Bookmarks portlet. The 
+Screenlet's Connector class must therefore contain properties for the `groupId` 
+(site ID) and `folderId` (Bookmarks folder ID), and an initializer that sets 
+them: 
 
     import UIKit
     import LiferayScreens
-    
-    
+
     public class BookmarkListPageLiferayConnector: PaginationLiferayConnector {
-    
+
         public let groupId: Int64
         public let folderId: Int64
-        
-        
+
         //MARK: Initializer
-    
+
         public init(startRow: Int, endRow: Int, computeRowCount: Bool, groupId: Int64, folderId: Int64) {
             self.groupId = groupId
             self.folderId = folderId
-    
+
             super.init(startRow: startRow, endRow: endRow, computeRowCount: computeRowCount)
         }
-    
-    }
+        ...
 
-Next, override the `validateData` method and insert validations for each property that need it. Use the [`ValidationError`](https://github.com/liferay/liferay-screens/blob/develop/ios/Framework/Core/Extensions/NSError%2BScreens.swift) class to encapsulate the errors:
+Next, override the `validateData` method as described in 
+[the tutorial on creating Connectors](create-and-use-a-connector-with-your-screenlet#creating-connectors). 
+Note that Bookmark List Screenlet only needs to validate the `folderId`: 
 
     override public func validateData() -> ValidationError? {
         let error = super.validateData()
-            
+
         if error == nil {
             if folderId <= 0 {
                 return ValidationError("Undefined folderId")
             }
         }
-            
+
         return error
     }
-    
-Finally, you must override two methods in the Connector class: one to retrieve the 
-page's rows, and the other to retrieve the row count:
 
-    public override func doAddPageRowsServiceCall(session session: LRBatchSession, startRow: Int, endRow: Int, obc: LRJSONObjectWrapper?) {
-        // Write the Liferay Mobile SDK service call to retrieve records from 
-        // startRow and endRow.
-    }
+Lastly, you must override the following two methods in the Connector class: 
 
-    override public func doAddRowCountServiceCall(session session: LRBatchSession) {
-        // Write the Liferay Mobile SDK service call to retrieve the row count.
-    }
+- `doAddPageRowsServiceCall`: calls the Liferay Mobile SDK service method that 
+  retrieves a page of entities. The `doAddPageRowsServiceCall` method's 
+  `startRow` and `endRow` arguments define the page's first and last entities, 
+  respectively. Make the service call just as you would in any other Screenlet. 
+  For example, the `doAddPageRowsServiceCall` method in 
+  `BookmarkListPageLiferayConnector` calls `LRBookmarksEntryService_v7`'s 
+  `getEntriesWithGroupId` method to retrieve a page of bookmarks from the folder 
+  specified by `folderId`: 
 
-In Bookmark List Screenlet, add these methods to the Connector class as follows: 
+        public override func doAddPageRowsServiceCall(session session: LRBatchSession, 
+            startRow: Int, endRow: Int, obc: LRJSONObjectWrapper?) {
+                let service = LRBookmarksEntryService_v7(session: session)
 
-    public override func doAddPageRowsServiceCall(session session: LRBatchSession, startRow: Int, endRow: Int, obc: LRJSONObjectWrapper?) {
-        let service = LRBookmarksEntryService_v7(session: session)
-        
-        do {
-            try service.getEntriesWithGroupId(groupId,
-                                              folderId: folderId,
-                                              start: Int32(startRow),
-                                              end: Int32(endRow))
+            do {
+                try service.getEntriesWithGroupId(groupId,
+                                                  folderId: folderId,
+                                                  start: Int32(startRow),
+                                                  end: Int32(endRow))
+            }
+            catch  {
+                // ignore error: the method returns nil (converted to an error) because
+                // the request is not actually sent
+            }
         }
-        catch  {
-            // ignore error: the method returns nil (converted to an error) because
-            // the request is not actually sent
+
+- `doAddRowCountServiceCall`: calls the Liferay Mobile SDK service method that 
+  retrieves the total number of entities. This number is required to support 
+  pagination. Make the service call just as you would in any other Screenlet. 
+  For example, the `doAddRowCountServiceCall` in 
+  `BookmarkListPageLiferayConnector` calls `LRBookmarksEntryService_v7`'s 
+  `getEntriesCountWithGroupId` method to retrieve the total number of bookmarks 
+  in the folder specified by `folderId`: 
+
+        override public func doAddRowCountServiceCall(session session: LRBatchSession) {
+            let service = LRBookmarksEntryService_v7(session: session)
+
+            do {
+                try service.getEntriesCountWithGroupId(groupId, folderId: folderId)
+            }
+            catch  {
+                // ignore error: the method returns nil (converted to an error) because
+                // the request is not actually sent
+            }
         }
-    }
-    
-    override public func doAddRowCountServiceCall(session session: LRBatchSession) {
-        let service = LRBookmarksEntryService_v7(session: session)
-        
-        do {
-            try service.getEntriesCountWithGroupId(groupId, folderId: folderId)
-        }
-        catch  {
-            // ignore error: the method returns nil (converted to an error) because
-            // the request is not actually sent
-        }
-    }
 
 Now that you have your Connector class, you're ready to create the Screenlet's 
 Interactor. 
 
 ## Creating the Interactor [](id=creating-the-interactor)
 
-Recall that Screenlet Interactors respond to user actions. In list Screenlets, 
-loading entities is usually the only action a user can take.
-
-The Interactor class of a list Screenlet that implements fluent pagination 
+Recall that Screenlet Interactors implement your Screenlet's actions. In list 
+Screenlets, loading entities is usually the only action a user can take. The 
+Interactor class of a list Screenlet that implements fluent pagination 
 must extend `BaseListPageLoadInteractor`. Your Interactor class must also 
-contain any properties required for the Screenlet to function, and an 
-initializer that sets them. Note that this initializer takes `BaseListScreenlet` 
-as an argument. In a couple of steps, you'll create your Screenlet class to 
-extend `BaseListScreenlet`. 
+contain any properties the Screenlet needs, and an initializer that sets them. 
+This initializer must also take `BaseListScreenlet` as an argument so the 
+Interactor always has a Screenlet reference. The Interactor class must also 
+initiate the server request via the Connector, and convert the results into 
+model objects. 
 
-As an example, you'll now create Bookmark List Screenlet's Interactor class. 
-This class must contain the same `groupId` and `folderId` properties as the 
-Connector, and an initializer that sets them. Note that this initializer uses 
-`LiferayServerContext` to ensure that it contains a valid `groupId`. Create 
-the Interactor class as follows:
+For example, Bookmark List Screenlet's Interactor class must contain the same 
+`groupId` and `folderId` properties as the Connector, and an initializer that 
+sets them. Note that this initializer also takes a `BaseListScreenlet` argument: 
+<!-- What does computeRowCount do? -->
 
     public class BookmarkListPageLoadInteractor : BaseListPageLoadInteractor {
 
@@ -241,19 +248,20 @@ the Interactor class as follows:
 
                 super.init(screenlet: screenlet, page: page, computeRowCount: computeRowCount)
         }
-    }
+        ...
 
-The Interactor class must also initiate the server request via the Connector, 
-and convert the results into model objects. You'll override the 
-`createListPageConnector` method to create a Connector instance that initiates the 
-request. Your `createListPageConnector` method must convert the page number (the 
-Interactor's `page` attribute) to the page's start and end record numbers. Use 
-the `firstRowForPage` method to do this. Add the following `createConnector` 
-method to the `BookmarkListPageLoadInteractor`:
+To create a Connector instance that initiates the request, override the 
+`createListPageConnector` method. This method must first get a reference to the 
+Screenlet via the `screenlet` property. In your Connector's initializer, use 
+`screenlet.firstRowForPage` to convert the page number (`page`) to the page's 
+start and end indices. You must also pass your initializer any other properties 
+it needs, like the `groupId`. For example, `BookmarkListPageLoadInteractor`'s 
+`createListPageConnector` method does this to create a 
+`BookmarkListPageLiferayConnector` instance: 
 
     public override func createListPageConnector() -> PaginationLiferayConnector {
         let screenlet = self.screenlet as! BaseListScreenlet
-            
+
         return BookmarkListPageLiferayConnector(
             startRow: screenlet.firstRowForPage(self.page),
             endRow: screenlet.firstRowForPage(self.page + 1),
