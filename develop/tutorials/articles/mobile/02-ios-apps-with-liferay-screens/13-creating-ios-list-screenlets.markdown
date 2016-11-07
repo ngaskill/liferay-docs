@@ -1,30 +1,27 @@
 # Creating iOS List Screenlets [](id=creating-ios-list-screenlets)
 
-It's very common for mobile apps to display lists of entities. Liferay Screens 
+It's very common for mobile apps to display lists. Liferay Screens 
 lets you display asset lists and DDL lists in your iOS app by using 
 [Asset List Screenlet](/develop/reference/-/knowledge_base/7-0/assetlistscreenlet-for-ios) 
 and 
 [DDL List Screenlet](/develop/reference/-/knowledge_base/7-0/ddllistscreenlet-for-ios), 
-respectively. Screens also includes list Screenlets for other Liferay entities. 
-See the 
-[Screenlet reference documentation](/develop/reference/-/knowledge_base/7-0/screenlets-in-liferay-screens-for-ios) 
-for a list of all the Screenlets included with Liferay Screens. 
+respectively. Screens also includes list Screenlets for displaying lists of 
+other Liferay entities like web content articles, images, and more. 
+[The Screenlet reference documentation](/develop/reference/-/knowledge_base/7-0/screenlets-in-liferay-screens-for-ios) 
+lists all the Screenlets included with Liferay Screens. If there’s not a list 
+Screenlet for the entity you want to display in a list, you must create your own 
+list Screenlet. A list Screenlet can display any entity from a Liferay instance. 
+For example, you can create a list Screenlet that displays standard Liferay 
+entities like `User`, or custom entities from custom Liferay apps. 
 
-For your app to display a list of other entities from a Liferay instance, 
-however, you must create your own list Screenlet. You can create this Screenlet 
-to display standard Liferay entities such as `User`, or custom entities that 
-belong to custom Liferay apps. 
-
-This tutorial shows you how to create your own list Screenlet. As an example, 
-you'll create a Screenlet that displays a list of bookmarks from Liferay's 
-Bookmarks portlet--Bookmark List Screenlet. You can find the finished 
-Screenlet's code 
+This tutorial uses code from the sample Bookmark List Screenlet to show you how 
+to create your own list Screenlet. This Screenlet displays a list of bookmarks 
+from Liferay’s Bookmarks portlet. You can find this Screenlet’s complete code 
 [here in GitHub](https://github.com/liferay/liferay-screens/tree/master/ios/Samples/Bookmark/BookmarkListScreenlet). 
 
-Note that this tutorial doesn't explain general Screenlet concepts and 
-components in detail. Focus is instead placed on creating a Screenlet that 
-displays lists of entities. Before beginning, you should therefore read the 
-following tutorials: 
+Note that because this tutorial focuses on creating a list Screenlet, it doesn’t 
+explain general Screenlet concepts and components. Before beginning, you should 
+therefore read the following tutorials: 
 
 - [Creating iOS Screenlets](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets)
 - [Supporting Multiple Themes in Your Screenlet](/develop/tutorials/-/knowledge_base/7-0/supporting-multiple-themes-in-your-screenlet)
@@ -32,17 +29,15 @@ following tutorials:
 - [Add a Screenlet Delegate](/develop/tutorials/-/knowledge_base/7-0/add-a-screenlet-delegate)
 - [Creating and Using Your Screenlet's Model Class](/develop/tutorials/-/knowledge_base/7-0/creating-and-using-your-screenlets-model-class)
 
-You'll create the list Screenlet by following these steps:
+This tutorial uses the following steps to show you how to create a list 
+Screenlet: 
 
-1. Creating the Screenlet's Model class.
-
-2. Creating the Screenlet's Theme.
-
-3. Creating the Screenlet's Connector.
-
-4. Creating the Screenlet's Interactor.
-
-5. Creating the Screenlet class.
+1. Creating the Model class
+2. Creating the Theme
+3. Creating the Connector
+4. Creating the Interactor
+5. Creating the Delegate
+6. Creating the Screenlet class
 
 First though, you should understand how pagination works with list Screenlets. 
 
@@ -51,37 +46,36 @@ First though, you should understand how pagination works with list Screenlets.
 To ensure that users can scroll smoothly through large lists of items, list 
 Screenlets support 
 [fluent pagination](http://www.iosnomad.com/blog/2014/4/21/fluent-pagination). 
-Liferay Screens gives you some tools to implement fluent pagination with 
-configurable page size, as described in the above link. This tutorial shows you 
-how to use them. All list Screenlets in Screens use this approach. 
+Support for this is built into the list Screenlet framework. You’ll see this as 
+you construct your list Screenlet. 
 
-Now you're ready to start creating your list Screenlet! 
+Now you're ready to begin! 
 
 ## Creating the Model Class
 
 Recall that a model class transforms each `[String:AnyObject]` entity Screens 
-receives into a model object representing the Liferay instance's entity. For 
-instructions on creating your model class, see the tutorial 
+receives into a model object that represents the corresponding Liferay entity. 
+For instructions on creating your model class, see the tutorial 
 [Creating and Using Your Screenlet's Model Class](/develop/tutorials/-/knowledge_base/7-0/creating-and-using-your-screenlets-model-class). 
-The model class that tutorial uses as an example is the same one used here by 
-Bookmark List Screenlet. 
+The example model class in that tutorial is identical to Bookmark List 
+Screenlet’s. 
 
 Next, you'll create your Screenlet's Theme. 
 
 ## Creating the Theme [](id=creating-the-view)
 
 Recall that each Screenlet requires a Theme to serve as its UI. In Xcode, first 
-create a new XIB file for your Theme and name it according to the 
-[naming conventions in the iOS best practices tutorial](ios-best-practices). 
+create a new XIB file for your Theme and name it according to 
+[these naming conventions](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices#naming-conventions). 
 For example, the XIB for Bookmark List Screenlet's Default Theme is 
 `BookmarkListView_default.xib`. Use Interface Builder to construct your 
-Screenlet's UI in your Theme's XIB. Since the Screenlet must show a list of 
-items, you should add `UITableView` to this XIB. For example, 
+Screenlet's UI in your XIB. Since the Screenlet must show a list, add a 
+`UITableView` to this XIB. For example, 
 [Bookmark List Screenlet's XIB file](https://github.com/liferay/liferay-screens/blob/master/ios/Samples/Bookmark/BookmarkListScreenlet/Themes/Default/BookmarkListView_default.xib) 
 uses a `UITableView` to show the list of bookmarks. 
 
-Now create your Theme's View class, also named according to the 
-[naming conventions in the iOS best practices tutorial](ios-best-practices). 
+Now create your Theme's View class, and name it according to 
+[these naming conventions](/develop/tutorials/-/knowledge_base/7-0/ios-best-practices#naming-conventions). 
 Since the XIB uses `UITableView`, your View class must extend 
 `BaseListTableView`. For example, this is Bookmark List Screenlet's View class 
 declaration: 
@@ -92,14 +86,13 @@ In Interface Builder, set this new class as your XIB's Custom Class, and assign
 the `tableView` outlet to your `UITableView` component. 
 
 Next, you must override the View class methods that fill the table cells' 
-contents. There are two methods for this, depending on the type of cell being 
-filled: 
+contents. There are two methods for this, depending on the cell type: 
 
 - **Normal cells:** the cells that show the entities. These cells typically use 
-  `UILabel`, `UIImage`, or another UI component to show the entity's attributes. 
-  Override the `doFillLoadedCell` method to fill this type of cell. For example, 
-  Bookmark List Screenlet's View class overrides `doFillLoadedCell` to set each 
-  cell's `textLabel` to a bookmark's name:
+  `UILabel`, `UIImage`, or another UI component to show the entity. Override the 
+  `doFillLoadedCell` method to fill these cells. For example, Bookmark List 
+  Screenlet's View class overrides `doFillLoadedCell` to set each cell's 
+  `textLabel` to a bookmark's name: 
 
         override public func doFillLoadedCell(row row: Int, cell: UITableViewCell, object: AnyObject) {
             let bookmark = object as! Bookmark
@@ -107,11 +100,10 @@ filled:
             cell.textLabel?.text = bookmark.name
         }
 
-- **Progress cell:** the cell shown at the bottom of the list to indicate that 
-  the list is loading the next page of items. Override the 
-  `doFillInProgressCell` method to fill this type of cell. For example, Bookmark 
-  List Screenlet's View class overrides this method to set the cell's 
-  `textLabel` to the string `"Loading..."`: 
+- **Progress cell:** the cell at the bottom of the list that indicates the list 
+  is loading the next page of items. Override the `doFillInProgressCell` method 
+  to fill this cell. For example, Bookmark List Screenlet's View class overrides 
+  this method to set the cell's `textLabel` to the string `"Loading..."`: 
 
         override public func doFillInProgressCell(row row: Int, cell: UITableViewCell) {
             cell.textLabel?.text = "Loading..."
@@ -121,15 +113,25 @@ That's it! Now that your Theme is finished, you can create the Connector.
 
 ## Creating the Connector [](id=creating-the-connector)
 
-Recall that a Screenlet's Connector makes the server call to retrieve data. To 
-support pagination, a List Screenlet's Connector class must extend 
-`PaginationLiferayConnector`. The Connector class must also contain any 
-properties it needs to retrieve data. For example, Bookmark List Screenlet must 
-retrieve bookmarks from a Bookmarks portlet in a specific site. It must also 
-retrieve bookmarks from a specific folder in that Bookmarks portlet. The 
-Screenlet's Connector class must therefore contain properties for the `groupId` 
-(site ID) and `folderId` (Bookmarks folder ID), and an initializer that sets 
-them: 
+Recall that Connectors make a server call. To support pagination, a List 
+Screenlet's Connector class must extend the 
+[`PaginationLiferayConnector` class](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseListScreenlet/PaginationLiferayConnector.swift). 
+The Connector class must also contain any properties it needs to make the server 
+call, and an initializer that sets them. To support pagination, the initializer 
+must also contain the following arguments, which you'll pass to the superclass 
+initializer: 
+
+- `startRow`: The number representing the page's first row. 
+- `endRow`: The number representing the page's last row. 
+- `computeRowCount`: Whether to call the Connector’s `doAddRowCountServiceCall` 
+  method (you'll learn about this method shortly). 
+
+For example, Bookmark List Screenlet must retrieve bookmarks from a Bookmarks 
+portlet folder in a specific site. The Screenlet's Connector class must 
+therefore have properties for the `groupId` (site ID) and `folderId` (Bookmarks 
+folder ID), and an initializer that sets them. The initializer also calls the 
+superclass initializer with the `startRow`, `endRow`, and `computeRowCount` 
+arguments: 
 
     import UIKit
     import LiferayScreens
@@ -150,7 +152,7 @@ them:
         ...
 
 Next, override the `validateData` method as described in 
-[the tutorial on creating Connectors](create-and-use-a-connector-with-your-screenlet#creating-connectors). 
+[the tutorial on creating Connectors](/develop/tutorials/-/knowledge_base/7-0/create-and-use-a-connector-with-your-screenlet#creating-connectors). 
 Note that Bookmark List Screenlet only needs to validate the `folderId`: 
 
     override public func validateData() -> ValidationError? {
@@ -169,12 +171,12 @@ Lastly, you must override the following two methods in the Connector class:
 
 - `doAddPageRowsServiceCall`: calls the Liferay Mobile SDK service method that 
   retrieves a page of entities. The `doAddPageRowsServiceCall` method's 
-  `startRow` and `endRow` arguments define the page's first and last entities, 
-  respectively. Make the service call just as you would in any other Screenlet. 
-  For example, the `doAddPageRowsServiceCall` method in 
-  `BookmarkListPageLiferayConnector` calls `LRBookmarksEntryService_v7`'s 
-  `getEntriesWithGroupId` method to retrieve a page of bookmarks from the folder 
-  specified by `folderId`: 
+  `startRow` and `endRow` arguments specify the page's first and last entities, 
+  respectively. Make the service call as you would in any Screenlet. For 
+  example, the `doAddPageRowsServiceCall` method in 
+  `BookmarkListPageLiferayConnector` calls the service's `getEntriesWithGroupId` 
+  method to retrieve a page of bookmarks from the folder specified by 
+  `folderId`: 
 
         public override func doAddPageRowsServiceCall(session session: LRBatchSession, 
             startRow: Int, endRow: Int, obc: LRJSONObjectWrapper?) {
@@ -193,12 +195,11 @@ Lastly, you must override the following two methods in the Connector class:
         }
 
 - `doAddRowCountServiceCall`: calls the Liferay Mobile SDK service method that 
-  retrieves the total number of entities. This number is required to support 
-  pagination. Make the service call just as you would in any other Screenlet. 
-  For example, the `doAddRowCountServiceCall` in 
-  `BookmarkListPageLiferayConnector` calls `LRBookmarksEntryService_v7`'s 
-  `getEntriesCountWithGroupId` method to retrieve the total number of bookmarks 
-  in the folder specified by `folderId`: 
+  retrieves the total number of entities. This supports pagination. Make the 
+  service call as you would in any Screenlet. For example, the 
+  `doAddRowCountServiceCall` in `BookmarkListPageLiferayConnector` calls the 
+  service's `getEntriesCountWithGroupId` method to retrieve the total number of 
+  bookmarks in the folder specified by `folderId`: 
 
         override public func doAddRowCountServiceCall(session session: LRBatchSession) {
             let service = LRBookmarksEntryService_v7(session: session)
@@ -212,25 +213,28 @@ Lastly, you must override the following two methods in the Connector class:
             }
         }
 
-Now that you have your Connector class, you're ready to create the Screenlet's 
-Interactor. 
+Now that you have your Connector class, you're ready to create the Interactor. 
 
 ## Creating the Interactor [](id=creating-the-interactor)
 
-Recall that Screenlet Interactors implement your Screenlet's actions. In list 
-Screenlets, loading entities is usually the only action a user can take. The 
-Interactor class of a list Screenlet that implements fluent pagination 
-must extend `BaseListPageLoadInteractor`. Your Interactor class must also 
-contain any properties the Screenlet needs, and an initializer that sets them. 
-This initializer must also take `BaseListScreenlet` as an argument so the 
-Interactor always has a Screenlet reference. The Interactor class must also 
-initiate the server request via the Connector, and convert the results into 
-model objects. 
+Recall that Interactors implement your Screenlet's actions. In list Screenlets, 
+loading entities is usually the only action a user can take. The Interactor 
+class of a list Screenlet that implements fluent pagination must extend the 
+[`BaseListPageLoadInteractor` class](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseListScreenlet/BaseListPageLoadInteractor.swift). 
+Your Interactor class must also contain any properties the Screenlet needs, and 
+an initializer that sets them. This initializer also needs arguments for the 
+following properties, which it passes to the superclass initializer: 
 
-For example, Bookmark List Screenlet's Interactor class must contain the same 
+- `screenlet`: A `BaseListScreenlet` reference. This ensures the Interactor 
+  always has a Screenlet reference. 
+- `page`: The page number to retrieve. 
+- `computeRowCount`: Whether to call the Connector’s `doAddRowCountServiceCall` 
+  method. 
+
+For example, Bookmark List Screenlet's Interactor class contains the same 
 `groupId` and `folderId` properties as the Connector, and an initializer that 
-sets them. Note that this initializer also takes a `BaseListScreenlet` argument: 
-<!-- What does computeRowCount do? -->
+sets them. This initializer also passes the `screenlet`, `page`, and 
+`computeRowCount` arguments to the superclass initializer: 
 
     public class BookmarkListPageLoadInteractor : BaseListPageLoadInteractor {
 
@@ -250,12 +254,14 @@ sets them. Note that this initializer also takes a `BaseListScreenlet` argument:
         }
         ...
 
-To create a Connector instance that initiates the request, override the 
-`createListPageConnector` method. This method must first get a reference to the 
-Screenlet via the `screenlet` property. In your Connector's initializer, use 
+The Interactor class must also initiate the server request by instantiating the 
+Connector, and convert the results into model objects. Override the 
+`createListPageConnector` method to create and return an instance of your 
+Connector. This method must first get a reference to the Screenlet via the 
+`screenlet` property. When calling the Connector's initializer, use 
 `screenlet.firstRowForPage` to convert the page number (`page`) to the page's 
-start and end indices. You must also pass your initializer any other properties 
-it needs, like the `groupId`. For example, `BookmarkListPageLoadInteractor`'s 
+start and end indices. You must also pass the initializer any other properties 
+it needs, like `groupId`. For example, `BookmarkListPageLoadInteractor`'s 
 `createListPageConnector` method does this to create a 
 `BookmarkListPageLiferayConnector` instance: 
 
@@ -296,22 +302,20 @@ Great! Next, you'll create your Screenlet's delegate.
 ## Creating the Delegate
 
 Recall that a delegate is required if you want other classes to respond to your 
-Screenlet's actions. You can create your delegate by following the first step in 
+Screenlet's actions. Create your delegate by following the first step in 
 [the tutorial on adding a Screenlet delegate](/develop/tutorials/-/knowledge_base/7-0/add-a-screenlet-delegate). 
-A list Screenlet's delegate, however, must define an additional method for 
-responding when a list item is selected. For example, Bookmark List Screenlet's 
-delegate needs the following methods: 
+A list Screenlet's delegate must also define a method for responding to a list 
+item selection. For example, Bookmark List Screenlet's delegate needs the 
+following methods: 
 
 - `screenlet(_:onBookmarkListResponse:)`: Returns the `Bookmark` results when 
   the server call succeeds. 
-
 - `screenlet(_:onBookmarkListError:)`: Returns the `NSError` object when the 
   server call fails. 
-
 - `screenlet(_:onBookmarkSelected:)`: Returns the `Bookmark` when a user selects 
   it in the list. 
 
-The `BookmarkListScreenletDelegate` protocol defines these methods:
+The `BookmarkListScreenletDelegate` protocol defines these methods: 
 
     @objc public protocol BookmarkListScreenletDelegate : BaseScreenletDelegate {
 
@@ -330,15 +334,16 @@ Nice work! Next, you'll create the Screenlet class.
 
 ## Creating the Screenlet Class [](id=creating-the-screenlet-class)
 
-Now that your Screenlet's other components exist, you can create the Screenlet 
-class. A list Screenlet's Screenlet class must extend `BaseListScreenlet` and 
-define the configurable properties the Screenlet needs. You should define these 
-as `IBInspectable` properties. If you want to support offline mode, you should 
-also add an `offlinePolicy` property. 
+Now that your list Screenlet's other components exist, you can create the 
+Screenlet class. A list Screenlet's Screenlet class must extend the 
+[`BaseListScreenlet` class](https://github.com/liferay/liferay-screens/blob/master/ios/Framework/Core/Base/BaseListScreenlet/BaseListScreenlet.swift) 
+and define the configurable properties the Screenlet needs. You should define 
+these as `IBInspectable` properties. If you want to support offline mode, you 
+should also add an `offlinePolicy` property. 
 
 For example, 
 [Bookmark List Screenlet's Screenlet class](https://github.com/liferay/liferay-screens/blob/master/ios/Samples/Bookmark/BookmarkListScreenlet/BookmarkListScreenlet.swift) 
-contains `IBInspectable` properties for the `groupId`, `folderId`, and 
+contains the `IBInspectable` properties `groupId`, `folderId`, and 
 `offlinePolicy`: 
 
     public class BookmarkListScreenlet: BaseListScreenlet {
@@ -350,11 +355,12 @@ contains `IBInspectable` properties for the `groupId`, `folderId`, and
         ...
 
 Next, override the `createPageLoadInteractor` method to create and return the 
-Interactor for loading a page of entities. If your Screenlet supports offline 
-mode, you should also use `offlinePolicy`'s value to pass a `CacheStrategyType` 
-object to the Interactor. 
-
-Add this method to Bookmark List Screenlet's Screenlet class as follows:
+Interactor. If your Screenlet supports offline mode, you should also use 
+`offlinePolicy` to pass a `CacheStrategyType` object to the Interactor. For 
+example, the `createPageLoadInteractor` method in `BookmarkListScreenlet` 
+creates and returns a `BookmarkListPageLoadInteractor` instance. This method 
+also sets the Interactor’s `cacheStrategy` property to a `CacheStrategyType` 
+object created with `offlinePolicy`: 
 
     override public func createPageLoadInteractor(
         page page: Int, 
@@ -372,20 +378,21 @@ Add this method to Bookmark List Screenlet's Screenlet class as follows:
     }
 
 Now get a reference to your delegate. The `BaseScreenlet` class, which 
-`BaseListScreenlet` extends, already defines the `delegate` property to store 
-the delegate object. Any list Screenlet therefore has this property, and any app 
-developer using the Screenlet can assign an object to the property. To avoid 
-casting this `delegate` property to `BookmarkListScreenletDelegate` every time 
-you use it, you can add a computed property that does this once: 
+`BaseListScreenlet` extends, already defines the `delegate` property for the 
+delegate object. Every list Screenlet therefore has this property, and any app 
+developer using the Screenlet can access it. To avoid casting this property to 
+your delegate every time you use it, add a computed property to your Screenlet 
+class that does so. For example, the following `bookmarkListDelegate` property 
+in `BookmarkListScreenlet` casts the `delegate` property to 
+`BookmarkListScreenletDelegate`: 
 
     public var bookmarkListDelegate: BookmarkListScreenletDelegate? {
         return delegate as? BookmarkListScreenletDelegate
     }
 
-Now you must override the `BaseListScreenlet` methods that the Screenlet calls 
-to handle events. Because these events correspond to the events your delegate 
-methods handle, you'll call your delegate methods in these `BaseListScreenlet` 
-methods: 
+Next, override the `BaseListScreenlet` methods that handle the Screenlet’s 
+events. Because these events correspond to the events your delegate methods 
+handle, you'll call your delegate methods in these `BaseListScreenlet` methods: 
 
 - `onLoadPageResult`: Called when the Screenlet loads a page successfully. 
   Override this method to call your delegate's 
@@ -401,7 +408,7 @@ methods:
 - `onLoadPageError`: Called when the Screenlet fails to load a page. Override 
   this method to call your delegate's `screenlet(_:onBookmarkListError:)` 
   method. For example, here's `BookmarkListScreenlet`'s `onLoadPageError` 
-  method:
+  method: 
 
         override public func onLoadPageError(page page: Int, error: NSError) {
             super.onLoadPageError(page: page, error: error)
@@ -418,16 +425,21 @@ methods:
         }
 
 Awesome! You're done! Your list Screenlet, like any other Screenlet, is a 
-ready-to-use component that you can add to your storyboard. You can even
-[package it](/develop/tutorials/-/knowledge_base/7-0/creating-ios-themes#publish-your-themes-using-cocoapods)
-to contribute to the Liferay Screens project, or distribute it with CocoaPods. 
+ready-to-use component that you can add to your storyboard. You can even 
+[package it using the same steps you use to package a Theme](/develop/tutorials/-/knowledge_base/7-0/packaging-ios-themes), 
+and then contribute it to the Liferay Screens project or distribute it with 
+CocoaPods. 
 
 ## Related Topics [](id=related-topics)
 
-[Creating iOS List Screenlets (Advanced)](/develop/tutorials/-/knowledge_base/7-0/creating-ios-list-screenlets-advanced)
-
 [Creating iOS Screenlets](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets)
 
-[Creating iOS Screenlets (Advanced)](/develop/tutorials/-/knowledge_base/7-0/creating-ios-screenlets-advanced)
+[Supporting Multiple Themes in Your Screenlet](/develop/tutorials/-/knowledge_base/7-0/supporting-multiple-themes-in-your-screenlet)
+
+[Create and Use a Connector with Your Screenlet ](/develop/tutorials/-/knowledge_base/7-0/create-and-use-a-connector-with-your-screenlet)
+
+[Add a Screenlet Delegate](/develop/tutorials/-/knowledge_base/7-0/add-a-screenlet-delegate)
+
+[Creating and Using Your Screenlet's Model Class](/develop/tutorials/-/knowledge_base/7-0/creating-and-using-your-screenlets-model-class)
 
 [Architecture of Liferay Screens for iOS](/develop/tutorials/-/knowledge_base/7-0/architecture-of-liferay-screens-for-ios)
