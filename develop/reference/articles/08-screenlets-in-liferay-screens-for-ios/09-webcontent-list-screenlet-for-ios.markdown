@@ -2,8 +2,8 @@
 
 ## Requirements [](id=requirements)
 
-- Xcode 7.2
-- iOS 9 SDK
+- Xcode 8.0
+- iOS 10 SDK
 - Liferay Portal 6.2 (CE or EE), Liferay 7.0 CE, Liferay DXP 
 - Liferay Screens Compatibility Plugin 
   ([CE](http://www.liferay.com/marketplace/-/mp/application/54365664) or 
