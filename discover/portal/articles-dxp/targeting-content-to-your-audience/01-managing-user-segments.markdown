@@ -139,7 +139,7 @@ generate a new report. Reports display a summary of interesting information
 related to each user segment. For example, the Content Views report shows the
 asset that's been most viewed by users that belong to the user segment.
 
-![Figure 6: The Content Views report shows the asset that's been most viewed by users that belong to a user segment.](../../images-dxp/audience-targeting-user-segment-report.png)
+![Figure 6: This report displays what pages the user segment has visited.](../../images-dxp/audience-targeting-user-segment-report.png)
 
 Reports also display which users belonged to a user segment. This lets an
 administrator know which users of the site qualified to the particular user
@@ -148,7 +148,7 @@ users. Simply click the user report you're interested in and select the
 *Options* (![Options](../../images-dxp/icon-options.png)) &rarr; *Export*
 button. This downloads a CSV file with the list of users.
 
-Additional reports can be created by developers and deployed as OSGI plugins.
+Additional reports can be created by developers and deployed as OSGi plugins.
 See the [Reporting User Behavior with Audience Targeting](/develop/tutorials/-/knowledge_base/6-2/reporting-user-behavior-with-audience-targeting)
 tutorial for details. Reports are generated daily by default. However, you can
 generate a report at any time. To generate a new report when currently viewing a

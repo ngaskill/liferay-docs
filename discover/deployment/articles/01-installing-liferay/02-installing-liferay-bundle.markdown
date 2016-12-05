@@ -37,7 +37,7 @@ to use the embedded HSQL database but the HSQL database is primarily intended
 for demonstration and trial purposes. 
 
 `deploy`: To deploy Liferay plugins, copy them to this folder. Legacy style
-`.war` files, Liferay 7 style `.jar` files, and `.lpkg` files from Liferay
+`.war` files, @product-ver@ style `.jar` files, and `.lpkg` files from Liferay
 Marketplace are supported.
 
 `logs`: This folder contains Liferay's log files. The information in Liferay's
@@ -88,7 +88,7 @@ you'll create a configuration file called `portal-ext.properties`, and you'll
 place that file in your Liferay Home folder. 
 
 The configuration varies by database, of course, so templates for each one are
-provided in the [reference section](/develop/reference/-/knowledge_base/7-0/databse-templates). 
+provided in the [reference section](/discover/reference/-/knowledge_base/7-0/database-templates). 
 To connect your database, therefore, create a text file called
 `portal-ext.properties` in your Liferay Home folder. Copy the relevant template
 for your database and paste it into this file. 

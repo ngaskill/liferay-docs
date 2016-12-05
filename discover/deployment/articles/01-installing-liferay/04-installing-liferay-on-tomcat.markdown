@@ -1,9 +1,9 @@
 # Installing Liferay on Tomcat 8 [](id=installing-liferay-on-tomcat-8)
 
-If you want a fresh installation of Liferay on Tomcat 8, simply download a
+If you want a fresh installation of Liferay on Tomcat 8, download a
 Liferay Tomcat bundle from
 [https://www.liferay.com/downloads/liferay-portal/available-releases](https://www.liferay.com/downloads/liferay-portal/available-releases).
-Even if you want to manually install Liferay on an existing Tomcat 8
+Even if you want to install Liferay manually on an existing Tomcat 8
 application server, it can be helpful to download a Liferay Tomcat bundle. The
 bundle contains many required dependencies and configuration files. Before
 proceeding, you should also download the latest Liferay WAR file from
@@ -47,7 +47,7 @@ third-parties, as described below.
     - `activation.jar` - [http://www.oracle.com/technetwork/java/jaf11-139815.html](http://www.oracle.com/technetwork/java/jaf11-139815.html)
     - `ccpp.jar` - [http://mvnrepository.com/artifact/javax.ccpp/ccpp/1.0](http://mvnrepository.com/artifact/javax.ccpp/ccpp/1.0)
     - `com.liferay.osgi.service.tracker.collections.jar` - [http://mvnrepository.com/artifact/com.liferay/com.liferay.osgi.service.tracker.collections](http://mvnrepository.com/artifact/com.liferay/com.liferay.osgi.service.tracker.collections)
-    - `com.liferay.registry.api.jar` - [https://repository.liferay.com/nexus/content/groups/liferay-ce/com/liferay/com.liferay.registry.api](https://repository.liferay.com/nexus/content/groups/liferay-ce/com/liferay/com.liferay.registry.api)
+    - `com.liferay.registry.api.jar` - [https://repository.liferay.com/nexus/content/repositories/liferay-public-releases/com/liferay/com.liferay.registry.api](https://repository.liferay.com/nexus/content/repositories/liferay-public-releases/com/liferay/com.liferay.registry.api)
     - `hsql.jar` - [http://hsqldb.org/doc/src/org/hsqldb/jdbc/JDBCDriver.html](http://hsqldb.org/doc/src/org/hsqldb/jdbc/JDBCDriver.html)
     - `jms.jar`- [http://www.oracle.com/technetwork/java/docs-136352.html](http://www.oracle.com/technetwork/java/docs-136352.html)
     - `jta.jar`- [http://www.oracle.com/technetwork/java/javaee/jta/index.html](http://www.oracle.com/technetwork/java/javaee/jta/index.html)
@@ -77,24 +77,32 @@ Next, you need to configure Tomcat for running Liferay.
 
 1. If you're working with a bundle, copy the `setenv.bat` and `setenv.sh` files
    from your bundle to your `$TOMCAT_HOME/bin` folder. If not, create these
-   files. `setenv.bat` looks like this:
+   files. 
 
-        if exist "%CATALINA_HOME%/jre1.6.0_20/win" (
-            if not "%JAVA_HOME%" == "" (
-                set JAVA_HOME=
-            )
+   These files set a number of JVM options for Catalina, which is Tomcat's
+   servlet container. Among these options is the location of the Java runtime
+   environment. If this environment is not available on your server globally,
+   you must set its location in this file so Tomcat can run. Do this by pointing
+   the `JAVA_HOME` environment variable for your OS to the location of the
+   Liferay supported JRE:
 
-            set "JRE_HOME=%CATALINA_HOME%/jre1.6.0_20/win"
-        )
+        export JAVA_HOME=/usr/lib/jvm/java-8-jdk
+        export PATH=$JAVA_HOME/bin:$PATH
 
-        set "CATALINA_OPTS=%CATALINA_OPTS% -Dfile.encoding=UTF8 -Djava.net.preferIPv4Stack=true  -Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false -Duser.timezone=GMT -Xmx1024m -XX:MaxPermSize=384m"
+   Once you've done this, configure Catalina's options to support @product@: 
 
-    `setenv.sh` looks like this:
+        CATALINA_OPTS="$CATALINA_OPTS -Dfile.encoding=UTF8 -Djava.net.preferIPv4Stack=true  -Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false -Duser.timezone=GMT -Xmx1024m -XX:MaxPermSize=384m" 
 
-        CATALINA_OPTS="$CATALINA_OPTS -Dfile.encoding=UTF8 -Djava.net.preferIPv4Stack=true  -Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false -Duser.timezone=GMT -Xmx1024m -XX:MaxPermSize=384m"
+   This sets the file encoding to UTF-8, prefers an IPv4 stack over IPv6,
+   prevents Tomcat from working around garbage collection bugs relating to
+   static or final fields (these bugs don't exist in @product@ and working
+   around them causes problems with the logging system), sets the time zone to
+   GMT, and gives the JVM 1GB of RAM. 
 
-These files set a number of JVM options for Catalina. Catalina is Tomcat's
-servlet container.
+   These are initial settings. After installation you should tune your system
+   for performance. As a result of that process, you may find you want to change
+   particularly the amount of RAM available to @product@ based on how your
+   system runs. 
 
 2. If you're working with a bundle, copy the
    `$TOMCAT_HOME/conf/Catalina/localhost/ROOT.xml` file from your bundle to the
