@@ -2,8 +2,8 @@
 
 ## Requirements [](id=requirements)
 
-- Xcode 7.3
-- iOS 9 SDK
+- Xcode 8.0
+- iOS 10 SDK
 - Liferay Portal 6.2 (CE or EE), Liferay 7.0 CE, Liferay DXP 
 - OAuth Provider app (OAuth authentication is optional. Note that OAuth only 
   works with Liferay EE and DXP instances). 
