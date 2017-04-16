@@ -22,7 +22,7 @@ following:
         android:id="@+id/entrylist_screenlet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        liferay:layoutId="@layout/list_entries"/>
+        app:layoutId="@layout/list_entries"/>
 
 As with Guestbook List Screenlet, you'll use the `android:id` value to get a 
 Screenlet reference. Next, you must implement the Screenlet's listener. 
