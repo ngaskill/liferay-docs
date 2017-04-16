@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:liferay="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -15,6 +15,6 @@
         android:id="@+id/login_screenlet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        liferay:basicAuthMethod="screen_name"
-        liferay:layoutId="@layout/login_default" />
+        app:basicAuthMethod="screen_name"
+        app:layoutId="@layout/login_default" />
 </RelativeLayout>
