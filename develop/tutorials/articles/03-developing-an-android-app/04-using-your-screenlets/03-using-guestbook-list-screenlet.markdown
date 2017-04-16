@@ -121,7 +121,7 @@ To implement `BaseListListener`, you must implement the following methods:
         @Override
         public void onListPageFailed(int startRow, Exception e) {
 
-            Toast.makeText(getApplicationContext(), "Page request failed", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Page request failed", Toast.LENGTH_LONG).show();
         }
 
     This requires you to import `android.widget.Toast`. 
