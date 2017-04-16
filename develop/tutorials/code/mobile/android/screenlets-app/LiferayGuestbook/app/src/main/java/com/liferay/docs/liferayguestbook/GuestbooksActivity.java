@@ -108,7 +108,7 @@ public class GuestbooksActivity extends AppCompatActivity implements BaseListLis
     @Override
     public void onListPageFailed(int startRow, Exception e) {
 
-        Toast.makeText(getApplicationContext(), "Page request failed: " + e, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Page request failed: " + e, Toast.LENGTH_LONG).show();
     }
 
     @Override
