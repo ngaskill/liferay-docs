@@ -8,6 +8,17 @@ import java.util.Map;
 
 public class EntryModel implements Parcelable {
 
+    public static final Creator<EntryModel> CREATOR = new Creator<EntryModel>() {
+        @Override
+        public EntryModel createFromParcel(Parcel in) {
+            return new EntryModel(in);
+        }
+
+        @Override
+        public EntryModel[] newArray(int size) {
+            return new EntryModel[size];
+        }
+    };
     private Map values;
     private long entryId;
     private long groupId;
@@ -20,18 +31,6 @@ public class EntryModel implements Parcelable {
     private String email;
     private String message;
     private long guestbookId;
-
-    public static final Creator<EntryModel> CREATOR = new Creator<EntryModel>() {
-        @Override
-        public EntryModel createFromParcel(Parcel in) {
-            return new EntryModel(in);
-        }
-
-        @Override
-        public EntryModel[] newArray(int size) {
-            return new EntryModel[size];
-        }
-    };
 
     public EntryModel() {
         super();

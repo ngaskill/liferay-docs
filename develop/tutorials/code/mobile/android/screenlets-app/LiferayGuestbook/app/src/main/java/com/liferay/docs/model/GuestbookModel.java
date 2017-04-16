@@ -8,16 +8,6 @@ import java.util.Map;
 
 public class GuestbookModel implements Parcelable {
 
-    private Map values;
-    private long guestbookId;
-    private long groupId;
-    private long companyId;
-    private long userId;
-    private String userName;
-    private long createDate;
-    private long modifiedDate;
-    private String name;
-
     public static final Creator<GuestbookModel> CREATOR = new Creator<GuestbookModel>() {
         @Override
         public GuestbookModel createFromParcel(Parcel in) {
@@ -29,6 +19,15 @@ public class GuestbookModel implements Parcelable {
             return new GuestbookModel[size];
         }
     };
+    private Map values;
+    private long guestbookId;
+    private long groupId;
+    private long companyId;
+    private long userId;
+    private String userName;
+    private long createDate;
+    private long modifiedDate;
+    private String name;
 
     public GuestbookModel() {
         super();
