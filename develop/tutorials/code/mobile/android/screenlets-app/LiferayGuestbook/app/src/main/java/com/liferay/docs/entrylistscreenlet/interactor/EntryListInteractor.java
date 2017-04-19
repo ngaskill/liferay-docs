@@ -7,6 +7,7 @@ import com.liferay.mobile.screens.base.list.interactor.BaseListInteractorListene
 import com.liferay.mobile.screens.base.list.interactor.Query;
 
 import org.json.JSONArray;
+
 import java.util.Map;
 
 public class EntryListInteractor extends

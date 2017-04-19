@@ -6,23 +6,23 @@
 
     <TextView
         android:id="@+id/entry_message"
-        android:textSize="25sp"
-        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="1dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingBottom="1dp"
         android:paddingTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/entry_name"
-        android:textSize="15sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingBottom="10dp"
         android:paddingTop="1dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:textSize="15sp" />
 
 </LinearLayout>

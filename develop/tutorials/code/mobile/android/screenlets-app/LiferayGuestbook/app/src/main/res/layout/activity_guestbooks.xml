@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="@dimen/nav_header_height"
-            app:layoutId="@layout/list_guestbooks"/>
+            app:layoutId="@layout/list_guestbooks" />
 
     </android.support.design.widget.NavigationView>
 

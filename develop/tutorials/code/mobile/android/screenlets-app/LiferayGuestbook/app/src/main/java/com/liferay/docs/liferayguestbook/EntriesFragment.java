@@ -15,11 +15,6 @@ import java.util.List;
 
 public class EntriesFragment extends Fragment implements BaseListListener<EntryModel> {
 
-
-    public EntriesFragment() {
-        // Required empty public constructor
-    }
-
     public static EntriesFragment newInstance(long guestbookId) {
         EntriesFragment entriesFragment = new EntriesFragment();
         Bundle args = new Bundle();
