@@ -132,6 +132,8 @@ connection, you can use the `saveCredentials` attribute together with the
 | `OAuthConsumerKey` | `string` | Specifies the *Consumer Key* to use in OAuth authentication. |
 | `OAuthConsumerSecret` | `string` | Specifies the *Consumer Secret* to use in OAuth authentication. |
 | `saveCredentials` | `boolean` | When set, the user credentials and attributes are stored securely in the keychain. This information can then be loaded in subsequent sessions by calling the `SessionContext.loadStoredCredentials()` method. |
+| `shouldHandleCookieExpiration` | `bool` | Specifies if the cookie refresh should be handled automatically. This means that if you are using cookie login everytime your cookie is about to expire it is refreshed. The default value is `true` |
+| `cookieExpirationTime` | `int` | Specifies the time to life of the cookie, seconds, this value depends on the configuration of your liferay instance. The default value is `900s` |
 
 ## Delegate [](id=delegate)
 
@@ -153,3 +155,29 @@ following methods:
 - `- screenlet:onCredentialsLoadedUserAttributes:`: Called when the user 
   credentials are retrieved. Note that this only occurs when the Screenlet is 
   used and stored credentials are available. 
+  
+## Authentication challenge [](id=authentication-challenge)
+
+In order to support authentication challenges when login into liferay using the cookie login method the Session context class has a `challengeResolver` attribute. You can read more about authentication challenges [here] (https://en.wikipedia.org/wiki/Challenge%E2%80%93response_authentication) and more about how this is handled in iOS [here](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/AuthenticationChallenges.html)
+
+This challenge resolver type is a closure or block that will receive two parameters:
+
+- the first one is a `URLAuthenticationChallenge`
+- the second one is another closure or block, you will have to call this method to resolve the challenge passing a type of credentials, cancelling the challenge, etc. You decide this passing a `URLSession.AuthChallengeDisposition`
+
+
+This is an example of this that will send a basic authorization in response of an authentication challenge:
+
+```
+SessionContext.challengeResolver = { challenge, decisionCallback in
+	let credential = URLCredential(user: "user", password: "password", persistence: .forSession)
+	
+	// check there is no failures before
+	if challenge.previousFailureCount == 0 {
+		decisionCallback(.useCredential, credential)
+	}
+	else {
+		decisionCallback(.performDefaultHandling, credential)
+	}
+}
+```
