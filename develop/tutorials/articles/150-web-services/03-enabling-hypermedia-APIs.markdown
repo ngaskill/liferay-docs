@@ -1,4 +1,4 @@
-#Enabling Hypermedia REST APIs
+# Enabling Hypermedia REST APIs
 
 Liferay Hypermedia REST APIs are not automatically enabled in Liferay Portal CE 7.1 GA1 (it will be enabled from version 7.1sp1 for EE users, and from version 7.1GA2).
 
