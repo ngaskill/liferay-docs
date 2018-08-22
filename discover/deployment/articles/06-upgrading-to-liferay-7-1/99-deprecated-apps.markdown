@@ -54,6 +54,7 @@ availability.
 | Private Messaging | Removed |  |
 | Quick Note | Nexus |  |
 | Recently Downloaded | Nexus |  |
+| RSS Publisher | Release (bundle) | See [LPS-80535](https://issues.liferay.com/browse/LPS-80535) |
 | Social Activity | Nexus |  |
 | Social Networking | Nexus | Formerly available as an unsupported Labs app via Marketplace. |
 | Twitter | Removed |  |
