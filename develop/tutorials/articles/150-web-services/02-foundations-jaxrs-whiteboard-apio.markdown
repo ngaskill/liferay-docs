@@ -5,15 +5,15 @@ There are three cornerstones upon which the Hypermedia REST APIs are built in @p
 Although is not completely necessary to master the three of them, it is useful to have at least a good basic understanding of what these are, and which role they play to make the APIs work.
 
 ## JAX-RS [](id=jax-rs)
-First and foremost, the APIs are REST services, written in Java, so it should not be a surprise that they are written according to the [JAX-RS Specification](http://download.oracle.com/otndocs/jcp/jaxrs-2_1-final-eval-spec/index.html). 
+First and foremost, the APIs are REST web services, written in Java, so it should not be a surprise that they are written according to the [JAX-RS Specification](http://download.oracle.com/otndocs/jcp/jaxrs-2_1-final-eval-spec/index.html). 
 
-JAX-RS API described in the aforementioned specification drives the [development of RESTful Web services](https://docs.oracle.com/javaee/7/tutorial/jaxrs.htm) by the use of Java annotations that allow developers to decorate Java POJOS (regular classes) that define the resources, endpoints, mappings and all the elements required to publish a REST Web service.
+JAX-RS API described in the aforementioned specification drives the [development of REST Web Services](https://docs.oracle.com/javaee/7/tutorial/jaxrs.htm) by the use of Java annotations that allow developers to decorate Java POJOS (regular classes) that define the resources, endpoints, mappings and all the elements required to publish a REST Web service.
 
 Although it could seem as a common sense foundation, keep in mind that the Hypermedia REST APIs is composed of a set of JAX-RS Services. Thus, if you find yourself in need of extending the API, in the end, it's just a matter of creating new JAX-RS services. That said, there are two other pieces that will help the developer to create or consume those services.
 
 ## OSGi's JAX-RS Whiteboad Specification [](id=osgi-jaxrs-whiteboard)
 
-The REST services that compose the Hypermedia REST APIs should be developed and deployed as modules, keeping in mind the OSGi environment in which is based @product@ since version 7.
+The REST endpoints that compose the Hypermedia REST APIs should be developed and deployed as modules, keeping in mind the OSGi environment in which is based @product@ since version 7.
 
 To bootstrap and publish JAX-RS resources, register them as OSGi components and resolve posible references to other OSGi components (or services) already deployed as part of other modules, we make use of the [OSGi's JAX-RS Whiteboard](https://osgi.org/specification/osgi.cmpn/7.0.0/service.jaxrs.html#service.jaxrs.whiteboard).
 
