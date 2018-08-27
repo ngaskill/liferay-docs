@@ -1,4 +1,4 @@
-# Foundations: JAX-RS, OSGi Whiteboard, and APIO
+# Foundations: JAX-RS, OSGi Whiteboard, and APIO [](id=foundations-jax-rs-osgi-whiteboard-and-apio)
 
 Hypermedia REST APIs in @product@ are built on these technologies:
 
