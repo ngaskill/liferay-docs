@@ -1,8 +1,8 @@
 # Navigating Between Related Resources [](id=navigating-between-related-resources)
 
-A key benefit of Liferay's hypermedia REST APIs is discovering and navigating
-all the services from a single starting point, the API's home URL. This is
-possible because each endpoint returns links to its related resources or
+A key benefit of Liferay's hypermedia REST APIs is discovering and navigating 
+all the services from a single starting point, the API's home URL. This is 
+possible because each endpoint contains links to its related resources or 
 endpoints. 
 
 You can therefore navigate from 
