@@ -48,3 +48,6 @@ hypermedia formats (e.g., HAL, Siren, JSON-LD), content negotiation, resource
 discovery, collection patterns, and many other features that help build 
 hypermedia REST APIs. 
 
+## Related Topics [](id=related-topics)
+
+[Consuming Web Services](/develop/tutorials/-/knowledge_base/7-1/consuming-web-services)
