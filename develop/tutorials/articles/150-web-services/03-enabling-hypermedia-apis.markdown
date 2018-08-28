@@ -60,21 +60,21 @@ Now you must download and install the latest version of the APIs:
 
 1.  Download the updated API modules by clicking the link for each: 
 
-    -   [`com.liferay.apio.architect.impl-1.0.6.jar`](http://central.maven.org/maven2/com/liferay/com.liferay.apio.architect.impl/1.0.6/com.liferay.apio.architect.impl-1.0.6.jar)
-    -   [`com.liferay.apio.architect.api-1.3.0.jar`](http://central.maven.org/maven2/com/liferay/com.liferay.apio.architect.api/1.3.0/com.liferay.apio.architect.api-1.3.0.jar)
+    -   [`com.liferay.apio.architect.api-1.5.0.jar`](http://central.maven.org/maven2/com/liferay/com.liferay.apio.architect.api/1.5.0/com.liferay.apio.architect.api-1.5.0.jar)
+    -   [`com.liferay.apio.architect.impl-1.0.9.jar`](http://central.maven.org/maven2/com/liferay/com.liferay.apio.architect.impl/1.0.9/com.liferay.apio.architect.impl-1.0.9.jar)
     -   [`com.liferay.apio.architect.uri.mapper.impl-1.0.1.jar`](http://central.maven.org/maven2/com/liferay/com.liferay.apio.architect.uri.mapper.impl/1.0.1/com.liferay.apio.architect.uri.mapper.impl-1.0.1.jar)
     -   [`com.liferay.apio.architect.exception.mapper.impl-1.0.3.jar`](http://central.maven.org/maven2/com/liferay/com.liferay.apio.architect.exception.mapper.impl/1.0.3/com.liferay.apio.architect.exception.mapper.impl-1.0.3.jar) 
 
 2.  Deploy these files to the `[Liferay Home]/deploy` folder. The console should 
     show that the modules are starting: 
 
-        2018-07-16 13:01:26.477 INFO  [com.liferay.portal.kernel.deploy.auto.AutoDeployScanner][AutoDeployDir:261] Processing com.liferay.apio.architect.api-1.3.0.jar
-        2018-07-16 13:01:26.483 INFO  [com.liferay.portal.kernel.deploy.auto.AutoDeployScanner][AutoDeployDir:261] Processing com.liferay.apio.architect.impl-1.0.6.jar
+        2018-07-16 13:01:26.477 INFO  [com.liferay.portal.kernel.deploy.auto.AutoDeployScanner][AutoDeployDir:261] Processing com.liferay.apio.architect.api-1.5.0.jar
+        2018-07-16 13:01:26.483 INFO  [com.liferay.portal.kernel.deploy.auto.AutoDeployScanner][AutoDeployDir:261] Processing com.liferay.apio.architect.impl-1.0.9.jar
         2018-07-16 13:01:26.484 INFO  [com.liferay.portal.kernel.deploy.auto.AutoDeployScanner][AutoDeployDir:261] Processing com.liferay.apio.architect.exception.mapper.impl-1.0.3.jar
         2018-07-16 13:01:26.484 INFO  [com.liferay.portal.kernel.deploy.auto.AutoDeployScanner][AutoDeployDir:261] Processing com.liferay.apio.architect.uri.mapper.impl-1.0.1.jar
         2018-07-16 13:01:31.818 INFO  [fileinstall-$LIFERAY_HOME/osgi/modules][BundleStartStopLogger:35] STARTED com.liferay.apio.architect.exception.mapper.impl_1.0.3 [948]
-        2018-07-16 13:01:31.898 INFO  [fileinstall-$LIFERAY_HOME/osgi/modules][BundleStartStopLogger:35] STARTED com.liferay.apio.architect.impl_1.0.6 [949]
-        2018-07-16 13:01:32.831 INFO  [fileinstall-$LIFERAY_HOME/osgi/modules][BundleStartStopLogger:35] STARTED com.liferay.apio.architect.api_1.3.0 [947]
+        2018-07-16 13:01:31.898 INFO  [fileinstall-$LIFERAY_HOME/osgi/modules][BundleStartStopLogger:35] STARTED com.liferay.apio.architect.impl_1.0.9 [949]
+        2018-07-16 13:01:32.831 INFO  [fileinstall-$LIFERAY_HOME/osgi/modules][BundleStartStopLogger:35] STARTED com.liferay.apio.architect.api_1.5.0 [947]
         2018-07-16 13:01:32.839 INFO  [fileinstall-$LIFERAY_HOME/osgi/modules][BundleStartStopLogger:35] STARTED com.liferay.apio.architect.uri.mapper.impl_1.0.1 [950]
 
     The modules should then appear in `[Liferay Home]/osgi/modules`. 
