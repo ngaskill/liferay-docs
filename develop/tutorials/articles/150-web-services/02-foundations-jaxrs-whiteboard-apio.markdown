@@ -29,5 +29,5 @@ But time has proven that writting hypermedia and evolvable APIs is not easy. So,
 
 Apio Architect transparently adds support for several Hypermedia Formats (as HAL, Siren or JSON-LD), Content-negotation, links navigability and discoverability of resources, collection patterns, and many other features that helps to build hypermedia REST APIs easily.
 
-Apio Architect is probably the most important component in how Hypermedia REST APIs are built. Through the rest of the documents you will hopefully see the benefits that it brings to the building and consuming the API endopoints. 
+Apio Architect is probably the most important component in how Hypermedia REST APIs are built. Through the rest of the documents you will hopefully see the benefits that it brings to the building and consuming the API endpoints. 
 
