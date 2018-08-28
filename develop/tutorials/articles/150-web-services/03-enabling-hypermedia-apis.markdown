@@ -54,11 +54,11 @@ You must first remove the older, pre-installed version of the APIs:
 4.  Finally, remove the `*apio*` configuration file in 
     `[Liferay Home]/osgi/configs`. 
 
-## Install the Latest Version of the APIs [](id=install-the-latest-version-of-the-apis)
+## Install the Latest Version of APIO [](id=install-the-latest-version-of-apio)
 
-Now you must download and install the latest version of the APIs: 
+Now you must download and install the latest version of the APIO, the modules that support Hypermedia REST APIs in @product@: 
 
-1.  Download the updated API modules by clicking the link for each: 
+1.  Download the updated APIO modules by clicking the link for each: 
 
     -   [`com.liferay.apio.architect.api-1.5.0.jar`](http://central.maven.org/maven2/com/liferay/com.liferay.apio.architect.api/1.5.0/com.liferay.apio.architect.api-1.5.0.jar)
     -   [`com.liferay.apio.architect.impl-1.0.9.jar`](http://central.maven.org/maven2/com/liferay/com.liferay.apio.architect.impl/1.0.9/com.liferay.apio.architect.impl-1.0.9.jar)
@@ -81,7 +81,7 @@ Now you must download and install the latest version of the APIs:
 
 ## Enable Access to the APIs [](id=enable-access-to-the-apis)
 
-By default, security restricts access to the APIs. To enable access, you must 
+By default, APIO security restricts access to the APIs. To enable access, you must 
 add a specific configuration file: 
 
 1.  Create the file 
@@ -115,6 +115,9 @@ add a specific configuration file:
 
     If you instead receive a permissions error, then the configuration didn't 
     load. In this case, try restarting the portal. 
+
+    <!-- Add instructions to download an install the APIs implementation once they 
+    are available at the marketplace -->
 
 ## Related Topics [](id=related-topics)
 
