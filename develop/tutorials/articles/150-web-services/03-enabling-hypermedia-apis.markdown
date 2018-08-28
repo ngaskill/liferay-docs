@@ -5,7 +5,7 @@ Liferay DXP 7.1 Fix Pack 1. To use these APIs in earlier 7.1 releases, you must
 install them manually: 
 
 1.  Remove the Pre-installed APIs
-2.  Install the Latest Version of the APIs
+2.  Install the Latest Version of APIO
 3.  Enable Access to the APIs
 
 The following sections walk you through these steps. 
